@@ -30,6 +30,11 @@
 <!-- Preloader -->
 <div id="preloader"></div>
 
+<script>
+    // 直接下一幀就移除，完全不等 load/AOS/任何外掛
+    queueMicrotask(() => document.getElementById('preloader')?.remove());
+</script>
+
 <!-- Vendor JS Files -->
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/vendor/php-email-form/validate.js"></script>
@@ -40,5 +45,5 @@
 <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
 <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-
 <script src="assets/js/main.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>

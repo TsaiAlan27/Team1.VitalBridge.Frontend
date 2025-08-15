@@ -30,16 +30,18 @@
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: Kelly
-  * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
-  * Updated: Aug 07 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <!-- <style>
+    /* 若 AOS 尚未初始化，避免 data-aos 元素被永久透明 */
+    [data-aos] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style> -->
+
 </head>
 
 <body class="index-page">
+
   <div data-include="partials/header.html"></div>
 
 
@@ -58,6 +60,14 @@
             <h2>Kelly Adams</h2>
             <p>I'm a professional illustrator from San Francisco</p>
             <a href="about.html" class="btn-get-started">About Me</a>
+
+            <!-- 測試Vue的部分 -->
+            <div id="app">
+              <h1>{{ message }}</h1>
+              <button @click="count++">點我加一：{{ count }}</button>
+            </div>
+            <!-- 測試結束 -->
+
           </div>
         </div>
       </div>
@@ -68,11 +78,13 @@
 
 
 
-
-
   <div data-include="partials/footer.html"></div>
   <script src="scripts/include.js"></script>
 
 </body>
+
+
+
+
 
 </html>
