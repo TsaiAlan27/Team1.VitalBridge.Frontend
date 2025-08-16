@@ -68,9 +68,6 @@
     });
   }
 
-
-
-
   /**
    * Scroll top button
    */
@@ -186,4 +183,44 @@
 
   });
 
+})();
+
+// --- run code after all JS-level initialization (app:ready) and window.load ---
+(function () {
+  function onceEvent(eventName) {
+    return new Promise(function (resolve) {
+      function handler(e) {
+        window.removeEventListener(eventName, handler);
+        resolve(e);
+      }
+      window.addEventListener(eventName, handler);
+    });
+  }
+
+  function waitAppReady() {
+    if (window.appReadyAt !== undefined) return Promise.resolve({ detail: { readyAt: window.appReadyAt } });
+    return onceEvent('app:ready');
+  }
+
+  function waitWindowLoad() {
+    if (document.readyState === 'complete') return Promise.resolve();
+    return onceEvent('load');
+  }
+
+  async function runAfterAllLoaded() {
+    try {
+      await Promise.all([waitAppReady(), waitWindowLoad()]);
+
+      // Put code that must run after all fragments, vendor and resources are loaded here
+      function initMyFeature() {
+        // TODO: replace with your logic
+      }
+
+      initMyFeature();
+    } catch (e) {
+      console.error('runAfterAllLoaded error', e);
+    }
+  }
+
+  runAfterAllLoaded();
 })();
