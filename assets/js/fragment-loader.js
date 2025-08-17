@@ -26,8 +26,9 @@
                 await loadIfNeeded('assets/js/main.js').catch(function (e) { console.error(e); });
                 window._mainLoaded = true;
             }
-
             // signal readiness to page scripts
+            await loadIfNeeded('assets/js/LoadPlate.js');
+            LoadPlateByNow();
             try { window.appReadyAt = performance && performance.now ? performance.now() : Date.now(); window.dispatchEvent(new CustomEvent('app:ready', { detail: { readyAt: window.appReadyAt } })); } catch (e) { /* ignore */ }
         } catch (e) {
             console.error('fragment-loader 初始化錯誤', e);
