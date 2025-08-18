@@ -17,19 +17,30 @@
 
     async function init() {
         try {
-            await Promise.all([loadFragment('.headerpage', 'header.html'), loadFragment('.footerpage', 'footer.html')]);
+            // 用絕對路徑（根目錄起算）
+            var headerUrl = '/partials/header.html';
+            var footerUrl = '/partials/footer.html';
+
+            await Promise.all([
+                loadFragment('.headerpage', headerUrl),
+                loadFragment('.footerpage', footerUrl)
+            ]);
+
             // hide preloader if present
             if (typeof $ !== 'undefined' && $('#preloader').length) $('#preloader').fadeOut(200);
 
             // ensure main.js is loaded once (allow static include instead)
             if (!window._mainLoaded) {
-                await loadIfNeeded('assets/js/main.js').catch(function (e) { console.error(e); });
+                await loadIfNeeded('/assets/js/main.js').catch(function (e) { console.error(e); });
                 window._mainLoaded = true;
             }
             // signal readiness to page scripts
-            await loadIfNeeded('assets/js/LoadPlate.js');
-            LoadPlateByNow();
-            try { window.appReadyAt = performance && performance.now ? performance.now() : Date.now(); window.dispatchEvent(new CustomEvent('app:ready', { detail: { readyAt: window.appReadyAt } })); } catch (e) { /* ignore */ }
+            await loadIfNeeded('/assets/js/LoadPlate.js');
+            if (typeof LoadPlateByNow === 'function') LoadPlateByNow();
+            try {
+                window.appReadyAt = performance && performance.now ? performance.now() : Date.now();
+                window.dispatchEvent(new CustomEvent('app:ready', { detail: { readyAt: window.appReadyAt } }));
+            } catch (e) { /* ignore */ }
         } catch (e) {
             console.error('fragment-loader 初始化錯誤', e);
         }
