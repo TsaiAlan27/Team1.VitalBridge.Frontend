@@ -52,11 +52,13 @@
     // 輔助：載入 script
     function loadScript(url) {
         return new Promise(function (resolve, reject) {
-            if (document.querySelector('script[src="' + url + '"]')) return resolve(url);
+            // 統一根目錄路徑
+            var absUrl = url.startsWith('/') ? url : '/' + url.replace(/^\/?/, '');
+            if (document.querySelector('script[src="' + absUrl + '"]')) return resolve(absUrl);
             var s = document.createElement("script");
-            s.src = url;
-            s.onload = function () { resolve(url); };
-            s.onerror = function () { reject(new Error("載入失敗: " + url)); };
+            s.src = absUrl;
+            s.onload = function () { resolve(absUrl); };
+            s.onerror = function () { reject(new Error("載入失敗: " + absUrl)); };
             document.head.appendChild(s);
         });
     }
@@ -65,7 +67,9 @@
     function loadFragment(selector, url) {
         return new Promise(function (resolve, reject) {
             if (typeof $ === "undefined") return reject(new Error("jQuery 未載入"));
-            $.get(url)
+            // 統一根目錄路徑
+            var absUrl = url.startsWith('/') ? url : '/' + url.replace(/^\/?/, '');
+            $.get(absUrl)
                 .done(function (data) {
                     $(selector).html(data);
                     console.log("[fragment] " + url + " loaded.");
@@ -103,22 +107,22 @@
         try {
             // 同步載入 header/footer
             await Promise.all([
-                loadFragment(".headerpage", "header.html"),
-                loadFragment(".footerpage", "footer.html")
+                loadFragment(".headerpage", "/partials/header.html"),
+                loadFragment(".footerpage", "/partials/footer.html")
             ]);
             console.log("header/footer loaded.");
 
             hidePreloader();
 
             // 若你未在每頁靜態載入 AOS，可在此確保
-            try { await ensureLib("assets/vendor/aos/aos.js", "AOS"); } catch (e) { console.warn("AOS load failed, continuing:", e); }
+            try { await ensureLib("/assets/vendor/aos/aos.js", "AOS"); } catch (e) { console.warn("AOS load failed, continuing:", e); }
 
             // 載入 main.js（若還沒載入）
             if (!window._mainLoaded) {
                 try {
-                    await loadScript("assets/js/main.js");
+                    await loadScript("/assets/js/main.js");
                     window._mainLoaded = true;
-                    console.log("assets/js/main.js loaded.");
+                    console.log("/assets/js/main.js loaded.");
                 } catch (e) {
                     console.error("main.js load failed:", e);
                 }

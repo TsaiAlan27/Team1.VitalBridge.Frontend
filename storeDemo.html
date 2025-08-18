@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - Kelly Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div>
+  <main id="shop-main">
+    <!-- 局部樣式：只影響 #shop-main 內的元素 -->
+    <style>
+      /* CSS 作用域鎖在 #shop-main，避免汙染全站 */
+      #shop-main {
+        --bg: #0b0c10;
+        --panel: #11131a;
+        --muted: #8a8f98;
+        --text: #e8ecf1;
+        --brand: #6aa6ff;
+        --brand-2: #8b5cf6;
+        --ok: #22c55e;
+        --danger: #ef4444;
+        --border: #1f2430;
+        --chip: #161a25;
+        --card: #0f1219;
+        --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+        color: var(--text);
+        background: var(--bg);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        line-height: 1.6;
+      }
+
+      #shop-main .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 16px 60px;
+      }
+
+      /* 頁首/麵包屑 + 標題列 */
+      #shop-main .page-head {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      #shop-main .crumbs {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      #shop-main .page-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      #shop-main h1 {
+        font-size: clamp(22px, 3.5vw, 30px);
+        margin: 0;
+        letter-spacing: .3px;
+      }
+
+      #shop-main .results {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      /* 篩選列（類別 chips + 價位 slider 假件 + 搜尋框） */
+      #shop-main .toolbar {
+        background: linear-gradient(180deg, var(--panel), rgba(17, 19, 26, 0.6));
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        display: grid;
+        gap: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+      }
+
+      #shop-main .filter-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      #shop-main .chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--chip);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-size: 13px;
+        cursor: pointer;
+        transition: .2s ease;
+        user-select: none;
+      }
+
+      #shop-main .chip:hover {
+        transform: translateY(-1px);
+      }
+
+      #shop-main .chip.is-active {
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        border-color: transparent;
+        color: white;
+        box-shadow: 0 8px 24px rgba(108, 128, 255, .35);
+      }
+
+      #shop-main .spacer {
+        flex: 1;
+      }
+
+      #shop-main .search {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+      }
+
+      #shop-main .search input {
+        width: 100%;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px 10px 36px;
+        color: var(--text);
+        outline: none;
+        transition: .2s ease;
+      }
+
+      #shop-main .search input:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(106, 166, 255, .18);
+      }
+
+      #shop-main .search .icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      /* 排序 / 顯示數 */
+      #shop-main .sortbar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      #shop-main .select {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      #shop-main select {
+        appearance: none;
+        background: var(--card);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 8px 36px 8px 12px;
+        font-size: 14px;
+        position: relative;
+        outline: none;
+        cursor: pointer;
+      }
+
+      #shop-main .select-wrap {
+        position: relative;
+        display: inline-block;
+      }
+
+      #shop-main .select-wrap::after {
+        content: "▾";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-size: 12px;
+        pointer-events: none;
+      }
+
+      /* 商品格 */
+      #shop-main .grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+      }
+
+      @media (max-width: 1100px) {
+        #shop-main .grid {
+          grid-template-columns: repeat(9, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        #shop-main .grid {
+          grid-template-columns: repeat(6, 1fr);
+        }
+      }
+
+      @media (max-width: 520px) {
+        #shop-main .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      #shop-main .card {
+        grid-column: span 3;
+        background: linear-gradient(180deg, var(--card), rgba(15, 18, 25, 0.6));
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+      }
+
+      @media (max-width: 1100px) {
+        #shop-main .card {
+          grid-column: span 3;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #shop-main .card {
+          grid-column: span 3;
+        }
+      }
+
+      @media (max-width: 520px) {
+        #shop-main .card {
+          grid-column: span 1;
+        }
+      }
+
+      #shop-main .card:hover {
+        transform: translateY(-2px);
+        border-color: #2a3243;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+      }
+
+      /* 圖片占位（無外部圖） */
+      #shop-main .thumb {
+        aspect-ratio: 4/3;
+        background:
+          radial-gradient(1200px 200px at -10% -10%, rgba(106, 166, 255, .25), transparent 45%),
+          radial-gradient(1000px 200px at 110% -20%, rgba(139, 92, 246, .25), transparent 40%),
+          linear-gradient(135deg, #0f1623, #0c0f17 70%);
+        display: grid;
+        place-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #shop-main .thumb::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .06), transparent);
+        transform: translateX(-100%);
+        animation: shine 2.2s linear infinite;
+      }
+
+      @keyframes shine {
+        to {
+          transform: translateX(100%);
+        }
+      }
+
+      #shop-main .thumb .badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 999px;
+        box-shadow: 0 10px 20px rgba(106, 166, 255, .35);
+      }
+
+      #shop-main .thumb .fav {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(0, 0, 0, .35);
+        border: 1px solid rgba(255, 255, 255, .08);
+        cursor: pointer;
+        transition: .2s ease;
+      }
+
+      #shop-main .thumb .fav:hover {
+        transform: scale(1.05);
+      }
+
+      #shop-main .thumb .fav[data-active="true"] {
+        background: rgba(239, 68, 68, .25);
+        border-color: rgba(239, 68, 68, .4);
+      }
+
+      /* 內容區 */
+      #shop-main .body {
+        padding: 14px 14px 16px;
+        display: grid;
+        gap: 8px;
+      }
+
+      #shop-main .title {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.45;
+      }
+
+      #shop-main .subtitle {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      #shop-main .meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      #shop-main .price {
+        font-weight: 700;
+        letter-spacing: .3px;
+      }
+
+      #shop-main .price .old {
+        color: var(--muted);
+        text-decoration: line-through;
+        font-weight: 400;
+        margin-left: 8px;
+        font-size: 13px;
+      }
+
+      #shop-main .rating {
+        display: inline-flex;
+        gap: 2px;
+        font-size: 12px;
+        color: #ffd166;
+      }
+
+      #shop-main .actions {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        margin-top: 2px;
+      }
+
+      #shop-main .btn {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #131722;
+        color: var(--text);
+        cursor: pointer;
+        transition: .2s ease;
+        font-weight: 600;
+        letter-spacing: .2px;
+      }
+
+      #shop-main .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      #shop-main .btn.primary {
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        border: none;
+        color: white;
+        box-shadow: 0 10px 24px rgba(106, 166, 255, .35);
+      }
+
+      #shop-main .ship {
+        font-size: 12px;
+        color: var(--ok);
+        margin-top: 2px;
+      }
+
+      /* 分頁 */
+      #shop-main .pager {
+        margin-top: 22px;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #shop-main .pager .pbtn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        display: grid;
+        place-items: center;
+        color: var(--text);
+        cursor: pointer;
+        transition: .2s ease;
+      }
+
+      #shop-main .pager .pbtn:hover {
+        transform: translateY(-1px);
+      }
+
+      #shop-main .pager .pbtn.is-active {
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        border: none;
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(106, 166, 255, .35);
+      }
+
+      /* 小裝置優化 */
+      @media (max-width: 520px) {
+        #shop-main .actions {
+          grid-template-columns: 1fr;
+        }
+
+        #shop-main .results {
+          width: 100%;
+        }
+      }
+    </style>
+
+    <section class="container">
+      <!-- 頁首 -->
+      <div class="page-head">
+        <nav class="crumbs">首頁 / 商店 / 所有商品</nav>
+        <div class="page-title">
+          <h1>精選商品</h1>
+          <div class="results">共 128 項</div>
+        </div>
+      </div>
+
+      <!-- 篩選 + 搜尋 -->
+      <div class="toolbar">
+        <div class="filter-row">
+          <span class="chip is-active">全部</span>
+          <span class="chip">上衣</span>
+          <span class="chip">下著</span>
+          <span class="chip">鞋款</span>
+          <span class="chip">配件</span>
+          <span class="spacer"></span>
+          <label class="search">
+            <span class="icon">🔎</span>
+            <input type="search" placeholder="搜尋商品、型號、關鍵字…" aria-label="搜尋商品">
+          </label>
+        </div>
+
+        <div class="sortbar">
+          <div class="select">
+            排序：
+            <span class="select-wrap">
+              <select aria-label="商品排序">
+                <option value="popular">熱門優先</option>
+                <option value="new">最新上架</option>
+                <option value="price-asc">價格低到高</option>
+                <option value="price-desc">價格高到低</option>
+                <option value="rating">評分最高</option>
+              </select>
+            </span>
+          </div>
+          <div class="select">
+            顯示數：
+            <span class="select-wrap">
+              <select aria-label="每頁顯示數">
+                <option>12</option>
+                <option selected>24</option>
+                <option>36</option>
+                <option>48</option>
+              </select>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品格 -->
+      <div class="grid">
+        <!-- 商品卡片樣板 x 8（示意） -->
+        <!-- 你可以複製 .card 並替換標題/價格/徽章文本 -->
+        <article class="card" aria-label="商品：雲霧輕機能外套">
+          <div class="thumb" role="img" aria-label="商品示意圖（占位）">
+            <span class="badge">NEW</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">雲霧輕機能外套</div>
+            <div class="subtitle">快乾 / 防潑水 / 透氣</div>
+            <div class="meta">
+              <div class="price">$1,980 <span class="old">$2,480</span></div>
+              <div class="rating" aria-label="評分 4.6 顆星">★★★★★</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 24 小時出貨</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：極簡厚磅 T-Shirt">
+          <div class="thumb">
+            <span class="badge">-20%</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="true">❤</button>
+          </div>
+          <div class="body">
+            <div class="title">極簡厚磅 T-Shirt</div>
+            <div class="subtitle">100% 精梳棉</div>
+            <div class="meta">
+              <div class="price">$520 <span class="old">$650</span></div>
+              <div class="rating">★★★★☆</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 超商取貨</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：軟彈慢跑鞋">
+          <div class="thumb">
+            <span class="badge">HOT</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">軟彈慢跑鞋</div>
+            <div class="subtitle">EVA 緩震 / 輕量 240g</div>
+            <div class="meta">
+              <div class="price">$2,780</div>
+              <div class="rating">★★★★★</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 免運門檻 $999</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：防潑水多口袋短褲">
+          <div class="thumb">
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">防潑水多口袋短褲</div>
+            <div class="subtitle">Urban Outdoor</div>
+            <div class="meta">
+              <div class="price">$890</div>
+              <div class="rating">★★★★☆</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 現貨供應</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：立體背膠棒球帽">
+          <div class="thumb">
+            <span class="badge">NEW</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">立體背膠棒球帽</div>
+            <div class="subtitle">透氣網布 / 可調節</div>
+            <div class="meta">
+              <div class="price">$480</div>
+              <div class="rating">★★★★☆</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 7 天鑑賞</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：城市機能後背包 22L">
+          <div class="thumb">
+            <span class="badge">HOT</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="true">❤</button>
+          </div>
+          <div class="body">
+            <div class="title">城市機能後背包 22L</div>
+            <div class="subtitle">抗撕裂 / 輕量 / 防潑水</div>
+            <div class="meta">
+              <div class="price">$1,680</div>
+              <div class="rating">★★★★★</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 滿額贈束口袋</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：石墨烯保暖內搭">
+          <div class="thumb">
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">石墨烯保暖內搭</div>
+            <div class="subtitle">抑菌 / 輕薄貼合</div>
+            <div class="meta">
+              <div class="price">$760 <span class="old">$890</span></div>
+              <div class="rating">★★★★★</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 台灣製造</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：柔彈休閒長褲">
+          <div class="thumb">
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">柔彈休閒長褲</div>
+            <div class="subtitle">四向彈性 / 立體剪裁</div>
+            <div class="meta">
+              <div class="price">$1,280</div>
+              <div class="rating">★★★★☆</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 兩件 95 折</div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="商品：輕旅側背包">
+          <div class="thumb">
+            <span class="badge">-15%</span>
+            <button class="fav" type="button" aria-label="加入最愛" data-active="false">♡</button>
+          </div>
+          <div class="body">
+            <div class="title">輕旅側背包</div>
+            <div class="subtitle">多口袋 / 防潑</div>
+            <div class="meta">
+              <div class="price">$990 <span class="old">$1,180</span></div>
+              <div class="rating">★★★★☆</div>
+            </div>
+            <div class="actions">
+              <button class="btn">加入購物車</button>
+              <button class="btn primary">立即購買</button>
+            </div>
+            <div class="ship">☑ 今日下單明日到</div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 分頁 -->
+      <nav class="pager" aria-label="分頁">
+        <button class="pbtn" aria-label="上一頁">‹</button>
+        <button class="pbtn is-active" aria-current="page">1</button>
+        <button class="pbtn">2</button>
+        <button class="pbtn">3</button>
+        <button class="pbtn">…</button>
+        <button class="pbtn">9</button>
+        <button class="pbtn" aria-label="下一頁">›</button>
+      </nav>
+    </section>
+
+    <!-- 微互動（可刪）：最愛切換 -->
+    <script>
+      (function () {
+        const root = document.getElementById('shop-main');
+        root?.addEventListener('click', e => {
+          const btn = e.target.closest('.fav');
+          if (!btn) return;
+          const active = btn.getAttribute('data-active') === 'true';
+          btn.setAttribute('data-active', String(!active));
+          btn.textContent = !active ? '❤' : '♡';
+        }, { passive: true });
+      })();
+    </script>
+  </main>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+
+
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+
+
+
+
+        console.log("✅ Vue mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>
