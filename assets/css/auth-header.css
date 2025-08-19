@@ -1,0 +1,116 @@
+/* Auth header styles (scoped to header only) */
+
+/* Brown palette tuned to light header background */
+:root {
+    --vb-brown: #8a6e4b;
+    /* primary brown */
+    --vb-brown-600: #7a5f3e;
+    /* hover/active */
+    --vb-brown-200: #efe9e2;
+    /* subtle bg for outline hover if needed */
+    --vb-contrast: #ffffff;
+}
+
+/* Base button shape/spacing within header auth area */
+.header .header-auth .btn.vb-btn,
+.header .header-auth .btn.vb-btn-outline {
+    border-radius: 6px;
+    /* more square */
+    padding: 5px 10px;
+    /* smaller */
+    border-width: 1px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.header .header-auth .btn.vb-btn+.btn.vb-btn,
+.header .header-auth .btn.vb-btn+.btn.vb-btn-outline,
+.header .header-auth .btn.vb-btn-outline+.btn.vb-btn,
+.header .header-auth .btn.vb-btn-outline+.btn.vb-btn-outline {
+    margin-left: 8px;
+}
+
+/* Compact size for btn-sm explicitly */
+.header .header-auth .btn.vb-btn.btn-sm,
+.header .header-auth .btn.vb-btn-outline.btn-sm {
+    padding: 3px 8px;
+    font-size: 0.85rem;
+}
+
+/* Filled brown */
+.header .header-auth .btn.vb-btn {
+    background-color: var(--vb-brown);
+    border-color: var(--vb-brown);
+    color: var(--vb-contrast);
+}
+
+.header .header-auth .btn.vb-btn:hover,
+.header .header-auth .btn.vb-btn:focus {
+    background-color: var(--vb-brown-600);
+    border-color: var(--vb-brown-600);
+    color: var(--vb-contrast);
+}
+
+/* Outline brown */
+.header .header-auth .btn.vb-btn-outline {
+    background: transparent;
+    border-color: var(--vb-brown);
+    color: var(--vb-brown);
+}
+
+.header .header-auth .btn.vb-btn-outline:hover,
+.header .header-auth .btn.vb-btn-outline:focus {
+    background: var(--vb-brown);
+    color: var(--vb-contrast);
+    border-color: var(--vb-brown);
+}
+
+/* Optional: name style next to logout */
+.header .header-auth .user-name {
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+/* Text-only link buttons */
+.header .header-auth .vb-link {
+    display: inline-block;
+    padding: 2px 2px;
+    /* tighter horizontal padding */
+    color: color-mix(in srgb, var(--vb-brown), transparent 35%);
+    /* semi-transparent look */
+    font-weight: 600;
+    text-decoration: none;
+    border: 0;
+    background: transparent;
+}
+
+.header .header-auth .vb-link:hover,
+.header .header-auth .vb-link:focus {
+    color: var(--vb-brown-600);
+    /* stronger on hover */
+    text-decoration: underline;
+}
+
+.header .header-auth .vb-link+.vb-link {
+    margin-left: 0;
+    /* spacing handled by separator */
+}
+
+/* Insert pipe separator between adjacent links */
+.header .header-auth .vb-link+.vb-link::before {
+    content: "|";
+    display: inline-block;
+    margin: 0 2px;
+    /* ~2px spacing at both sides of the pipe */
+    color: color-mix(in srgb, var(--vb-brown), transparent 55%);
+}
+
+/* Remove extra paddings around the separator */
+.header .header-auth .vb-link+.vb-link {
+    padding-left: 0;
+}
+
+.header .header-auth .vb-link:first-child {
+    padding-right: 0;
+}
