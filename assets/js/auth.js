@@ -168,15 +168,15 @@ function renderAuthArea(user) {
     if (!container) return;
     container.innerHTML = '';
     if (!user) {
-        // 未登入：顯示登入/註冊按鈕
+        // 未登入：顯示登入/註冊按鈕（圓角矩形＋褐色主題）
         const loginBtn = document.createElement('a');
-        loginBtn.className = 'btn btn-outline-accent me-2 btn-sm rounded-pill';
+        loginBtn.className = 'vb-link';
         loginBtn.href = '#';
         loginBtn.textContent = '登入';
         loginBtn.addEventListener('click', (e) => { e.preventDefault(); const el = new bootstrap.Modal(document.getElementById('loginModal')); el.show(); });
 
         const regBtn = document.createElement('a');
-        regBtn.className = 'btn btn-accent btn-sm rounded-pill';
+        regBtn.className = 'vb-link';
         regBtn.href = '#';
         regBtn.textContent = '註冊';
         regBtn.addEventListener('click', (e) => { e.preventDefault(); const el = new bootstrap.Modal(document.getElementById('registerModal')); el.show(); });
@@ -194,7 +194,7 @@ function renderAuthArea(user) {
     nameEl.textContent = user.Name || user.name || user.Email || '會員';
 
     const logoutBtn = document.createElement('a');
-    logoutBtn.className = 'btn btn-outline-accent btn-logout btn-sm rounded-pill';
+    logoutBtn.className = 'vb-link btn-logout';
     logoutBtn.href = '#';
     logoutBtn.textContent = '登出';
     logoutBtn.addEventListener('click', async (e) => { e.preventDefault(); await logout(); renderAuthArea(null); });

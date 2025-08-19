@@ -233,6 +233,41 @@ h6 {
   gap: 8px;
 }
 
+/* Refined look & feel for header auth buttons */
+.header .header-auth .btn {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1.1;
+  padding: 6px 14px;
+  border-width: 1px;
+  border-radius: 999px;
+  /* ensure pill even without rounded-pill */
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .05s ease-in-out;
+}
+
+.header .header-auth .btn.btn-sm {
+  padding: 6px 12px;
+}
+
+.header .header-auth .btn.btn-accent {
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color), transparent 80%);
+}
+
+.header .header-auth .btn.btn-accent:focus-visible,
+.header .header-auth .btn.btn-outline-accent:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+.header .header-auth .btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.header .header-auth .btn+.btn {
+  margin-left: 6px;
+}
+
 @media (max-width: 1200px) {
   .header .logo {
     order: 1;
