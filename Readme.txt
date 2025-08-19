@@ -1,6 +1,13 @@
-Thanks for downloading this template!
+最簡 Vite 使用說明
 
-Template Name: Kelly
-Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
-Author: BootstrapMade.com
-License: https://bootstrapmade.com/license/
+在專案根執行以下 PowerShell 指令：
+
+```powershell
+npm install
+npm run dev        # 開發（熱重載）
+# 若要檢查打包結果：
+npm run build
+npm run preview
+```
+
+備註：若 `package.json` 已包含 `"dev": "vite"`，只要 `npm install` 後執行 `npm run dev` 即可。
