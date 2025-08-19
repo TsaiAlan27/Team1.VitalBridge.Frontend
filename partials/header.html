@@ -45,10 +45,10 @@
 
 
 
+        <div class="header-social-links d-flex align-items-center flex-nowrap gap-2">
+            <div id="authArea" class="header-auth d-flex align-items-center me-3"></div>
 
 
-
-        <div class="header-social-links ">
 
             <!-- 通知鈴鐺 -->
             <a class="btn position-relative dropdown-toggle" href="#" role="button" id="notificationDropdown"
@@ -72,12 +72,80 @@
                 <li><a class="dropdown-item text-center text-muted" href="#">查看全部通知</a></li>
             </ul>
 
-            <a href="#" class="line"><i class="bi bi-line"></i></a>
+            <!-- <a href="#" class="line"><i class="bi bi-line"></i></a> -->
             <!-- <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a> -->
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+            <!-- <a href="#" class="facebook"><i class="bi bi-facebook"></i></a> -->
 
 
         </div>
 
     </div>
 </header>
+
+<!-- Login / Register Modals -->
+<!-- 登入按鈕觸發 modal -->
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">會員登入</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="loginEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">密碼</label>
+                        <input type="password" class="form-control" id="loginPassword" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
+                    </div>
+                    <div id="loginAlert" class="alert d-none" role="alert"></div>
+                    <button type="submit" class="btn btn-primary">登入</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">註冊會員</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <label for="regName" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="regName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="regEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="regEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="regPassword" class="form-label">密碼</label>
+                        <input type="password" class="form-control" id="regPassword" required>
+                    </div>
+                    <div id="regAlert" class="alert d-none" role="alert"></div>
+                    <button type="submit" class="btn btn-primary">註冊</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- auth area will be rendered by assets/js/auth.js -->
+
+
+<!-- 引入 auth 模組 -->
+<script type="module" src="/assets/js/auth.js"></script>

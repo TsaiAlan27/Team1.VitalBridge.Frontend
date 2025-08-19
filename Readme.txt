@@ -11,3 +11,6 @@ npm run preview
 ```
 
 備註：若 `package.json` 已包含 `"dev": "vite"`，只要 `npm install` 後執行 `npm run dev` 即可。
+
+若要重啟
+直接在終端機 按ctrl+c
