@@ -11,7 +11,8 @@
 // - register 回傳 200 OK
 // - refresh 回傳 { accessToken: string, expiresInSeconds: number }
 
-const API_BASE = '/api/Auth';
+const API_BASE = 'https://localhost:7104/api/Auth';
+// const API_BASE = '/api/Auth'; // 若使用相對路徑，確保後端 API 路徑正確
 
 let accessToken = null; // 記憶體中的 access token
 let isRefreshing = false;
