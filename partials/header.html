@@ -1,7 +1,7 @@
 <header id="header" class="header d-flex align-items-center light-background sticky-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-        <a href="/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <a href="https://localhost:7184/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
             <h1 class="sitename">樂齡橋 VitalBridge</h1>
@@ -146,6 +146,27 @@
 
 <!-- auth area will be rendered by assets/js/auth.js -->
 
+
+<!-- Register Success Modal -->
+<div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-labelledby="registerSuccessModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerSuccessModalLabel">註冊成功</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">我們已寄出驗證信至 <span id="regSuccessEmail" class="fw-bold"></span>。</p>
+                <p class="text-muted mb-0">請前往信箱點擊驗證連結後再登入。</p>
+            </div>
+            <div class="modal-footer">
+                <a href="/index.html" class="btn btn-outline-secondary">回首頁</a>
+                <button type="button" id="btnOpenLoginFromSuccess" class="btn btn-primary">前往登入</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 引入 auth 樣式（獨立於 main.css） -->
 <link rel="stylesheet" href="/assets/css/auth-header.css" />

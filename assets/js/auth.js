@@ -24,6 +24,20 @@ function getCookie(name) {
     return v ? decodeURIComponent(v[1]) : null;
 }
 
+// Helper: 取得可能的 CSRF/XSRF token（支援多種常見名稱與 .AspNetCore.Antiforgery 前綴）
+function getXsrfToken() {
+    const candidates = ['XSRF-TOKEN', 'X-CSRF-TOKEN', 'XSRFTOKEN', 'csrf-token'];
+    for (const n of candidates) {
+        const v = getCookie(n);
+        if (v) return v;
+    }
+    try {
+        const m = document.cookie.match(/(?:^|;)\s*(\.AspNetCore\.Antiforgery[^=]*)=\s*([^;]+)/);
+        if (m && m[2]) return decodeURIComponent(m[2]);
+    } catch { }
+    return null;
+}
+
 // Helper: 設 cookie（簡單），path=/, 可設定 days
 function setCookie(name, value, days) {
     let expires = '';
@@ -46,15 +60,12 @@ async function apiFetch(path, opts = {}, retry = true) {
     if (!opts.credentials) opts.credentials = 'include';
     // 若有 server 設定 CSRF token cookie（例如 XSRF-TOKEN），將其放入標頭以通過 CSRF 驗證
     try {
-        const xsrf = getCookie('XSRF-TOKEN') || getCookie('X-CSRF-TOKEN') || getCookie('XSRFTOKEN') || getCookie('csrf-token');
+        const xsrf = getXsrfToken();
         if (xsrf) {
-            // 常見 header 名稱
             headers['X-XSRF-TOKEN'] = xsrf;
             headers['RequestVerificationToken'] = xsrf;
         }
-    } catch (e) {
-        // ignore
-    }
+    } catch (e) { }
     // debug: console.debug('apiFetch', path, { hasAccessToken: !!accessToken, headers });
     const res = await fetch(API_BASE + path, { ...opts, headers });
     if (res.status === 401 && retry) {
@@ -76,7 +87,7 @@ async function ensureRefreshed() {
             // refresh endpoint 依後端實作可能會使用 HttpOnly cookie 辨識 refresh token
             console.debug('ensureRefreshed: calling refresh endpoint');
             // 讀取可能的 XSRF cookie 並放入 header
-            const xsrf = getCookie('XSRF-TOKEN') || getCookie('X-CSRF-TOKEN') || getCookie('XSRFTOKEN') || getCookie('csrf-token');
+            const xsrf = getXsrfToken();
             const refreshHeaders = xsrf ? { 'X-XSRF-TOKEN': xsrf, 'RequestVerificationToken': xsrf } : {};
             console.debug('ensureRefreshed: sending refresh with xsrf present', !!xsrf);
             const r = await fetch(API_BASE + '/refresh', { method: 'POST', credentials: 'include', headers: refreshHeaders });
@@ -119,8 +130,28 @@ function clearAuth() {
 }
 
 export async function register(dto) {
-    const res = await fetch(API_BASE + '/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dto), credentials: 'include' });
-    if (!res.ok) throw new Error('註冊失敗');
+    // Attach CSRF headers if present
+    let headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    try {
+        const xsrf = getXsrfToken();
+        if (xsrf) {
+            headers['X-XSRF-TOKEN'] = xsrf;
+            headers['RequestVerificationToken'] = xsrf;
+        }
+    } catch { }
+    const res = await fetch(API_BASE + '/register', { method: 'POST', headers, body: JSON.stringify(dto), credentials: 'include' });
+    if (!res.ok) {
+        // read body once, try json parse, and log for diagnostics
+        let bodyText = '';
+        try { bodyText = await res.text(); } catch { bodyText = ''; }
+        let msg = '註冊失敗';
+        try {
+            const data = bodyText ? JSON.parse(bodyText) : null;
+            msg = data?.message || data?.Message || data?.error || data?.title || msg;
+        } catch { /* not json */ }
+        console.error('Register API failed', { status: res.status, body: bodyText });
+        throw new Error(msg || bodyText || '註冊失敗');
+    }
     return await res.json().catch(() => null);
 }
 
@@ -239,20 +270,87 @@ function setupDomHandlers() {
     if (regForm) {
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
+            const nameInput = document.getElementById('regName');
+            const emailInput = document.getElementById('regEmail');
+            const passwordInput = document.getElementById('regPassword');
+            const name = nameInput?.value?.trim() || '';
+            const email = emailInput?.value?.trim() || '';
+            const password = passwordInput?.value || '';
             const alertEl = document.getElementById('regAlert');
+            // helpers for field error rendering
+            const setInvalid = (el, msg) => {
+                if (!el) return;
+                el.classList.add('is-invalid');
+                let fb = el.nextElementSibling;
+                const needCreate = !(fb && fb.classList && fb.classList.contains('invalid-feedback'));
+                if (needCreate) {
+                    fb = document.createElement('div');
+                    fb.className = 'invalid-feedback';
+                    el.parentNode && el.parentNode.insertBefore(fb, el.nextSibling);
+                }
+                fb.textContent = msg || '';
+            };
+            const clearInvalid = (el) => {
+                if (!el) return;
+                el.classList.remove('is-invalid');
+                const fb = el.nextElementSibling;
+                if (fb && fb.classList && fb.classList.contains('invalid-feedback')) fb.textContent = '';
+            };
+            // clear previous state
+            [nameInput, emailInput, passwordInput].forEach(clearInvalid);
+            if (alertEl) { alertEl.classList.add('d-none'); alertEl.classList.remove('alert-danger', 'alert-success'); alertEl.textContent = ''; }
+            // validate
+            const errors = {};
+            if (!name) errors.name = '請輸入姓名';
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) errors.email = '請輸入 Email';
+            else if (!emailRegex.test(email)) errors.email = 'Email 格式不正確';
+            if (!password) errors.password = '請輸入密碼';
+            else if (password.length < 6) errors.password = '密碼至少需 6 個字元';
+            if (errors.name) setInvalid(nameInput, errors.name);
+            if (errors.email) setInvalid(emailInput, errors.email);
+            if (errors.password) setInvalid(passwordInput, errors.password);
+            if (Object.keys(errors).length) {
+                if (alertEl) { alertEl.classList.remove('d-none'); alertEl.classList.add('alert-danger'); alertEl.textContent = '請修正紅框欄位後再送出'; }
+                return;
+            }
+            const submitBtn = regForm.querySelector('button[type="submit"]');
+            const restoreBtn = () => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    if (submitBtn.dataset.originalText) submitBtn.innerHTML = submitBtn.dataset.originalText;
+                }
+            };
             try {
+                if (submitBtn) {
+                    submitBtn.dataset.originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>註冊中...';
+                }
                 await register({ name, email, password });
-                if (alertEl) { alertEl.classList.remove('d-none', 'alert-danger'); alertEl.classList.add('alert-success'); alertEl.textContent = '註冊成功，請登入'; }
-                // 自動開啟登入 modal
-                const regModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-                regModal?.hide();
-                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-                loginModal.show();
+                // 成功後關閉註冊視窗並顯示成功提示 Modal
+                try {
+                    const regModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                    regModal?.hide();
+                } catch { }
+                try {
+                    const emailSpan = document.getElementById('regSuccessEmail');
+                    if (emailSpan) emailSpan.textContent = email;
+                    const successModalEl = document.getElementById('registerSuccessModal');
+                    if (successModalEl && window.bootstrap && bootstrap.Modal) {
+                        const successModal = new bootstrap.Modal(successModalEl);
+                        successModal.show();
+                    }
+                } catch { }
             } catch (err) {
                 if (alertEl) { alertEl.classList.remove('d-none', 'alert-success'); alertEl.classList.add('alert-danger'); alertEl.textContent = err.message || '註冊失敗'; }
+                // 如果是常見的帳號已存在，標示在 Email 欄位
+                if ((err?.message || '').match(/(已存在|exist|已被使用|duplicate|衝突|conflict)/i)) {
+                    setInvalid(emailInput, '此 Email 已被使用');
+                }
+            }
+            finally {
+                restoreBtn();
             }
         });
     }
@@ -263,6 +361,17 @@ function setupDomHandlers() {
         if (t && t.matches && t.matches('.btn-logout')) {
             e.preventDefault();
             logout().then(() => window.location.reload()).catch(() => window.location.reload());
+        }
+        if (t && t.id === 'btnOpenLoginFromSuccess') {
+            e.preventDefault();
+            try {
+                const s = bootstrap.Modal.getInstance(document.getElementById('registerSuccessModal'));
+                s?.hide();
+            } catch { }
+            try {
+                const m = new bootstrap.Modal(document.getElementById('loginModal'));
+                m.show();
+            } catch { }
         }
     });
 }
