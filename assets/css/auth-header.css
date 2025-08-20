@@ -114,3 +114,26 @@
 .header .header-auth .vb-link:first-child {
     padding-right: 0;
 }
+
+/* Skeleton loader and fade-in to smooth initial render */
+.header .header-auth .vb-skeleton {
+    display: inline-block;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.06));
+    background-size: 200% 100%;
+    animation: vb-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes vb-skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: 0 0; }
+}
+
+.header .header-auth .vb-fade-in {
+    animation: vb-fade 120ms ease-in;
+}
+
+@keyframes vb-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

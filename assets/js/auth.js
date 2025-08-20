@@ -88,6 +88,11 @@ async function ensureRefreshed() {
             console.debug('ensureRefreshed: calling refresh endpoint');
             // 讀取可能的 XSRF cookie 並放入 header
             const xsrf = getXsrfToken();
+            // 若無 XSRF token（跨網域常見），為避免 CSRF 驗證失敗導致 500，直接放棄本次 refresh
+            if (!xsrf) {
+                console.debug('ensureRefreshed: skip refresh, no XSRF token available');
+                return false;
+            }
             const refreshHeaders = xsrf ? { 'X-XSRF-TOKEN': xsrf, 'RequestVerificationToken': xsrf } : {};
             console.debug('ensureRefreshed: sending refresh with xsrf present', !!xsrf);
             const r = await fetch(API_BASE + '/refresh', { method: 'POST', credentials: 'include', headers: refreshHeaders });
@@ -104,8 +109,8 @@ async function ensureRefreshed() {
             if (data?.accessToken) {
                 accessToken = data.accessToken;
                 console.debug('ensureRefreshed: obtained accessToken');
-                // 自動更新 header UI（不等待也可，但 await 可確保 UI 立即反映）
-                try { await updateHeaderUI(); } catch (e) { console.debug('updateHeaderUI failed', e); }
+                // 若非 Vue 模式才更新 header UI（Vue 負責畫面）
+                try { if (!window.__VB_AUTH_VUE_ACTIVE) await updateHeaderUI(); } catch (e) { console.debug('updateHeaderUI failed', e); }
                 return true;
             }
             console.warn('ensureRefreshed: refresh response missing accessToken', data);
@@ -170,8 +175,8 @@ export async function login(dto, remember = false) {
         // 記得設定安全性：若 production，應該由後端透過 HttpOnly cookie 設定
         setCookie('refreshToken', data.refreshToken, remember ? 30 : 1);
     }
-    // 更新 header UI
-    try { await updateHeaderUI(); } catch (e) { }
+    // 若非 Vue 模式才更新 header UI（Vue 負責畫面）
+    try { if (!window.__VB_AUTH_VUE_ACTIVE) await updateHeaderUI(); } catch (e) { }
     return data;
 }
 
@@ -384,6 +389,9 @@ function setupDomHandlers() {
     } catch (e) {
         // ignore
     }
+    // 若由 Vue 控制畫面，略過 DOM 綁定與 UI 畫面更新
+    const useVue = !!window.__VB_AUTH_VUE_ACTIVE;
+    if (useVue) return;
     // 設定 DOM handler 並更新 header
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { setupDomHandlers(); updateHeaderUI(); });
     else { setupDomHandlers(); updateHeaderUI(); }
@@ -407,6 +415,7 @@ try {
         updateHeaderUI,
         getAccessToken: () => accessToken
     });
+    try { window.dispatchEvent(new CustomEvent('vb:auth-ready')); } catch (e) { }
 } catch (e) {
     // ignore (e.g., non-browser env)
 }

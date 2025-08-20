@@ -46,7 +46,7 @@
 
 
         <div class="header-social-links d-flex align-items-center flex-nowrap gap-2">
-            <div id="authArea" class="header-auth d-flex align-items-center me-3"></div>
+            <div id="authArea" class="header-auth d-flex align-items-center me-3" data-vue-auth="true"></div>
 
 
 
@@ -173,3 +173,6 @@
 
 <!-- 引入 auth 模組 -->
 <script type="module" src="/assets/js/auth.js"></script>
+<!-- Vue 控制層（需先載入 Vue 3 CDN） -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="/assets/js/auth-vue.js"></script>
