@@ -101,6 +101,7 @@ body {
 }
 
 /* Sliding Navigation Menu */
+/* --- Base Navigation Menu Styles --- */
 .nav-menu {
     position: fixed;
     top: 80px;
@@ -115,7 +116,9 @@ body {
     /* Space for header */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     transform: translateX(-100%);
-    transition: left 0.3s ease-in-out;
+    /* Initial off-screen position */
+    transition: transform 0.3s ease-in-out;
+    /* Smooth slide-in/out */
     z-index: 999;
     overflow-y: auto;
     /* Enable scrolling for long menus */
@@ -123,19 +126,20 @@ body {
     border-bottom-right-radius: 15px;
 }
 
-
-
+/* State for open menu */
 .nav-menu.open {
     transform: translateX(0);
+    /* Slide into view */
 }
 
+/* --- List & Link Base Styles --- */
 .nav-menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-/* Styles for the main LI elements */
+/* Styles for main LI elements */
 .nav-menu ul li {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
@@ -145,6 +149,7 @@ body {
     border-bottom: none;
 }
 
+/* Base link styling for non-submenu items (will be overridden by .menu-link for submenu items) */
 .nav-menu ul li a {
     display: block;
     padding: 15px 20px;
@@ -162,7 +167,70 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Submenu styles */
+/* --- Menu Item Wrapper for Split Navigation/Toggle --- */
+.nav-menu .menu-item-wrapper {
+    display: flex;
+    align-items: stretch;
+    margin: 5px 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Override existing link styles to work with wrapper */
+.nav-menu .menu-item-wrapper .menu-link {
+    flex: 1;
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    margin: 0;
+    /* Reset margin from general `ul li a` */
+    border-radius: 0;
+    /* Reset border-radius from general `ul li a` */
+}
+
+.nav-menu .menu-item-wrapper .menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Submenu Toggle Button --- */
+.nav-menu .submenu-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 15px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    min-width: 50px;
+}
+
+.nav-menu .submenu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Arrow styling for submenu toggle */
+.nav-menu .toggle-arrow {
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.nav-menu .toggle-arrow.rotated {
+    transform: rotate(90deg);
+    /* Rotate arrow when submenu is open */
+}
+
+/* Override the existing ::after arrow for items with a toggle button */
+.nav-menu ul li.has-submenu>.menu-item-wrapper .menu-link::after {
+    display: none;
+}
+
+/* --- Submenu Content Styles --- */
 .nav-menu ul ul {
     background-color: rgba(0, 0, 0, 0.2);
     padding-left: 15px;
@@ -170,6 +238,17 @@ body {
     /* Hidden by default */
 }
 
+/* Indentation for nested submenu items */
+.nav-menu ul ul .menu-item-wrapper {
+    margin-left: 15px;
+}
+
+.nav-menu ul ul .menu-item-wrapper .menu-link {
+    padding-left: 25px;
+    /* Deeper indentation for nested links */
+}
+
+/* Styles for the classic submenu arrow (if not using the new button toggle) */
 .nav-menu ul li.has-submenu>a {
     position: relative;
 }
@@ -193,6 +272,20 @@ body {
 .nav-menu ul li.has-submenu.active>ul {
     display: block;
     /* Show submenu when active */
+}
+
+/* --- Loading Indicators --- */
+.nav-menu .loading-indicator {
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+/* Loading item styling */
+.nav-menu .loading-item {
+    padding: 10px 20px 10px 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    font-size: 0.9em;
 }
 
 

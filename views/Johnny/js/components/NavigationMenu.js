@@ -3,6 +3,8 @@ import MenuItem from './MenuItem.js'
 
 
 // 2. Define the main NavigationMenu component that uses MenuItem
+// NavigationMenu.js - Updated for async loading
+
 export default {
     name: 'NavigationMenu',
     components: { MenuItem },
@@ -15,13 +17,14 @@ export default {
     `,
     data() {
         return {
-            menuItems: [] // Navigation menu data
+            menuItems: []
         };
     },
     methods: {
         async fetchNavigationMenu() {
             try {
-                const response = await fetch('/api/ContentArticleCategories');
+                const baseAddress = 'https://localhost:7104';
+                const response = await fetch(`${baseAddress}/api/ContentArticleCategoryAPI`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return await response.json();
             } catch (error) {
@@ -29,73 +32,57 @@ export default {
                 return [];
             }
         },
-        async loadNavigationMenu() {
 
-            // Menu Data Structure with nested subcategories
-            this.menuItems = [
-                {
-                    name: 'International',
-                    link: '#international',
-                    subcategories: [
-                        { name: 'Asia', link: '#international-asia' },
-                        { name: 'Europe', link: '#international-europe' },
-                        { name: 'Americas', link: '#international-americas' }
-                    ]
-                },
-                {
-                    name: 'Sports',
-                    link: '#sports',
-                    subcategories: [
-                        {
-                            name: 'Football',
-                            link: '#sports-football',
-                            subcategories: [
-                                { name: 'NFL', link: '#sports-football-nfl' },
-                                { name: 'Premier League', link: '#sports-football-premierleague' },
-                                { name: 'College Football', link: '#sports-football-college' }
-                            ]
-                        },
-                        { name: 'Basketball', link: '#sports-basketball' },
-                        { name: 'Cricket', link: '#sports-cricket' }
-                    ]
-                },
-                {
-                    name: 'Opinion',
-                    link: '#opinion',
-                    subcategories: []
-                },
-                {
-                    name: 'Business',
-                    link: '#business',
-                    subcategories: [
-                        { name: 'Finance', link: '#business-finance' },
-                        { name: 'Startups', link: '#business-startups' },
-                        { name: 'Marketing', link: '#business-marketing' }
-                    ]
-                },
-                {
-                    name: 'Youth',
-                    link: '#youth',
-                    subcategories: []
-                },
-                {
-                    name: 'Entertainment',
-                    link: '#entertainment',
-                    subcategories: [
-                        { name: 'Movies', link: '#entertainment-movies' },
-                        { name: 'Music', link: '#entertainment-music' },
-                        { name: 'Gaming', link: '#entertainment-gaming' }
-                    ]
-                },
-                {
-                    name: 'Lifestyle',
-                    link: '#lifestyle',
-                    subcategories: [
-                        { name: 'Health & Wellness', link: '#lifestyle-health' },
-                        { name: 'Travel Guides', link: '#lifestyle-travel' }
-                    ]
-                }
-            ];
+        async loadNavigationMenu() {
+            // Load only top-level menu items initially
+            // Note: hasSubcategories indicates whether a category has subcategories
+            // but we don't load the actual subcategories until needed
+            // this.menuItems = [
+            //     {
+            //         name: 'International',
+            //         link: '#international',
+            //         hasSubcategories: true,
+            //         categoryId: 'International'
+            //     },
+            //     {
+            //         name: 'Sports',
+            //         link: '#sports',
+            //         hasSubcategories: true,
+            //         categoryId: 'Sports'
+            //     },
+            //     {
+            //         name: 'Opinion',
+            //         link: '#opinion',
+            //         hasSubcategories: false
+            //     },
+            //     {
+            //         name: 'Business',
+            //         link: '#business',
+            //         hasSubcategories: true,
+            //         categoryId: 'Business'
+            //     },
+            //     {
+            //         name: 'Youth',
+            //         link: '#youth',
+            //         hasSubcategories: false
+            //     },
+            //     {
+            //         name: 'Entertainment',
+            //         link: '#entertainment',
+            //         hasSubcategories: true,
+            //         categoryId: 'Entertainment'
+            //     },
+            //     {
+            //         name: 'Lifestyle',
+            //         link: '#lifestyle',
+            //         hasSubcategories: true,
+            //         categoryId: 'Lifestyle'
+            //     }
+            // ];
+
+            // In a real implementation, you might want to fetch this from your API:
+            this.menuItems = await this.fetchNavigationMenu();
+            console.log("Navigation menu loaded:", this.menuItems);
         }
     },
     mounted() {

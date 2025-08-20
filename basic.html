@@ -117,73 +117,74 @@
 
 
 
+
+  <!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+  <script>
+    (function onFullyReady(run) {
+      function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+      function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+      function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+      Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+    })(function () {
+      // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+      // 例如：
+      // $(document).ready(function () {
+      //   console.log("✅ jQuery .ready() 測試成功！");
+      //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+      // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //Vue的部分寫這邊
+      (function mountVue() {
+        // 把頁面專屬的 Vue 程式寫在這個函式裡
+        function initPageVue() {
+          if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+          const { createApp } = Vue;
+          // 範例：把實際程式改成你要的內容
+
+          createApp({
+            data() { return { message: "✅ Vue 測試文字：讀取成功！" }; },
+            // methods: { ... }, mounted() { ... } 等可在此加入
+          }).mount('#hero');
+
+
+
+
+          console.log("✅ Vue mount 成功！");
+        }
+        // 立即執行（外層 post-load 已確保時機正確）
+        initPageVue();
+      })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    });
+  </script>
+
 </body>
-
-<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
-<script>
-  (function onFullyReady(run) {
-    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
-    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
-    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
-    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
-  })(function () {
-    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
-    // 例如：
-    // $(document).ready(function () {
-    //   console.log("✅ jQuery .ready() 測試成功！");
-    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
-    // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Vue的部分寫這邊
-    (function mountVue() {
-      // 把頁面專屬的 Vue 程式寫在這個函式裡
-      function initPageVue() {
-        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
-        const { createApp } = Vue;
-        // 範例：把實際程式改成你要的內容
-
-        createApp({
-          data() { return { message: "✅ Vue 測試文字：讀取成功！" }; },
-          // methods: { ... }, mounted() { ... } 等可在此加入
-        }).mount('#hero');
-
-
-
-
-        console.log("✅ Vue mount 成功！");
-      }
-      // 立即執行（外層 post-load 已確保時機正確）
-      initPageVue();
-    })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
-  });
-</script>
 
 </html>
