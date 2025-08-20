@@ -133,7 +133,7 @@
       const ready = ref(false); // 初次判定完成後再渲染，避免先顯示「登入/註冊」的閃爍
 
       // login form state
-  const loginForm = reactive({ email: '', password: '', remember: false, alert: { type: '', msg: '' } });
+      const loginForm = reactive({ email: '', password: '', remember: false, alert: { type: '', msg: '' } });
 
       async function refreshUser() {
         try {
@@ -199,7 +199,7 @@
 
       onMounted(() => { waitAuthReady().then((a) => { api = a; refreshUser(); }); });
 
-  return { user, ready, loginForm, loginErrors, regForm, doLogin, doRegister, doLogout, openLogin, openRegister, openLoginFromSuccess };
+      return { user, ready, loginForm, loginErrors, regForm, doLogin, doRegister, doLogout, openLogin, openRegister, openLoginFromSuccess };
     },
     template: `
       <template v-if="ready">
