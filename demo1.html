@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VitalBridge｜長照資訊整合平台</title>
+  <meta name="description" content="長照資訊整合平台：快速查詢機構、服務、補助，提供照護知識與配對諮詢。" />
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root{
+      --vb-primary:#0ea5e9; /* sky-500 */
+      --vb-primary-dark:#0284c7; /* sky-600 */
+      --vb-accent:#22c55e; /* green-500 */
+      --vb-bg:#f8fafc; /* slate-50 */
+      --vb-card:#ffffff;
+    }
+    body{background:var(--vb-bg);}    
+    .btn-primary{background:var(--vb-primary);border-color:var(--vb-primary);} 
+    .btn-primary:hover{background:var(--vb-primary-dark);border-color:var(--vb-primary-dark);} 
+    .navbar{backdrop-filter:saturate(180%) blur(6px);} 
+    .hero{position:relative; overflow:hidden; background:linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);} 
+    .hero .bg-shape{position:absolute; inset:auto -20% -30% -20%; height:80%; background:radial-gradient(50% 50% at 50% 50%, rgba(14,165,233,.25) 0, rgba(14,165,233,0) 55%), radial-gradient(50% 50% at 70% 30%, rgba(34,197,94,.25) 0, rgba(34,197,94,0) 60%);} 
+    .search-card{box-shadow:0 10px 30px rgba(2,8,23,.06);} 
+    .feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;} 
+    .stat{border-radius:16px;background:var(--vb-card);box-shadow:0 8px 20px rgba(2,8,23,.05);} 
+    .section-title{font-weight:800;letter-spacing:.02em;} 
+    .card-hover{transition:transform .2s ease, box-shadow .2s ease;} 
+    .card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(2,8,23,.12);} 
+    .partner-cta{background:linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);} 
+    .partner-cta .badge{background:rgba(255,255,255,.25);} 
+    .vb-badge{background:#e2fbe8;color:#067647;border-radius:999px;padding:.25rem .6rem;font-weight:600;font-size:.8rem;} 
+    .footer a{color:#0ea5e9;text-decoration:none;} .footer a:hover{text-decoration:underline;} 
+    /* 可視化跳至主內容 */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+    .skip-link:focus{position:static;width:auto;height:auto;padding:.5rem 1rem;background:#111;color:#fff;z-index:10000;}
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">跳至主內容</a>
+
+  <!-- 導覽列 -->
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container py-2">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+        <i class="bi bi-heart-pulse-fill text-primary"></i>
+        VitalBridge 長照平台
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="切換導覽"> 
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#search">找機構/服務</a></li>
+          <li class="nav-item"><a class="nav-link" href="#categories">服務類別</a></li>
+          <li class="nav-item"><a class="nav-link" href="#articles">照護知識</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">常見問題</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-primary" href="#" id="btnLogin">登入</a>
+          <a class="btn btn-primary" href="#" id="btnSignup">免費註冊</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero + 搜尋 -->
+  <header class="hero py-5 py-lg-6">
+    <div class="bg-shape"></div>
+    <div class="container position-relative">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <span class="vb-badge">整合全台長照資源</span>
+          <h1 class="display-5 fw-800 mt-3">一站式查詢 <span class="text-primary">長照機構、服務與補助</span></h1>
+          <p class="lead text-secondary">支援跨平台配對、即時空床、到宅服務與專家諮詢，讓家屬在最緊要的時刻，能快速做出安心決策。</p>
+          <div class="d-flex gap-3 align-items-center mt-3">
+            <div class="d-flex align-items-center text-secondary small"><i class="bi bi-shield-check me-2"></i>資料經過實名/機構驗證</div>
+            <div class="d-flex align-items-center text-secondary small"><i class="bi bi-clock-history me-2"></i>每日更新</div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card search-card border-0 p-3 p-md-4">
+            <div class="card-body">
+              <h2 id="search" class="h5 mb-3">快速搜尋</h2>
+              <!-- ⭐ MAIN: 搜尋核心元件（若要只取 main，可從此處起） -->
+              <form id="searchForm" class="row g-3" autocomplete="on">
+                <div class="col-12 col-md-6">
+                  <label for="keyword" class="form-label">關鍵字（機構 / 服務 / 地點）</label>
+                  <input type="text" class="form-control" id="keyword" placeholder="例：日照中心、失智照護、台中西屯" />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="city" class="form-label">縣市</label>
+                  <select class="form-select" id="city" aria-label="選擇縣市">
+                    <option value="" selected>不限</option>
+                    <option>台北市</option><option>新北市</option><option>桃園市</option><option>台中市</option>
+                    <option>台南市</option><option>高雄市</option><option>基隆市</option><option>新竹市</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="type" class="form-label">服務類型</label>
+                  <select class="form-select" id="type" aria-label="選擇服務類型">
+                    <option value="" selected>不限</option>
+                    <option value="homecare">居家照護</option>
+                    <option value="daycare">日間照顧</option>
+                    <option value="nursing">護理之家</option>
+                    <option value="respite">喘息服務</option>
+                    <option value="rehab">復健</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-4">
+                  <label for="budget" class="form-label">預算（每月，元）</label>
+                  <input type="number" class="form-control" id="budget" inputmode="numeric" placeholder="例如 30000" />
+                </div>
+                <div class="col-6 col-md-4">
+                  <label for="bed" class="form-label">空床/名額</label>
+                  <select class="form-select" id="bed">
+                    <option value="">不限</option>
+                    <option value="yes">目前有空位</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-4 align-self-end d-grid">
+                  <button class="btn btn-primary btn-lg" type="submit"><i class="bi bi-search me-2"></i>開始搜尋</button>
+                </div>
+              </form>
+              <!-- ⭐ MAIN: 搜尋核心元件結束（若要只取 main，可取到此） -->
+
+              <div id="searchResult" class="mt-4" aria-live="polite" aria-relevant="all"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 指標數據 -->
+      <div class="row g-3 mt-4">
+        <div class="col-6 col-md-3">
+          <div class="p-3 stat text-center">
+            <div class="h4 mb-0">6,240+</div>
+            <div class="text-secondary small">收錄機構/據點</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 stat text-center">
+            <div class="h4 mb-0">98.7%</div>
+            <div class="text-secondary small">資料完整度</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 stat text-center">
+            <div class="h4 mb-0">24h</div>
+            <div class="text-secondary small">空床回報頻率</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 stat text-center">
+            <div class="h4 mb-0">120k</div>
+            <div class="text-secondary small">每月查詢</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 三大核心價值 -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="section-title h3 mb-4">我們如何幫助你</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 card-hover h-100">
+              <div class="feature-icon mb-3"><i class="bi bi-geo-alt"></i></div>
+              <h3 class="h5">即時配對</h3>
+              <p class="text-secondary">依地點、服務與預算快速比對，顯示空床/名額、專長與評價。</p>
+              <a href="#search" class="link-primary">立即搜尋 <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 card-hover h-100">
+              <div class="feature-icon mb-3" style="background:#dcfce7;color:#166534"><i class="bi bi-cash-coin"></i></div>
+              <h3 class="h5">補助試算</h3>
+              <p class="text-secondary">整合長照 2.0、身障與地方方案，輸入條件即刻試算與教學。</p>
+              <a href="#tools" class="link-primary">前往工具 <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 card-hover h-100">
+              <div class="feature-icon mb-3" style="background:#fef3c7;color:#92400e"><i class="bi bi-headset"></i></div>
+              <h3 class="h5">專家諮詢</h3>
+              <p class="text-secondary">護理/社工線上諮詢，提供方案比較、入住評估與轉介。</p>
+              <a href="#consult" class="link-primary">預約諮詢 <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 服務分類 -->
+    <section id="categories" class="py-5 bg-white">
+      <div class="container">
+        <div class="d-flex align-items-end justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">服務類別</h2>
+          <a href="#" class="btn btn-outline-primary btn-sm">瀏覽全部</a>
+        </div>
+        <div class="row g-3">
+          <!-- 6 盒子 -->
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="居家照護" class="card-img-top" src="https://picsum.photos/600/360?random=11" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">居家照護</h3>
+                  <p class="text-secondary small mb-0">居服、護理到宅、復能、陪伴與送餐。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="日間照顧" class="card-img-top" src="https://picsum.photos/600/360?random=12" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">日間照顧</h3>
+                  <p class="text-secondary small mb-0">日照中心、共餐站、失智據點。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="護理之家" class="card-img-top" src="https://picsum.photos/600/360?random=13" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">護理之家</h3>
+                  <p class="text-secondary small mb-0">長期/短期住宿、醫療合作。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="喘息服務" class="card-img-top" src="https://picsum.photos/600/360?random=14" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">喘息服務</h3>
+                  <p class="text-secondary small mb-0">臨托、日托、居托多元方案。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="復健與醫療" class="card-img-top" src="https://picsum.photos/600/360?random=15" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">復健與醫療</h3>
+                  <p class="text-secondary small mb-0">物治、職治、語治與門診轉介。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-6 col-lg-4">
+            <a class="text-reset text-decoration-none" href="#">
+              <div class="card h-100 border-0 shadow-sm card-hover">
+                <img alt="輔具/居家無障礙" class="card-img-top" src="https://picsum.photos/600/360?random=16" loading="lazy" />
+                <div class="card-body">
+                  <h3 class="h6 mb-1">輔具/居家無障礙</h3>
+                  <p class="text-secondary small mb-0">補助、租借、到府評估與改造。</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 精選機構（Carousel） -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex align-items-end justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">精選機構</h2>
+          <div class="text-secondary small">由評價、回覆速度與合規指標綜合排序</div>
+        </div>
+        <div id="spotlightCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner rounded-4 shadow-sm">
+            <div class="carousel-item active">
+              <img src="https://picsum.photos/1200/420?random=21" class="d-block w-100" alt="精選機構 1" />
+              <div class="carousel-caption bg-dark bg-opacity-50 rounded p-3">
+                <h5 class="mb-1">安心日照中心．台中</h5>
+                <p class="small mb-0">專精失智照護｜即時名額回報｜跨專業團隊</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://picsum.photos/1200/420?random=22" class="d-block w-100" alt="精選機構 2" />
+              <div class="carousel-caption bg-dark bg-opacity-50 rounded p-3">
+                <h5 class="mb-1">青禾護理之家．高雄</h5>
+                <p class="small mb-0">慢性病共照｜復健設備完善｜24h 醫護</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://picsum.photos/1200/420?random=23" class="d-block w-100" alt="精選機構 3" />
+              <div class="carousel-caption bg-dark bg-opacity-50 rounded p-3">
+                <h5 class="mb-1">和悅居家照護．新北</h5>
+                <p class="small mb-0">到宅護理｜復能與營養｜家屬教育</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#spotlightCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">上一張</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#spotlightCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">下一張</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 工具 / 教學 / 最新文章 -->
+    <section id="articles" class="py-5 bg-white">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-end justify-content-between mb-3">
+              <h2 class="section-title h3 mb-0">最新文章</h2>
+              <a class="btn btn-outline-primary btn-sm" href="#">更多文章</a>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <article class="card border-0 shadow-sm h-100 card-hover">
+                  <img class="card-img-top" src="https://picsum.photos/600/360?random=31" alt="失智常見照護誤區" />
+                  <div class="card-body">
+                    <h3 class="h6">失智長者常見照護誤區與改善策略</h3>
+                    <p class="text-secondary small">照護技巧｜家屬心理｜環境佈置</p>
+                    <a href="#" class="stretched-link">閱讀</a>
+                  </div>
+                </article>
+              </div>
+              <div class="col-md-6">
+                <article class="card border-0 shadow-sm h-100 card-hover">
+                  <img class="card-img-top" src="https://picsum.photos/600/360?random=32" alt="補助申請流程" />
+                  <div class="card-body">
+                    <h3 class="h6">長照 2.0 補助申請完整流程（圖解）</h3>
+                    <p class="text-secondary small">試算工具｜準備文件｜常見地雷</p>
+                    <a href="#" class="stretched-link">閱讀</a>
+                  </div>
+                </article>
+              </div>
+              <div class="col-md-6">
+                <article class="card border-0 shadow-sm h-100 card-hover">
+                  <img class="card-img-top" src="https://picsum.photos/600/360?random=33" alt="復能訓練" />
+                  <div class="card-body">
+                    <h3 class="h6">復能：把日常生活變成訓練場</h3>
+                    <p class="text-secondary small">復健｜職能｜居家環境</p>
+                    <a href="#" class="stretched-link">閱讀</a>
+                  </div>
+                </article>
+              </div>
+              <div class="col-md-6">
+                <article class="card border-0 shadow-sm h-100 card-hover">
+                  <img class="card-img-top" src="https://picsum.photos/600/360?random=34" alt="喘息服務選擇" />
+                  <div class="card-body">
+                    <h3 class="h6">喘息服務怎麼選？三分鐘快速比較</h3>
+                    <p class="text-secondary small">臨托｜短托｜日托</p>
+                    <a href="#" class="stretched-link">閱讀</a>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="p-4 bg-white rounded-4 shadow-sm mb-3">
+              <h3 id="tools" class="h6 mb-3">實用工具</h3>
+              <div class="d-grid gap-2">
+                <a class="btn btn-outline-primary" href="#"><i class="bi bi-calculator me-2"></i>補助試算器</a>
+                <a class="btn btn-outline-primary" href="#"><i class="bi bi-clipboard2-check me-2"></i>照護需求自評</a>
+                <a class="btn btn-outline-primary" href="#"><i class="bi bi-geo me-2"></i>附近機構地圖</a>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-4 shadow-sm">
+              <h3 id="consult" class="h6 mb-3">專家諮詢</h3>
+              <p class="text-secondary small">留下需求，我們的護理師/社工將在 24 小時內與你聯繫。</p>
+              <form class="vstack gap-2">
+                <input class="form-control" placeholder="稱呼" />
+                <input class="form-control" placeholder="Email 或電話" />
+                <textarea class="form-control" placeholder="簡述需求（地點/服務/預算/時程）" rows="3"></textarea>
+                <button class="btn btn-primary" type="button">送出需求</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 合作夥伴 CTA（機構端） -->
+    <section class="partner-cta text-white py-5">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <span class="badge text-bg-light text-dark">機構/服務單位專區</span>
+            <h2 class="mt-2">加入 VitalBridge，提升曝光與媒合效率</h2>
+            <p class="mb-0">同步你的空床與可接案時段，快速回覆家屬詢問，建立可信口碑。</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a class="btn btn-light btn-lg" href="#"><i class="bi bi-building-add me-2"></i>申請成為合作夥伴</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-5">
+      <div class="container">
+        <h2 class="section-title h3 mb-3">常見問題</h2>
+        <div class="accordion" id="faqAcc">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q1h"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">平台資料來源？多久更新？</button></h2>
+            <div id="q1" class="accordion-collapse collapse show" aria-labelledby="q1h" data-bs-parent="#faqAcc">
+              <div class="accordion-body">資料來源包含政府開放資料、機構自行維護與我們的查核；空床/名額資訊預設每日更新。</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q2h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">如何比較費用與服務內容？</button></h2>
+            <div id="q2" class="accordion-collapse collapse" aria-labelledby="q2h" data-bs-parent="#faqAcc">
+              <div class="accordion-body">使用搜尋後的「比較清單」將多家機構/方案並列，從收費、專長、評價到交通時間一目了然。</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q3h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">是否提供真人協助？</button></h2>
+            <div id="q3" class="accordion-collapse collapse" aria-labelledby="q3h" data-bs-parent="#faqAcc">
+              <div class="accordion-body">是，我們提供護理/社工諮詢，並可協助預約參訪與入住評估。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="footer bg-white border-top pt-5 pb-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-heart-pulse-fill text-primary"></i>
+            <span class="fw-bold">VitalBridge 長照平台</span>
+          </div>
+          <p class="text-secondary small mb-2">整合長照資訊，協助家庭在有限時間內做出安心且可負擔的決策。</p>
+          <div class="d-flex gap-3 fs-5">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="LINE"><i class="bi bi-line"></i></a>
+            <a href="#" aria-label="Email"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold">探索</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#search">找機構/服務</a></li>
+            <li><a href="#categories">服務類別</a></li>
+            <li><a href="#articles">照護知識</a></li>
+            <li><a href="#faq">常見問題</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h6 class="fw-bold">資源</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#tools">補助試算</a></li>
+            <li><a href="#">下載中心</a></li>
+            <li><a href="#">開放資料</a></li>
+            <li><a href="#">隱私權/服務條款</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="fw-bold">聯絡我們</h6>
+          <p class="small text-secondary mb-2">service@vitalbridge.example<br/>週一到週五 09:00-18:00</p>
+          <a class="btn btn-outline-primary btn-sm" href="#">成為合作機構</a>
+        </div>
+      </div>
+      <div class="border-top mt-4 pt-3 d-flex flex-column flex-md-row justify-content-between small text-secondary">
+        <span>© <span id="year"></span> VitalBridge. All rights reserved.</span>
+        <span>Made with <i class="bi bi-heart-fill text-danger"></i> for better care.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 年份
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 假資料（可替換為 /api/facilities/search 結果）
+    const mockData = [
+      { id:1, name:'安心日照中心', city:'台中市', type:'daycare', price:28000, vacancy:true, rating:4.7 },
+      { id:2, name:'青禾護理之家', city:'高雄市', type:'nursing', price:42000, vacancy:false, rating:4.5 },
+      { id:3, name:'和悅居家照護', city:'新北市', type:'homecare', price:時薪500, vacancy:true, rating:4.6 }
+    ];
+
+    // 搜尋互動（示範版）
+    const form = document.getElementById('searchForm');
+    const result = document.getElementById('searchResult');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const q = document.getElementById('keyword').value.trim().toLowerCase();
+      const city = document.getElementById('city').value;
+      const type = document.getElementById('type').value;
+      const budget = parseInt(document.getElementById('budget').value || '0', 10);
+      const needVacancy = document.getElementById('bed').value === 'yes';
+
+      // 前端篩選（請替換為實際 API 呼叫）
+      let list = mockData.filter(x =>
+        (!q || x.name.toLowerCase().includes(q)) &&
+        (!city || x.city === city) &&
+        (!type || x.type === type) &&
+        (!budget || (x.price >= budget * 0.5 && x.price <= budget * 1.5) || isNaN(x.price)) &&
+        (!needVacancy || x.vacancy === true)
+      );
+
+      renderResult(list);
+    });
+
+    function renderResult(list){
+      if(!list.length){
+        result.innerHTML = `
+          <div class="alert alert-warning" role="alert">
+            <i class="bi bi-info-circle me-2"></i>沒有找到符合條件的結果，試著放寬條件或更換關鍵字。
+          </div>`;
+        return;
+      }
+      result.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h3 class="h6 mb-0">為你找到 ${list.length} 筆結果</h3>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">排序</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#" data-sort="rating">評價高到低</a></li>
+              <li><a class="dropdown-item" href="#" data-sort="price">費用低到高</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="row g-3" id="resultList"></div>`;
+
+      const grid = result.querySelector('#resultList');
+      list.forEach(x => {
+        const card = document.createElement('div');
+        card.className = 'col-12';
+        card.innerHTML = `
+          <div class="card border-0 shadow-sm card-hover">
+            <div class="row g-0 align-items-center">
+              <div class="col-md-3">
+                <img class="img-fluid rounded-start" src="https://picsum.photos/480/320?random=${x.id+50}" alt="${x.name}" />
+              </div>
+              <div class="col-md-6 p-3">
+                <h4 class="h6 mb-1">${x.name} ${x.vacancy ? '<span class="badge text-bg-success ms-1">有空位</span>' : ''}</h4>
+                <div class="text-secondary small mb-2"><i class="bi bi-geo-alt me-1"></i>${x.city}｜<i class="bi bi-tag me-1 ms-2"></i>${mapType(x.type)}</div>
+                <div class="text-warning small mb-1">${'★'.repeat(Math.round(x.rating))}<span class="text-secondary">（${x.rating.toFixed(1)}）</span></div>
+                <div class="text-secondary small">收費參考：<span class="fw-semibold">${isNaN(x.price) ? x.price : 'NT$ ' + x.price.toLocaleString()}</span></div>
+              </div>
+              <div class="col-md-3 p-3 text-md-end">
+                <a href="#" class="btn btn-outline-primary btn-sm">加入比較</a>
+                <a href="#" class="btn btn-primary btn-sm ms-2">聯絡諮詢</a>
+              </div>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+
+      // 排序事件
+      result.querySelectorAll('[data-sort]').forEach(el => el.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const key = el.getAttribute('data-sort');
+        const sorted = [...list].sort((a,b)=> key==='price' ? (num(a.price) - num(b.price)) : (b.rating - a.rating));
+        renderResult(sorted);
+      }));
+    }
+
+    const num = (v)=> isNaN(v) ? Number.MAX_SAFE_INTEGER : v;
+    const mapType = (t)=> ({homecare:'居家照護', daycare:'日間照顧', nursing:'護理之家', respite:'喘息', rehab:'復健'}[t]||'服務');
+  </script>
+</body>
+</html>
