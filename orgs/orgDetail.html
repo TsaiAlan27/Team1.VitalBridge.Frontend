@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>機構詳細資料 - 樂齡橋 VitalBridge</title>
+    <meta name="description" content="查看長照機構的詳細資訊，包含服務項目、費用、特色服務等完整資料">
+    <meta name="keywords" content="長照機構詳細資料,機構資訊,長照服務,費用價格">
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="機構詳細資料 - 樂齡橋 VitalBridge">
+    <meta property="og:description" content="查看長照機構的詳細資訊，包含服務項目、費用、特色服務等完整資料">
+    <meta property="og:type" content="website">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <!-- 自己想改的樣式放這邊 -->
+    <style>
+        /* 機構詳細頁面自訂樣式 */
+        .detail-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .org-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+
+        .org-location {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bed-count {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .org-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-weight: 600;
+            border-left: 4px solid #007bff;
+            padding-left: 1rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .service-targets {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .service-target-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #007bff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .price-table th {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            border: none;
+        }
+
+        .price-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .price-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .feature-services {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: #ffc107;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .description-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .address-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .address-link {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .address-link:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            color: white;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 4rem;
+            color: #6c757d;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+            color: #6c757d;
+        }
+
+        .info-badge {
+            background: #007bff;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .detail-container {
+                padding: 1rem;
+            }
+
+            .org-image {
+                height: 250px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="headerpage"></div>
+
+    <main class="main">
+        <!-- Breadcrumb Navigation -->
+        <section class="py-2">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index.html">首頁</a></li>
+                        <li class="breadcrumb-item"><a href="/orgs/orgSearch.html">找機構</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">機構詳細資料</li>
+                    </ol>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Detail Section -->
+        <section id="detailApp" class="section">
+            <div class="container">
+                <!-- Back Button -->
+                <button type="button" class="btn back-btn" @click="goBack" aria-label="返回搜尋頁面">
+                    <i class="bi bi-arrow-left me-2"></i>返回搜尋
+                </button>
+
+                <!-- Loading State -->
+                <div v-if="loading" class="loading-container">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">載入中...</span>
+                    </div>
+                    <h3 class="mt-3">載入機構資料中...</h3>
+                </div>
+
+                <!-- Error State -->
+                <div v-else-if="errorMessage" class="error-message" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ errorMessage }}
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" @click="loadOrganizationDetail">
+                            <i class="bi bi-arrow-clockwise me-2"></i>重新載入
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Organization Detail -->
+                <div v-else-if="organization" class="detail-container">
+                    <!-- 1. 機構名稱 -->
+                    <h1 class="org-title">{{ organization.name }}</h1>
+
+                    <!-- 2. 位置與床位數 -->
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <p class="org-location">
+                                <i class="bi bi-geo-alt me-2"></i>
+                                {{ organization.cityName }}{{ organization.districtName }}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <span class="bed-count">
+                                <i class="bi bi-hospital me-2"></i>
+                                床位數：{{ organization.bedCount }} 床
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 3. 機構照片 -->
+                    <div v-if="organization.photoUrl">
+                        <img :src="organization.photoUrl" :alt="organization.name + '機構照片'" class="org-image"
+                            @error="handleImageError($event)">
+                    </div>
+
+                    <!-- 4. 服務對象 -->
+                    <div v-if="organization.serviceTarget">
+                        <h3 class="section-title">
+                            <i class="bi bi-people me-2"></i>服務對象
+                        </h3>
+                        <div class="service-targets">
+                            <div class="service-target-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">{{ organization.serviceTarget }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. 房型與價格 -->
+                    <div v-if="organization.rooms && organization.rooms.length > 0">
+                        <h3 class="section-title">
+                            <i class="bi bi-house me-2"></i>房型與費用
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="table price-table">
+                                <thead>
+                                    <tr>
+                                        <th>房型</th>
+                                        <th>月費 (NT$)</th>
+                                        <th>設備與服務</th>
+                                        <th>備註</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="room in organization.rooms" :key="room.id">
+                                        <td>
+                                            <strong>{{ room.roomType }}</strong>
+                                            <div v-if="room.size" class="text-muted small">
+                                                {{ room.size }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success fs-5">
+                                                {{ formatPrice(room.monthlyFee) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div v-if="room.facilities">
+                                                <small class="text-muted">{{ room.facilities }}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted" v-if="room.notes">{{ room.notes }}</small>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 6. 特色服務 -->
+                    <div v-if="organization.featureServices && organization.featureServices.length > 0">
+                        <h3 class="section-title">
+                            <i class="bi bi-star me-2"></i>特色服務
+                        </h3>
+                        <div class="feature-services">
+                            <div class="feature-grid">
+                                <div v-for="service in organization.featureServices" :key="service.id"
+                                    class="feature-item">
+                                    <div class="feature-icon">
+                                        <i :class="getServiceIcon(service.name)"></i>
+                                    </div>
+                                    <div class="feature-name">{{ service.name }}</div>
+                                    <div v-if="service.description" class="text-muted small mt-2">
+                                        {{ service.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7. 機構介紹 -->
+                    <div v-if="organization.description">
+                        <h3 class="section-title">
+                            <i class="bi bi-info-circle me-2"></i>機構介紹
+                        </h3>
+                        <div class="description-section">
+                            <p class="mb-0" style="white-space: pre-line;">{{ organization.description }}</p>
+                        </div>
+                    </div>
+
+                    <!-- 8. 聯絡資訊 -->
+                    <div>
+                        <h3 class="section-title">
+                            <i class="bi bi-telephone me-2"></i>聯絡資訊
+                        </h3>
+                        <div class="address-section">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6>完整地址</h6>
+                                    <a :href="getGoogleMapsUrl(organization.fullAddress)" target="_blank"
+                                        class="address-link" rel="noopener noreferrer"
+                                        :aria-label="'在 Google 地圖中查看' + organization.fullAddress">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        {{ organization.fullAddress }}
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4" v-if="organization.phone">
+                                    <h6>聯絡電話</h6>
+                                    <a :href="'tel:' + organization.phone" class="address-link">
+                                        <i class="bi bi-telephone-fill"></i>
+                                        {{ organization.phone }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 9. Google 地圖 -->
+                    <div v-if="organization.fullAddress">
+                        <h3 class="section-title">
+                            <i class="bi bi-map me-2"></i>位置地圖
+                        </h3>
+                        <div class="map-container">
+                            <iframe :src="getGoogleMapEmbedUrl(organization.fullAddress)" allowfullscreen=""
+                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                                :title="organization.name + '位置地圖'">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- 其他資訊 -->
+                    <div class="row mt-4">
+                        <div class="col-md-6" v-if="organization.establishedYear">
+                            <span class="info-badge">成立年份</span>
+                            {{ organization.establishedYear }} 年
+                        </div>
+                        <div class="col-md-6" v-if="organization.licenseNumber">
+                            <span class="info-badge">許可證號</span>
+                            {{ organization.licenseNumber }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="footerpage"></div>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/php-email-form/validate.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+    <!-- 其他要裝的js放在這之前 -->
+    <script src="/assets/js/fragment-loader.js" defer></script>
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+    (function onFullyReady(run) {
+        function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+        function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+        function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+        Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+    })(function () {
+        // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+
+        //Vue的部分寫這邊
+        (function mountVue() {
+            // 把頁面專屬的 Vue 程式寫在這個函式裡
+            function initPageVue() {
+                if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+                if (typeof axios === 'undefined') return; // 若未載入 axios 則跳過
+
+                const { createApp } = Vue;
+
+                // Axios 配置
+                const apiClient = axios.create({
+                    baseURL: 'https://localhost:7104',
+                    timeout: 30000,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Axios 錯誤攔截器
+                apiClient.interceptors.response.use(
+                    response => response,
+                    error => {
+                        console.error('API Error:', error);
+                        let errorMessage = '網路連線異常，請稍後再試';
+
+                        if (error.response) {
+                            if (error.response.status === 404) {
+                                errorMessage = '找不到指定的機構，可能已被移除或不存在';
+                            } else {
+                                errorMessage = `伺服器錯誤 (${error.response.status})`;
+                            }
+                        } else if (error.request) {
+                            errorMessage = '無法連線到伺服器，請檢查網路連線';
+                        }
+
+                        return Promise.reject({ message: errorMessage, originalError: error });
+                    }
+                );
+
+                createApp({
+                    data() {
+                        return {
+                            organization: null,
+                            loading: true,
+                            errorMessage: '',
+                            organizationId: null
+                        };
+                    },
+
+                    async mounted() {
+                        this.organizationId = this.getOrganizationIdFromUrl();
+
+                        if (!this.organizationId) {
+                            this.errorMessage = '缺少機構 ID 參數，請從搜尋頁面進入';
+                            this.loading = false;
+                            return;
+                        }
+
+                        await this.loadOrganizationDetail();
+                    },
+
+                    methods: {
+                        // 從 URL 取得機構 ID
+                        getOrganizationIdFromUrl() {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const id = urlParams.get('id');
+
+                            if (id && !isNaN(id)) {
+                                return parseInt(id);
+                            }
+                            return null;
+                        },
+
+                        // 載入機構詳細資料
+                        async loadOrganizationDetail() {
+                            this.loading = true;
+                            this.errorMessage = '';
+
+                            try {
+                                const response = await apiClient.get(`/api/Organizations/${this.organizationId}`);
+                                this.organization = response.data;
+
+                                // 更新頁面標題
+                                if (this.organization.name) {
+                                    document.title = `${this.organization.name} - 機構詳細資料 - 樂齡橋 VitalBridge`;
+                                }
+
+                            } catch (error) {
+                                console.error('載入機構詳細資料失敗:', error);
+                                this.errorMessage = error.message;
+                            } finally {
+                                this.loading = false;
+                            }
+                        },
+
+                        // 返回搜尋頁面
+                        goBack() {
+                            // 檢查是否有 history
+                            if (window.history.length > 1) {
+                                window.history.back();
+                            } else {
+                                window.location.href = '/orgs/orgSearch.html';
+                            }
+                        },
+
+                        // 格式化價格
+                        formatPrice(price) {
+                            return new Intl.NumberFormat('zh-TW').format(price);
+                        },
+
+                        // 圖片載入錯誤處理
+                        handleImageError(event) {
+                            event.target.src = '/assets/img/placeholder.jpg';
+                        },
+
+                        // 取得服務圖示
+                        getServiceIcon(serviceName) {
+                            const iconMap = {
+                                '復健治療': 'bi-heart-pulse',
+                                '日間照護': 'bi-sun',
+                                '護理服務': 'bi-hospital',
+                                '在宅養護': 'bi-house-heart',
+                                '營養餐食': 'bi-cup-hot',
+                                '交通接送': 'bi-bus-front',
+                                '娛樂活動': 'bi-music-note-beamed',
+                                '健康檢查': 'bi-clipboard-pulse',
+                                '藥物管理': 'bi-capsule',
+                                '心理輔導': 'bi-chat-heart',
+                                '物理治療': 'bi-person-arms-up',
+                                '職能治療': 'bi-tools',
+                                '語言治療': 'bi-chat-dots',
+                                '社工服務': 'bi-people',
+                                '家屬支持': 'bi-house-heart-fill'
+                            };
+
+                            return iconMap[serviceName] || 'bi-star-fill';
+                        },
+
+                        // 取得 Google Maps URL
+                        getGoogleMapsUrl(address) {
+                            const encodedAddress = encodeURIComponent(address);
+                            return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+                        },
+
+                        // 取得 Google Maps 嵌入 URL
+                        getGoogleMapEmbedUrl(address) {
+                            const encodedAddress = encodeURIComponent(address);
+                            return `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodedAddress}`;
+                        }
+                    }
+                }).mount('#detailApp');
+
+                console.log("✅ 機構詳細 Vue mount 成功！");
+            }
+
+            // 立即執行（外層 post-load 已確保時機正確）
+            initPageVue();
+        })();
+
+        // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    });
+</script>
+
+</html>
