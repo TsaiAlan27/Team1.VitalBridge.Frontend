@@ -37,7 +37,7 @@
       let api = null; // mounted 後設置
       const user = ref(null);
       const loading = ref(false);
-  const ready = ref(false); // 初次判定完成後再渲染，避免先顯示「登入/註冊」的閃爍
+      const ready = ref(false); // 初次判定完成後再渲染，避免先顯示「登入/註冊」的閃爍
 
       // login form state
       const loginForm = reactive({ email: '', password: '', remember: false, alert: { type: '', msg: '' } });
