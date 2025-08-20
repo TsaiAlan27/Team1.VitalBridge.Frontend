@@ -1,25 +1,196 @@
-<footer id="footer" class="footer light-background">
-
+<footer id="footer" class="footer light-background pt-5 mt-5 border-top">
     <div class="container">
-        <div class="copyright text-center ">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">Kelly</strong> <span>All Rights
-                    Reserved<br></span>
-            </p>
-        </div>
-        <div class="social-links d-flex justify-content-center">
 
-            <a href=""><i class="bi bi-line"></i></a>
-            <!-- <a href=""><i class="bi bi-twitter-x"></i></a> -->
-            <a href=""><i class="bi bi-facebook"></i></a>
+        <style>
+            /* ===== VitalBridge Footer (clean, common layout) ===== */
+            #footer {
+                color: #2b2b2b;
+                font-size: 14px;
+                line-height: 1.7;
+            }
 
+            #footer .container {
+                max-width: 1200px;
+            }
+
+            #footer h5,
+            #footer h6 {
+                margin-bottom: .75rem;
+                font-weight: 600;
+                color: #2b2b2b;
+            }
+
+            #footer .vb-desc {
+                color: #6f6f6f;
+                font-size: 13px;
+            }
+
+            /* Links */
+            #footer a {
+                color: #2b2b2b;
+                text-decoration: none;
+            }
+
+            #footer a:hover {
+                color: #000;
+                text-decoration: underline;
+            }
+
+            /* Nav list: two-column on desktop, single on mobile */
+            #footer .vb-links {
+                --gap: 8px;
+                --padY: 8px;
+                --padX: 10px;
+                --radius: 10px;
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: var(--gap);
+            }
+
+            @media (min-width:992px) {
+                #footer .vb-links {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            #footer .vb-link {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: var(--padY) var(--padX);
+                border-radius: var(--radius);
+                transition: background-color .18s ease, transform .18s ease, color .18s ease;
+            }
+
+            #footer .vb-link:hover {
+                background: rgba(0, 0, 0, .05);
+                transform: translateX(2px);
+            }
+
+            #footer .vb-link i {
+                width: 18px;
+                opacity: .6;
+            }
+
+            /* Contact block */
+            #footer .vb-contact p {
+                margin-bottom: .4rem;
+            }
+
+            #footer .vb-social {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+
+            #footer .vb-social-btn {
+                width: 38px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #bfbfbf;
+                border-radius: 50%;
+                color: #6a6a6a;
+                background: transparent;
+                transition: all .18s ease;
+            }
+
+            #footer .vb-social-btn:hover {
+                color: #2b2b2b;
+                border-color: #888;
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+            }
+
+            /* Bottom bar */
+            #footer .footer-bottom {
+                border-top: 1px solid #ddd;
+                margin-top: 2rem;
+                padding-top: 1rem;
+                font-size: 13px;
+                color: #777;
+            }
+        </style>
+
+        <div class="row gy-5">
+            <!-- 左：品牌與介紹 -->
+            <div class="col-lg-5 col-md-6">
+                <h5 class="mb-2">樂齡橋 VitalBridge</h5>
+                <p class="vb-desc mb-2">
+                    整合長照資訊與資源，協助家庭快速找到合適的照護方案，<br>
+                    讓照護決策不再孤單，為長者與家屬搭起信任之橋。
+                </p>
+                <p class="vb-desc mb-0">讓長照更簡單、更安心。</p>
+            </div>
+
+            <!-- 中：導覽 -->
+            <nav class="col-lg-4 col-md-6" aria-label="Footer navigation">
+                <h6>快速導覽</h6>
+                <ul class="vb-links">
+                    <li><a class="vb-link" href="/about"><i class="bi bi-chevron-right"></i><span>關於我們</span></a></li>
+                    <li><a class="vb-link" href="/guide"><i class="bi bi-chevron-right"></i><span>長照導覽</span></a></li>
+                    <li><a class="vb-link" href="/resources"><i class="bi bi-chevron-right"></i><span>政府資源</span></a>
+                    </li>
+                    <li><a class="vb-link" href="/contact"><i class="bi bi-chevron-right"></i><span>聯絡我們</span></a></li>
+                    <li><a class="vb-link" href="/privacy"><i class="bi bi-shield-check"></i><span>隱私權 / 服務條款</span></a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右：聯絡與社群 -->
+            <div class="col-lg-3 col-md-12">
+                <h6>聯絡我們</h6>
+                <div class="vb-contact">
+                    <p class="small">Email：<a href="mailto:service@vitalbridge.tw">service@vitalbridge.tw</a></p>
+                    <p class="small">客服專線：<strong>0800-123-456</strong></p>
+                </div>
+                <div class="vb-social">
+                    <a class="vb-social-btn" href="#" aria-label="LINE"><i class="bi bi-line"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Twitch"><i class="bi bi-twitch"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Discord"><i class="bi bi-discord"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Reddit"><i class="bi bi-reddit"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="award"><i class="bi bi-award"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Steam"><i class="bi bi-steam"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Tux"><i class="bi bi-tux"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Unity"><i class="bi bi-unity"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="WiFi Off"><i class="bi bi-wifi-off"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Xbox"><i class="bi bi-xbox"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Windows"><i class="bi bi-windows"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Apple"><i class="bi bi-apple"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="PlayStation"><i class="bi bi-playstation"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Patch Check"><i class="bi bi-patch-check"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="OpenAI"><i class="bi bi-openai"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="NVIDIA"><i class="bi bi-nvidia"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Git"><i class="bi bi-git"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Google Play"><i class="bi bi-google-play"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Google"><i class="bi bi-google"></i></a>
+                    <a class="vb-social-btn" href="#" aria-label="Dropbox"><i class="bi bi-dropbox"></i></a>
+
+
+
+                </div>
+            </div>
         </div>
-        <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you've purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+
+        <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div>© 2025 樂齡橋 VitalBridge ・ All Rights Reserved</div>
+            <!-- <div class="d-flex gap-3">
+                <a href="/privacy">隱私權政策</a>
+                <a href="/privacy#terms">服務條款</a>
+            </div> -->
         </div>
+
     </div>
-
 </footer>
