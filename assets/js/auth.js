@@ -54,6 +54,66 @@ function deleteCookie(name) {
     document.cookie = name + '=; Max-Age=0; path=/';
 }
 
+// ===== Error handling helpers =====
+function tryParseJson(text) {
+    try { return JSON.parse(text); } catch { return null; }
+}
+
+const DUP_REGEX = /(已存在|已被使用|已被註冊|已註冊|已經註冊|帳號已存在|使用者已存在|信箱重複|Email\s*重複|duplicate|exists?|already\s*taken|already\s*exists|in\s*use)/i;
+function isDuplicateMessage(s) { return !!(s && DUP_REGEX.test(String(s))); }
+
+function modelErrorsToFields(errors) {
+    const getFirst = (k) => {
+        const v = errors?.[k] || errors?.[k.toLowerCase?.() || k] || errors?.[k.toUpperCase?.() || k];
+        return Array.isArray(v) && v.length ? (v[0] || '') : '';
+    };
+    const fields = { name: '', email: '', password: '' };
+    // common keys
+    const n = getFirst('Name') || getFirst('name');
+    const e = getFirst('Email') || getFirst('email');
+    const p = getFirst('Password') || getFirst('password');
+    if (n) fields.name = n;
+    if (e) fields.email = e;
+    if (p) fields.password = p;
+    return fields;
+}
+
+function normalizeRegisterError(status, bodyText, data) {
+    let message = '註冊失敗';
+    let duplicate = false;
+    let fieldErrors = { name: '', email: '', password: '' };
+
+    // 1) ModelState dictionary
+    const dict = data?.errors || data?.Errors || null;
+    if (dict && typeof dict === 'object' && !Array.isArray(dict)) {
+        fieldErrors = modelErrorsToFields(dict);
+        message = Object.values(fieldErrors).find(x => x) || message;
+        if (isDuplicateMessage(fieldErrors.email)) duplicate = true;
+    }
+
+    // 2) ASP.NET Identity array [{code, description}]
+    const arr = Array.isArray(data?.errors) ? data.errors : (Array.isArray(data?.Errors) ? data.Errors : null);
+    if (arr && arr.length) {
+        const desc = arr.map(e => e?.description || e?.Description || e).filter(Boolean).join('\n');
+        if (desc) message = (message === '註冊失敗') ? (desc.split('\n')[0] || message) : message;
+        if (!fieldErrors.email && (/(Email|信箱)/i.test(desc) || isDuplicateMessage(desc))) fieldErrors.email = '此 Email 已被使用';
+        if (!fieldErrors.password && /(least\s*6|密碼至少\s*6|password.*6)/i.test(desc)) fieldErrors.password = '密碼至少需 6 個字元';
+        if (isDuplicateMessage(desc)) duplicate = true;
+    }
+
+    // 3) Envelope common props
+    if (message === '註冊失敗') {
+        message = data?.message || data?.Message || data?.error || data?.title || message;
+    }
+
+    // 4) Status/body hints
+    if (!duplicate && status === 409) duplicate = true;
+    if (!duplicate && isDuplicateMessage(bodyText)) duplicate = true;
+    if (duplicate && !fieldErrors.email) fieldErrors.email = '此 Email 已被使用';
+
+    return { message, duplicate, fieldErrors };
+}
+
 async function apiFetch(path, opts = {}, retry = true) {
     const headers = opts.headers ? { ...opts.headers } : {};
     if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
@@ -146,16 +206,23 @@ export async function register(dto) {
     } catch { }
     const res = await fetch(API_BASE + '/register', { method: 'POST', headers, body: JSON.stringify(dto), credentials: 'include' });
     if (!res.ok) {
-        // read body once, try json parse, and log for diagnostics
+        // read body and normalize error
         let bodyText = '';
         try { bodyText = await res.text(); } catch { bodyText = ''; }
-        let msg = '註冊失敗';
-        try {
-            const data = bodyText ? JSON.parse(bodyText) : null;
-            msg = data?.message || data?.Message || data?.error || data?.title || msg;
-        } catch { /* not json */ }
+        const data = bodyText ? tryParseJson(bodyText) : null;
+        const norm = normalizeRegisterError(res.status, bodyText, data);
+        const msg = norm.message || '註冊失敗';
+
         console.error('Register API failed', { status: res.status, body: bodyText });
-        throw new Error(msg || bodyText || '註冊失敗');
+        const err = new Error(msg || bodyText || '註冊失敗');
+        try {
+            err.status = res.status;
+            err.body = bodyText;
+            if (data) err.data = data;
+            err.duplicate = !!norm.duplicate;
+            err.fieldErrors = norm.fieldErrors;
+        } catch { }
+        throw err;
     }
     return await res.json().catch(() => null);
 }
@@ -163,21 +230,35 @@ export async function register(dto) {
 export async function login(dto, remember = false) {
     const res = await fetch(API_BASE + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dto), credentials: 'include' });
     if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || '登入失敗');
+        let body = '';
+        try { body = await res.text(); } catch { body = ''; }
+        const err = new Error(body || '登入失敗');
+        try {
+            err.status = res.status;
+            err.body = body;
+            const data = body ? tryParseJson(body) : null;
+            if (data) err.data = data;
+        } catch { }
+        throw err;
     }
-    const data = await res.json();
-    if (data?.accessToken) {
-        accessToken = data.accessToken;
+    const payload = await res.json();
+    // 後端包裝 { success, data, message }，或直接回傳 token 物件
+    const tokenBag = (payload && typeof payload === 'object' && 'success' in payload) ? payload.data : payload;
+    const t = tokenBag;
+    // 支援多種常見鍵名
+    const tokenStr = (typeof t === 'string') ? t : (t?.accessToken || t?.token || t?.jwt || t?.access_token || null);
+    if (tokenStr) {
+        accessToken = tokenStr;
     }
     // 如果 API 同時回傳 refreshToken（非 HttpOnly），可存 cookie（長期）
-    if (data?.refreshToken) {
+    const rt = (typeof t === 'object') ? (t.refreshToken || t.refresh_token) : null;
+    if (rt) {
         // 記得設定安全性：若 production，應該由後端透過 HttpOnly cookie 設定
-        setCookie('refreshToken', data.refreshToken, remember ? 30 : 1);
+        setCookie('refreshToken', rt, remember ? 30 : 1);
     }
     // 若非 Vue 模式才更新 header UI（Vue 負責畫面）
     try { if (!window.__VB_AUTH_VUE_ACTIVE) await updateHeaderUI(); } catch (e) { }
-    return data;
+    return payload;
 }
 
 export async function logout() {

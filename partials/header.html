@@ -96,18 +96,23 @@
                 <form id="loginForm">
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="loginEmail" required>
+                        <input type="email" class="form-control" id="loginEmail" :class="{ 'is-invalid': loginErrors && loginErrors.email }" @input="loginErrors && (loginErrors.email='')" required>
+                        <div class="invalid-feedback" v-if="loginErrors && loginErrors.email">{{ loginErrors.email }}</div>
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label">密碼</label>
-                        <input type="password" class="form-control" id="loginPassword" required>
+                        <input type="password" class="form-control" id="loginPassword" :class="{ 'is-invalid': loginErrors && loginErrors.password }" @input="loginErrors && (loginErrors.password='')" required>
+                        <div class="invalid-feedback" v-if="loginErrors && loginErrors.password">{{ loginErrors.password }}</div>
                     </div>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
                     </div>
                     <div id="loginAlert" class="alert d-none" role="alert"></div>
-                    <button type="submit" class="btn btn-primary">登入</button>
+                    <button type="submit" class="btn btn-primary" :disabled="loginSubmitting">
+                        <span v-if="loginSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                        登入
+                    </button>
                 </form>
             </div>
         </div>
@@ -123,21 +128,33 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="registerForm">
+                <form id="registerForm" @submit.prevent="doRegister">
                     <div class="mb-3">
                         <label for="regName" class="form-label">姓名</label>
-                        <input type="text" class="form-control" id="regName" required>
+                        <input type="text" class="form-control" id="regName" v-model.trim="regForm.name"
+                            :class="{ 'is-invalid': regErrors.name }" @input="regErrors.name=''" required>
+                        <div class="invalid-feedback" v-if="regErrors.name">{{ regErrors.name }}</div>
                     </div>
                     <div class="mb-3">
                         <label for="regEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="regEmail" required>
+                        <input type="email" class="form-control" id="regEmail" v-model.trim="regForm.email"
+                            :class="{ 'is-invalid': regErrors.email }" @input="regErrors.email=''" required>
+                        <div class="invalid-feedback" v-if="regErrors.email">{{ regErrors.email }}</div>
                     </div>
                     <div class="mb-3">
                         <label for="regPassword" class="form-label">密碼</label>
-                        <input type="password" class="form-control" id="regPassword" required>
+                        <input type="password" class="form-control" id="regPassword" v-model="regForm.password"
+                            :class="{ 'is-invalid': regErrors.password }" @input="regErrors.password=''" required>
+                        <div class="invalid-feedback" v-if="regErrors.password">{{ regErrors.password }}</div>
                     </div>
-                    <div id="regAlert" class="alert d-none" role="alert"></div>
-                    <button type="submit" class="btn btn-primary">註冊</button>
+                    <div id="regAlert" class="alert"
+                        :class="{ 'd-none': !regForm.alert.msg, 'alert-danger': regForm.alert.type==='danger', 'alert-success': regForm.alert.type==='success' }"
+                        role="alert">{{ regForm.alert.msg }}</div>
+                    <button type="submit" class="btn btn-primary" :disabled="regSubmitting">
+                        <span v-if="regSubmitting" class="spinner-border spinner-border-sm me-1" role="status"
+                            aria-hidden="true"></span>
+                        註冊
+                    </button>
                 </form>
             </div>
         </div>
@@ -171,6 +188,8 @@
 <!-- 引入 auth 樣式（獨立於 main.css） -->
 <link rel="stylesheet" href="/assets/css/auth-header.css" />
 
+<!-- 提前宣告 Vue 控制模式，避免 auth.js 綁定 DOM 造成重複處理 -->
+<script>window.__VB_AUTH_VUE_ACTIVE = true;</script>
 <!-- 引入 auth 模組 -->
 <script type="module" src="/assets/js/auth.js"></script>
 <!-- Vue 控制層（需先載入 Vue 3 CDN） -->
