@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - Kelly Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div>
+  <main class="main">
+    <!-- 你們的主要頁面內容放這邊下面 -->
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+
+
+      <!-- Vue 測試文字 -->
+      <p style="color:green; font-weight:bold;">{{ message }}</p>
+
+
+    </section><!-- /Hero Section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 你們的主要頁面內容放這邊上面 -->
+  </main>
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+
+
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="assets/js/fragment-loader.js" defer></script>
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { return { message: "✅ Vue 測試文字：讀取成功！" }; },
+          // methods: { ... }, mounted() { ... } 等可在此加入
+        }).mount('#hero');
+
+
+
+
+        console.log("✅ Vue mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>
