@@ -36,6 +36,7 @@
             }
             // signal readiness to page scripts
             await loadIfNeeded('/assets/js/LoadPlate.js');
+            await loadIfNeeded('https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js');
             if (typeof LoadPlateByNow === 'function') LoadPlateByNow();
             try {
                 window.appReadyAt = performance && performance.now ? performance.now() : Date.now();
