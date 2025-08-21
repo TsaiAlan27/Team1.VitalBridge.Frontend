@@ -41,6 +41,132 @@
     <!-- 自己想改的樣式放這邊 -->
     <style>
       /* 這裡可以加入自定義的 CSS 樣式 */
+      .notification-center {
+        width: 100%;
+        padding: 24px;
+        box-sizing: border-box;
+        background: #fff;
+        border-top: 1px solid #ddd;
+      }
+
+      .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        border: none;
+        background: #eee;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .tab.active {
+        background: #d00;
+        color: #fff;
+      }
+
+      .mark-all-read {
+        background: none;
+        border: none;
+        color: #888;
+        cursor: pointer;
+      }
+
+      .notification-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .notify-item {
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+        transition: background 0.3s ease;
+      }
+
+      .notify-item.unread {
+        background-color: #f5faff;
+      }
+
+      .notify-item.read {
+        background-color: #ffffff;
+      }
+
+      .notify-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* 垂直置中箭頭與文字 */
+        text-decoration: none;
+        color: inherit;
+      }
+
+
+      .notify-content-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* 垂直置中 */
+        width: 100%;
+      }
+
+
+
+      .notify-texts {
+        flex-grow: 1;
+      }
+
+      .notify-content {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .notify-text {
+        font-size: 14px;
+        color: #555;
+        margin-top: 4px;
+        display: block;
+      }
+
+      .notify-date {
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+        display: block;
+      }
+
+      .notify-arrow {
+        font-size: 28px;       /* 放大箭頭 */
+        color: #999;
+        padding-left: 12px;
+        flex-shrink: 0;
+        line-height: 1;
+      }
+      .mark-all-read {
+        padding: 8px 16px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .mark-all-read-btn:hover {
+        background-color: #005ea2;
+      }
+
     </style>
   </head>
 
@@ -51,22 +177,25 @@
 
     <main class="main">
       <!-- 你們的主要頁面內容放這邊下面 -->
-      <ul
-        class="dropdown-menu dropdown-menu-end shadow"
-        aria-labelledby="notificationDropdown"
-        style="width: 300px"
-      >
-        <li>
-          <h6 class="dropdown-header">通知中心</h6>
-        </li>
-        <div id="allMessageContext">
-          
-        </div>
-      </ul>
+      
       <!-- Hero Section -->
-      <section id="hero" class="hero section">
-        <p style="color: green; font-weight: bold">{{ message }}</p>
-      </section>
+      <!-- <section id="hero" class="hero section"> -->
+        <!-- <p style="color: green; font-weight: bold">{{ message }}</p> -->
+        
+        <div class="notification-center">
+          <header class="notification-header">
+            <h2>通知中心</h2>
+            <div class="tabs">
+            </div>
+            <button class="mark-all-read" id="markAllReadBtn">全部已讀</button>
+          </header>
+
+          <ul id="allMessageContext" class="notification-list">
+            <!-- 通知項目將由 JS 動態插入 -->
+          </ul>
+        </div>
+
+      <!-- </section> -->
       <!-- /Hero Section -->
 
       <!-- 你們的主要頁面內容放這邊上面 -->
@@ -134,46 +263,52 @@
           console.error("post-load hook error", e);
         });
     })(async function () {
+      const $context = $("#allMessageContext");
+      $context.empty();
+
       try {
-        const user = await auth.me();
         const res = await auth.apiFetch('/getAllNotify', { method: 'GET' });
+
         if (!res.ok) {
-          $("#allMessageContext").empty();
-          $("#allMessageContext").append(
-              '<li><a class="dropdown-item" href="#">暫無通知</a></li>'
-          );
+          $context.append('<li><a class="dropdown-item">暫無通知</a></li>');
+          return;
         }
-        else{
-          res.json().then(result=>{
-          const html = result.map(item => {
-              return `
-                  <li class="notify-item ">
-                      ${item.notifysUrl ? `<a href="${item.notifysUrl}">` : ''}
-                          <span class="notify-content">
-                          <strong>${item.name}</strong>（${item.title}）
-                          </span>
-                          <br>
-                          <span class="notify-date">${item.sendDate}</span>
-                      ${item.notifysUrl ? `</a>` : ''}
 
-                      
-                  </li>
-              `;
+        const result = await res.json();
 
+        if (!result || result.length === 0) {
+          $context.append('<li><a class="dropdown-item">暫無通知</a></li>');
+          return;
+        }
 
-          }).join('<hr>');
+        const html = result.map(item => {
+        const isReadClass = item.isRead ? 'read' : 'unread';
+        const hasLink = !!item.notifysUrl;
 
-          $("#allMessageContext").empty();
-          $("#allMessageContext").append(html);
-        });
-      }
+        return `
+          <li class="notify-item ${isReadClass}">
+            ${hasLink ? `<a href="${item.notifysUrl}" class="notify-link">` : ''}
+              <div class="notify-content-wrapper">
+                <div class="notify-texts">
+                  <span class="notify-content">
+                    <strong>${item.name}</strong>（${item.title}）
+                  </span><br>
+                  <span class="notify-text">${item.text ? item.text : ''}</span><br>
+                  <span class="notify-date">${item.sendDate}</span>
+                </div>
+                ${hasLink ? `<span class="notify-arrow">›</span>` : ''}
+              </div>
+            ${hasLink ? `</a>` : ''}
+          </li>
+        `;
+      }).join('');
+
+        $context.append(html);
 
       } catch (e) {
-        $("#allMessageContext").empty();
-        $("#allMessageContext").append(
-          '<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>'
-        );
+        $context.append('<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>');
       }
+
       // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
       // 例如：
       // $(document).ready(function () {
@@ -181,7 +316,23 @@
       //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
       // });
         
+      $('#markAllReadBtn').on('click',async function () {
+      // 可選：按鈕暫時禁用，避免重複點擊
+      $(this).prop('disabled', true).text('處理中...');
 
+      await auth.apiFetch('/AllRead', { method: 'GET' })
+        .then(() => {
+          $('.notify-item.unread').each(function () {
+            $(this).removeClass('unread').addClass('read');
+          });
+        })
+        .catch(() => {
+          
+        })
+        .finally(() => {
+          $('#markAllReadBtn').prop('disabled', false).text('全部已讀');
+        });
+    });
       //Vue的部分寫這邊
       (function mountVue() {
         // 把頁面專屬的 Vue 程式寫在這個函式裡
