@@ -70,7 +70,6 @@ function loadAdsByDate(dateStr) {
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>`;
-                    console.log(p.location);
                     $(p.location).after(carousel);
                 }
             }  
