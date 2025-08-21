@@ -207,7 +207,7 @@
 <script>
   $("#notificationDropdown").on("shown.bs.dropdown", async function () {
     try {
-      const user = await auth.me();
+      // const user = await auth.me();
       const res = await auth.apiFetch('/getNotify', { method: 'GET' });
       if (!res.ok) {
         $("#messageContext").empty();
@@ -269,7 +269,6 @@
   async function isLogin() {
     isLogout();
     const user = await auth.me();
-    console.log(user)
     const messenger = document.createElement("df-messenger");
     messenger.setAttribute("project-id", "vitalbridge");
     messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
