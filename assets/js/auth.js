@@ -269,6 +269,7 @@ export async function logout() {
         await fetch(API_BASE + '/logout', { method: 'POST', headers: { 'Authorization': 'Bearer ' + (accessToken || '') }, credentials: 'include' });
     } catch (e) { }
     clearAuth();
+    isLogout();
 }
 
 // 取得目前使用者並更新 header 顯示
@@ -322,6 +323,7 @@ function renderAuthArea(user) {
     wrapper.appendChild(nameEl);
     wrapper.appendChild(logoutBtn);
     container.appendChild(wrapper);
+    isLogin(0);
 }
 
 export async function me() {

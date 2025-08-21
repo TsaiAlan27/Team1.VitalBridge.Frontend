@@ -20,9 +20,12 @@ function loadAdsByDate(dateStr) {
                 if (p.images.length === 0) {
                     const fileName = p.defaultImageFile.fileName;
                     const fileUrl = `/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+                    const ClickUrl = p.defaultImageClickUrl ? p.defaultImageClickUrl : '';
                     html += `
                     <div class="carousel-item active">
-                        <img src="${fileUrl}" title="${p.defaultImageIntroduct}" class="d-block w-100" alt="...">
+                        ${ClickUrl ? `<a href="${ClickUrl}">` : ''}
+                            <img src="${fileUrl}" title="${p.defaultImageIntroduct ? p.defaultImageIntroduct : ''}" class="d-block w-100" alt="...">
+                        ${ClickUrl ? `</a>` : ''}
                     </div>`;
                 } else {
                     let count = 0;
@@ -30,9 +33,12 @@ function loadAdsByDate(dateStr) {
                         const activeClass = count === 0 ? "active" : "";
                         const fileName = image.imageFile.fileName;
                         const fileUrl = `https://localhost:7184/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+                        const ClickUrl = image.clickUrl ? image.clickUrl : '';
                         html += `
                         <div class="carousel-item ${activeClass}">
-                            <img src="${fileUrl}" title="${image.introduct}" class="d-block w-100" alt="...">
+                            ${ClickUrl ? `<a href="${ClickUrl}">` : ''}
+                                <img src="${fileUrl}" title="${image.introduct ? image.introduct : ''}" class="d-block w-100" alt="...">
+                            ${ClickUrl ? `</a>` : ''}
                         </div>`;
                         if (count > 0) {
                             btn += `<button type="button" data-bs-target="#${p.name}" data-bs-slide-to="${count}" aria-label="Slide ${count + 1}"></button>`;

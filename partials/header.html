@@ -1,12 +1,10 @@
 <header id="header" class="header d-flex align-items-center light-background sticky-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
-
-        <a href="https://localhost:7184/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <a href="/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
             <h1 class="sitename">樂齡橋 VitalBridge</h1>
         </a>
-
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="/VitalBridge/index.html">首頁</a></li>
@@ -16,7 +14,6 @@
                 <li><a href="#">專欄文章</a></li>
                 <li><a href="#">會員中心</a></li>
                 <li><a href="#">關於我們</a></li>
-
 
                 <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -37,48 +34,45 @@
                         <li><a href="#">Dropdown 4</a></li>
                     </ul>
                 </li> -->
-
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-
-
-
         <div class="header-social-links d-flex align-items-center flex-nowrap gap-2">
             <div id="authArea" class="header-auth d-flex align-items-center me-3" data-vue-auth="true"></div>
-
-
 
             <!-- 通知鈴鐺 -->
             <a class="btn position-relative dropdown-toggle" href="#" role="button" id="notificationDropdown"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-bell fs-4"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    3
-                    <span class="visually-hidden">unread notifications</span>
+                <!-- <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          3 -->
+                <span class="visually-hidden">unread notifications</span>
                 </span>
             </a>
 
             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notificationDropdown"
-                style="width: 300px;">
+                style="width: 300px">
                 <li>
                     <h6 class="dropdown-header">通知中心</h6>
                 </li>
-                <li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>
+                <div id="messageContext">
+
+                </div>
                 <li>
-                    <hr class="dropdown-divider">
+                    <hr class="dropdown-divider" />
                 </li>
-                <li><a class="dropdown-item text-center text-muted" href="#">查看全部通知</a></li>
+                <li>
+                    <a class="dropdown-item text-center text-muted" href="/VitalBridge/notifyCenter.html">查看全部通知</a>
+                </li>
             </ul>
 
             <!-- <a href="#" class="line"><i class="bi bi-line"></i></a> -->
             <!-- <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a> -->
             <!-- <a href="#" class="facebook"><i class="bi bi-facebook"></i></a> -->
-
-
         </div>
-
     </div>
 </header>
 
@@ -202,3 +196,89 @@
 <!-- Vue 控制層（需先載入 Vue 3 CDN） -->
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="/assets/js/auth-vue.js"></script>
+<script>
+    $("#notificationDropdown").on("shown.bs.dropdown", async function () {
+        try {
+            // const user = await auth.me();
+            const res = await auth.apiFetch('/getNotify', { method: 'GET' });
+            if (!res.ok) {
+                $("#messageContext").empty();
+                $("#messageContext").append(
+                    '<li><a class="dropdown-item" href="#">暫無通知</a></li>'
+                );
+            }
+            else {
+                res.json().then(result => {
+                    const html = result.map(item => {
+                        return `
+                <li class="notify-item ">
+                    ${item.notifysUrl ? `<a href="${item.notifysUrl}">` : ''}
+                        <span class="notify-content">
+                        <strong>${item.name}</strong>（${item.title}）
+                        </span>
+                        <br>
+                        <span class="notify-date">${item.sendDate}</span>
+                    ${item.notifysUrl ? `</a>` : ''}
+
+                    
+                </li>
+            `;
+
+
+                    }).join('<hr>');
+
+                    $("#messageContext").empty();
+                    $("#messageContext").append(html);
+                });
+            }
+
+        } catch (e) {
+            $("#messageContext").empty();
+            $("#messageContext").append(
+                '<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>'
+            );
+        }
+    });
+</script>
+<link rel="stylesheet"
+    href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css" />
+<style>
+    df-messenger {
+        z-index: 999;
+        position: fixed;
+        --df-messenger-font-color: #000;
+        --df-messenger-font-family: Google Sans;
+        --df-messenger-chat-background: #f3f6fc;
+        --df-messenger-message-user-background: #d3e3fd;
+        --df-messenger-message-bot-background: #fff;
+        bottom: 16px;
+        right: 64px;
+    }
+</style>
+<script>
+    async function isLogin() {
+        isLogout();
+        const user = await auth.me();
+        const messenger = document.createElement("df-messenger");
+        messenger.setAttribute("project-id", "vitalbridge");
+        messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
+        messenger.setAttribute("language-code", "zh-tw");
+        messenger.setAttribute("max-query-length", "-1");
+        const bubble = document.createElement("df-messenger-chat-bubble");
+        bubble.setAttribute("chat-title", "樂齡橋小助手");
+        messenger.appendChild(bubble);
+        document.body.appendChild(messenger);
+        messenger.addEventListener('df-messenger-loaded', () => {
+            messenger.sendQuery(`這段訊息是要告訴你uid 非使用者發送 不必回覆 uid:${user.id} 使用者姓名:${user.name}`);
+        });
+
+
+    }
+    function isLogout() {
+        const messenger = document.querySelector("df-messenger");
+        if (messenger) {
+            messenger.remove();
+        }
+    }
+
+</script>
