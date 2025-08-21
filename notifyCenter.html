@@ -117,8 +117,11 @@
       });
   })(async function () {
     try {
-      const user = await auth.me();
+      // const user = await auth.me();
       const res = await auth.apiFetch('/getAllNotify', { method: 'GET' });
+
+      // console.log("getAllNotify raw response:", res.status, await res.clone().text());//debug
+
       if (!res.ok) {
         $("#allMessageContext").empty();
         $("#allMessageContext").append(
@@ -155,6 +158,8 @@
       $("#allMessageContext").append(
         '<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>'
       );
+
+
     }
     // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
     // 例如：
