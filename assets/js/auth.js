@@ -95,7 +95,7 @@ async function ensureRefreshed() {
                 // 嘗試讀取 body 以便 debug（後端可能回傳錯誤訊息或 stacktrace）
                 let bodyText = '';
                 try { bodyText = await r.text(); } catch (e) { bodyText = '<unable to read response text>'; }
-                console.error('ensureRefreshed: refresh returned not OK', r.status, bodyText);
+                // console.error('ensureRefreshed: refresh returned not OK', r.status, bodyText); //debug用
                 clearAuth();
                 return false;
             }
@@ -301,7 +301,20 @@ function setupDomHandlers() {
             // clear previous state
             clearInvalid(document.getElementById('loginEmail'));
             clearInvalid(document.getElementById('loginPassword'));
+            // button lock & spinner
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const restoreBtn = () => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    if (submitBtn.dataset.originalText) submitBtn.innerHTML = submitBtn.dataset.originalText;
+                }
+            };
             try {
+                if (submitBtn) {
+                    submitBtn.dataset.originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>登入中...';
+                }
                 await login({ email, password }, remember);
                 if (alertEl) { alertEl.classList.remove('d-none', 'alert-danger'); alertEl.classList.add('alert-success'); alertEl.textContent = '登入成功'; }
                 // 關閉 modal
@@ -311,11 +324,24 @@ function setupDomHandlers() {
                 window.location.reload();
             } catch (err) {
                 const msg = (err && err.message) ? err.message : '登入失敗';
-                // 對於密碼錯誤或 400/401，顯示在密碼欄位下方
-                if (/帳號或密碼錯誤/i.test(msg) || err?.status === 400 || err?.status === 401) {
+                const isCred = /帳號或密碼錯誤/i.test(msg);
+                const isUnverified = /尚未驗證/i.test(msg);
+                const isBanned = /停權/i.test(msg);
+                const isFrozen = /凍結/i.test(msg);
+                const isLocked = /已鎖定/i.test(msg);
+
+                // 僅在「帳號或密碼錯誤」時，把錯誤顯示在密碼欄下
+                if (isCred) {
                     setInvalid(document.getElementById('loginPassword'), '帳號或密碼錯誤');
                 }
-                if (alertEl) { alertEl.classList.remove('d-none', 'alert-success'); alertEl.classList.add('alert-danger'); alertEl.textContent = msg; }
+                // 其他狀態（未驗證/停權/凍結/鎖定）僅在 alert 顯示明確訊息
+                if (alertEl) {
+                    alertEl.classList.remove('d-none', 'alert-success');
+                    alertEl.classList.add('alert-danger');
+                    alertEl.textContent = msg || '登入失敗';
+                }
+            } finally {
+                restoreBtn();
             }
         });
     }
