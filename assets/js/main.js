@@ -228,11 +228,11 @@
 
   async function runAfterAllLoaded() {
     try {
-  // 等待：頁面片段載入完成、window onload、以及 auth 初始化完成
-  await Promise.all([waitAppReady(), waitWindowLoad(), waitAuthReady()]);
+      // 等待：頁面片段載入完成、window onload、以及 auth 初始化完成
+      await Promise.all([waitAppReady(), waitWindowLoad(), waitAuthReady()]);
 
       // Put code that must run after all fragments, vendor and resources are loaded here
-  function initMyFeature() {
+      function initMyFeature() {
         // TODO: replace with your logic
       }
 
