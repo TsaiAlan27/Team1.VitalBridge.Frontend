@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic News Portal</title>
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            /* Subtle linear gradient background */
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Prevent horizontal scrolling */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Fixed Header */
+        .header {
+            position: fixed;
+            top: 10px;
+            /* Small distance from top border */
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            /* Small distance away from side borders (20px each side) */
+            max-width: 400px;
+            /* Fixed small width */
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 15px;
+            /* Rounded corners on all four sides */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .header-left,
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger-icon {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            margin-right: 15px;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .hamburger-icon:hover {
+            background-color: #f0f0f0;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            border-radius: 2px;
+        }
+
+        .header-home-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: 20px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-home-link:hover {
+            background-color: #e0e0e0;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            width: 180px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #6a0dad;
+            /* Purple focus */
+            box-shadow: 0 0 5px rgba(106, 13, 173, 0.3);
+        }
+
+        /* Sliding Navigation Menu */
+
+
+
+        /* Main Content Layout */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            /* Default to single column for mobile */
+            gap: 20px;
+            margin-top: 100px;
+            /* Space for fixed header */
+        }
+
+        .articles-column {
+            flex: 2;
+            /* Takes more space on larger screens */
+        }
+
+        .sidebar-column {
+            flex: 1;
+            /* Takes less space on larger screens */
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .featured-article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .featured-image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            /* Vibrant gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-top-left-radius: 15px;
+            /* Keep top corners rounded */
+            border-top-right-radius: 15px;
+        }
+
+        .featured-content {
+            padding: 25px;
+        }
+
+        .category-breadcrumb {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow wrapping for small screens */
+        }
+
+        .category-pill,
+        .subcategory-pill {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 999px;
+            /* Pill shape */
+            font-size: 0.9em;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            /* For wrapping */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .category-pill {
+            background: linear-gradient(45deg, #6a0dad, #8a2be2);
+            /* Purple gradient */
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .subcategory-pill {
+            background-color: #e9ecef;
+            color: #555;
+            border: 1px solid #ccc;
+        }
+
+        .subcategory-pill:hover {
+            background-color: #dee2e6;
+            transform: translateY(-1px);
+        }
+
+        .featured-headline {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            color: #222;
+        }
+
+        .featured-excerpt {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .article-meta {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        /* Article Grid */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .article-card {
+            background-color: #fff;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .article-image-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(45deg, #a8e063, #56ab2f);
+            /* Example gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1em;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .article-card-content {
+            padding: 15px;
+        }
+
+        .article-card .category-breadcrumb {
+            margin-bottom: 8px;
+            /* Slightly less space for smaller cards */
+        }
+
+        .article-card .category-pill,
+        .article-card .subcategory-pill {
+            padding: 4px 10px;
+            font-size: 0.8em;
+        }
+
+        .article-card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            /* Space before excerpt */
+            color: #333;
+            line-height: 1.3;
+        }
+
+        .article-card-excerpt {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            /* Space before meta */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* Limit excerpt to 3 lines */
+            -webkit-box-orient: vertical;
+        }
+
+        .article-card-meta {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        /* Load More Articles Button */
+        .load-more-btn-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        .load-more-btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            /* Blue gradient */
+            color: #fff;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .load-more-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .load-more-btn:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .load-more-btn:disabled {
+            background: linear-gradient(45deg, #ccc, #bbb);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .load-more-btn .arrow-icon {
+            display: inline-block;
+            font-size: 1.2em;
+            transition: transform 0.2s ease;
+        }
+
+        /* Sidebar Widgets */
+        .widget-box {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        #popularCategoriesWidget {
+            background-color: #f8f8f8;
+            /* Light gray background for this widget */
+        }
+
+        .widget-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .widget-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .widget-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .widget-list li:last-child {
+            border-bottom: none;
+        }
+
+        .widget-list li:hover {
+            background-color: #f0f0f0;
+            /* Slightly darker grey on hover for light grey background */
+            transform: translateX(5px);
+            border-radius: 5px;
+        }
+
+        .widget-list li a {
+            text-decoration: none;
+            color: #555;
+            font-size: 1em;
+            flex-grow: 1;
+            padding-right: 10px;
+            /* Space for badges */
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: black;
+            margin-left: 5px;
+        }
+
+        .hot-badge {
+            background-color: #dc3545;
+            /* Red */
+        }
+
+        .count-badge {
+            background-color: #6c757d;
+            /* Gray */
+        }
+
+        .trending-badge {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            /* Circular */
+        }
+
+        .first-trending-badge {
+            background-color: #ffc107;
+            /* Gold/Orange */
+            color: #333;
+            /* Dark text for contrast */
+            border-radius: 5px;
+            padding: 3px 6px;
+            font-size: 0.75em;
+        }
+
+        /* Call-to-Action (CTA) Banner */
+        .cta-banner {
+            background: linear-gradient(90deg, #fd7e14, #dc3545);
+            /* Orange to Red gradient */
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .cta-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .purchase-btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #fff;
+            color: #333;
+            /* Dark text for button */
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .purchase-btn:hover {
+            background-color: #f0f0f0;
+            color: #000;
+            /* Even darker text on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .purchase-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Return to Top Button */
+        .return-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #8a2be2, #007bff);
+            /* Purple to blue gradient */
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            /* Removed opacity and pointer-events for always-visible button */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            /* Remove underline for anchor tag */
+            z-index: 900;
+        }
+
+        .return-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .return-to-top:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+
+
+
+        /* Media Queries for Responsiveness */
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+                /* Two columns on larger screens */
+            }
+
+            .header {
+                width: calc(100% - 40px);
+                /* Maintain side distance on larger screens */
+            }
+
+            .articles-column {
+                flex: 3;
+                /* Even wider */
+            }
+
+            .sidebar-column {
+                flex: 1;
+            }
+
+            .nav-menu {
+                width: 300px;
+                /* Wider menu for tablets/desktops */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .header {
+                padding: 10px 10px;
+                width: calc(100% - 20px);
+                /* Smaller side distance on very small screens */
+            }
+
+            .header-home-link {
+                font-size: 1em;
+                margin-right: 10px;
+            }
+
+            .search-input {
+                width: 120px;
+                padding: 6px 10px;
+            }
+
+            .featured-headline {
+                font-size: 1.8em;
+            }
+
+            .featured-image-placeholder {
+                height: 180px;
+                font-size: 1.2em;
+            }
+
+            .featured-content {
+                padding: 15px;
+            }
+
+            .category-pill,
+            .subcategory-pill {
+                padding: 5px 12px;
+                font-size: 0.8em;
+            }
+
+            .article-grid {
+                grid-template-columns: 1fr;
+                /* Single column for very small screens */
+                gap: 15px;
+            }
+
+            .article-image-placeholder {
+                height: 150px;
+            }
+
+            .article-card-title {
+                font-size: 1.1em;
+            }
+
+            .load-more-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            .cta-title {
+                font-size: 1.5em;
+            }
+
+            .cta-subtitle {
+                font-size: 1em;
+            }
+
+            .purchase-btn {
+                font-size: 0.9em;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="hamburger-icon" id="hamburgerIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="#" class="header-home-link">All</a>
+        </div>
+        <div class="header-right">
+            <input type="search" class="search-input" placeholder="Search...">
+        </div>
+    </header>
+
+    <!-- Sliding Navigation Menu -->
+    <nav class="nav-menu" id="navMenu">
+        <!-- Navigation links will be dynamically loaded here by JavaScript -->
+        <ul></ul>
+    </nav>
+
+    <div class="container">
+        <main class="main-content">
+            <section class="articles-column">
+                <!-- Featured Article -->
+                <article class="featured-article">
+                    <div class="featured-image-placeholder">
+                        Featured Article Image
+                    </div>
+                    <div class="featured-content">
+                        <div class="category-breadcrumb">
+                            <a href="#" class="category-pill">Business</a>
+                            <a href="#" class="subcategory-pill">Success</a>
+                        </div>
+                        <h1 class="featured-headline">The Art of Building a Resilient Company Culture in 2025</h1>
+                        <p class="featured-excerpt">Explore key strategies for fostering a robust and adaptive
+                            organizational culture that thrives in uncertain times, focusing on innovation and employee
+                            well-being.</p>
+                        <p class="article-meta">By John Doe • August 15, 2025</p>
+                    </div>
+                </article>
+
+                <!-- Article Grid -->
+                <div class="article-grid" id="articleGrid">
+                    <!-- Articles will be loaded here by JavaScript -->
+                </div>
+
+                <!-- Load More Articles Button -->
+                <div class="load-more-btn-wrapper">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        Load More Articles <span class="arrow-icon">&#x2193;</span>
+                    </button>
+                </div>
+            </section>
+
+            <aside class="sidebar-column">
+                <!-- Popular Categories Widget -->
+                <div class="widget-box" id="popularCategoriesWidget">
+                    <h3 class="widget-title">熱門分類 (Popular Categories)</h3>
+                    <ul class="widget-list">
+                        <li><a href="#">心靈</a> <span class="badge first-trending-badge">第一熱度</span></li>
+                        <li><a href="#">運動與健康</a> <span class="badge count-badge">50</span></li>
+                        <li><a href="#">理財</a> <span class="badge count-badge">42</span></li>
+                        <li><a href="#">生活</a> <span class="badge count-badge">67</span></li>
+                        <li><a href="#">Health & Fitness</a> <span class="badge count-badge">55</span></li>
+                        <li><a href="#">Technology</a> <span class="badge count-badge">10</span></li>
+                        <li><a href="#">Football</a> <span class="badge count-badge">5</span></li>
+                        <li><a href="#">Cricket</a> <span class="badge count-badge">67</span></li>
+                        <li><a href="#">Covid 19</a> <span class="badge count-badge">12</span></li>
+                    </ul>
+                </div>
+
+                <!-- Trending Now Widget -->
+                <div class="widget-box">
+                    <h3 class="widget-title">最近熱門 (Trending Now)</h3>
+                    <ul class="widget-list">
+                        <li><span class="badge ">1</span> <a href="#">如何培養美好的心靈讓你每天過得舒適</a></li>
+                        <li><span class="badge ">2</span> <a href="#">Being self-controlled child may lead
+                                to healthier middle-age</a></li>
+                        <li><span class="badge ">3</span> <a href="#">Best things you can do on a solo
+                                mountain climb</a></li>
+                        <li><span class="badge ">4</span> <a href="#">How to burn calories with pleasant
+                                activities</a></li>
+                    </ul>
+                </div>
+
+                <!-- Call-to-Action (CTA) Banner -->
+                <div class="cta-banner">
+                    <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
+                    <p class="cta-subtitle">Experience the change!</p>
+                    <button class="purchase-btn">PURCHASE NOW</button>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Return to Top Button -->
+    <a href="#top" class="return-to-top" id="returnToTopBtn">
+        &#x2191;
+    </a>
+
+    <script>
+        // Hamburger Menu Toggle
+        document.getElementById('hamburgerIcon').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('open');
+        });
+
+        // Close nav menu when clicking outside (optional, but good UX)
+        document.addEventListener('click', function (event) {
+            const navMenu = document.getElementById('navMenu');
+            const hamburgerIcon = document.getElementById('hamburgerIcon');
+            if (!navMenu.contains(event.target) && !hamburgerIcon.contains(event.target)) {
+                navMenu.classList.remove('open');
+            }
+        });
+
+        // Menu Data Structure with nested subcategories
+        const menuData = [
+            {
+                name: 'International',
+                link: '#international',
+                subcategories: [
+                    { name: 'Asia', link: '#international-asia' },
+                    { name: 'Europe', link: '#international-europe' },
+                    { name: 'Americas', link: '#international-americas' }
+                ]
+            },
+            {
+                name: 'Sports',
+                link: '#sports',
+                subcategories: [
+                    {
+                        name: 'Football',
+                        link: '#sports-football',
+                        subcategories: [
+                            { name: 'NFL', link: '#sports-football-nfl' },
+                            { name: 'Premier League', link: '#sports-football-premierleague' },
+                            { name: 'College Football', link: '#sports-football-college' }
+                        ]
+                    },
+                    { name: 'Basketball', link: '#sports-basketball' },
+                    { name: 'Cricket', link: '#sports-cricket' }
+                ]
+            },
+            {
+                name: 'Opinion',
+                link: '#opinion',
+                subcategories: []
+            },
+            {
+                name: 'Business',
+                link: '#business',
+                subcategories: [
+                    { name: 'Finance', link: '#business-finance' },
+                    { name: 'Startups', link: '#business-startups' },
+                    { name: 'Marketing', link: '#business-marketing' }
+                ]
+            },
+            {
+                name: 'Youth',
+                link: '#youth',
+                subcategories: []
+            },
+            {
+                name: 'Entertainment',
+                link: '#entertainment',
+                subcategories: [
+                    { name: 'Movies', link: '#entertainment-movies' },
+                    { name: 'Music', link: '#entertainment-music' },
+                    { name: 'Gaming', link: '#entertainment-gaming' }
+                ]
+            },
+            {
+                name: 'Lifestyle',
+                link: '#lifestyle',
+                subcategories: [
+                    { name: 'Health & Wellness', link: '#lifestyle-health' },
+                    { name: 'Travel Guides', link: '#lifestyle-travel' }
+                ]
+            }
+        ];
+
+        // Function to dynamically load the navigation menu
+        async function loadNavigationMenu() {
+            const navMenuUl = document.querySelector('#navMenu ul');
+            navMenuUl.innerHTML = ''; // Clear existing content
+
+            function createMenuItem(item, parentUl) {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = item.link;
+                a.textContent = item.name;
+
+                li.appendChild(a);
+                if (item.subcategories && item.subcategories.length > 0) {
+                    li.classList.add('has-submenu');
+                    const subUl = document.createElement('ul');
+                    item.subcategories.forEach(subItem => createMenuItem(subItem, subUl));
+                    li.appendChild(subUl);
+
+                    a.addEventListener('click', function (e) {
+                        e.preventDefault(); // Prevent default link behavior
+                        li.classList.toggle('active'); // Toggle 'active' class to show/hide submenu
+                    });
+                }
+                parentUl.appendChild(li);
+            }
+            menuData.forEach(item => createMenuItem(item, navMenuUl));
+
+        }
+
+        // Call the function to load the navigation menu when the page loads
+        document.addEventListener('DOMContentLoaded', loadNavigationMenu);
+
+
+        // Article Data (example data for loading more articles)
+        const allArticles = [
+            {
+                image: 'Article Image',
+                imageGradient: 'linear-gradient(45deg, #a8e063, #56ab2f)',
+                category: 'Technology',
+                subcategory: 'Gadgets',
+                title: 'Top 5 Innovative Gadgets for 2025',
+                excerpt: 'Discover the cutting-edge devices shaping our future, from smart home assistants to portable AI companions. Get a glimpse of tomorrow\'s tech today.',
+                author: 'Jane Smith',
+                date: 'August 10, 2025'
+            },
+            {
+                image: 'Recipe Image',
+                imageGradient: 'linear-gradient(45deg, #fceabb, #fbcc8b)',
+                category: 'Food',
+                subcategory: 'Recipes',
+                title: 'Delicious Vegan Recipes for Quick Dinners',
+                excerpt: 'Whip up savory and healthy vegan meals in under 30 minutes with these easy-to-follow recipes. Perfect for busy weeknights!',
+                author: 'Chef Leo',
+                date: 'August 9, 2025'
+            },
+            {
+                image: 'Travel Image',
+                imageGradient: 'linear-gradient(45deg, #4facfe, #00f2fe)',
+                category: 'Travel',
+                subcategory: 'Destinations',
+                title: 'Exploring Hidden Gems in Southeast Asia',
+                excerpt: 'Venture off the beaten path to uncover breathtaking landscapes, rich cultures, and unforgettable experiences across Southeast Asia.',
+                author: 'Wanderlust Explorer',
+                date: 'August 8, 2025'
+            },
+            {
+                image: 'Finance Image',
+                imageGradient: 'linear-gradient(45deg, #fbd786, #f7797d)',
+                category: 'Business',
+                subcategory: 'Investment',
+                title: 'Understanding the Latest Stock Market Trends',
+                excerpt: 'Stay informed on the dynamic world of finance with an overview of current stock market trends and expert insights for savvy investors.',
+                author: 'Financial Guru',
+                date: 'August 7, 2025'
+            },
+            {
+                image: 'Health Image',
+                imageGradient: 'linear-gradient(45deg, #c79081, #dfa390)',
+                category: 'Health',
+                subcategory: 'Fitness',
+                title: 'Effective Home Workouts for Busy Professionals',
+                excerpt: 'Maximize your fitness with these efficient home workout routines designed for professionals with packed schedules. No gym required!',
+                author: 'FitLife Coach',
+                date: 'August 6, 2025'
+            },
+            {
+                image: 'Culture Image',
+                imageGradient: 'linear-gradient(45deg, #eecda3, #ef629f)',
+                category: 'Lifestyle',
+                subcategory: 'Culture',
+                title: 'The Resurgence of Traditional Crafts',
+                excerpt: 'Witness the comeback of timeless artistry as traditional crafts find new life in modern society. A celebration of heritage and skill.',
+                author: 'Cultural Analyst',
+                date: 'August 5, 2025'
+            },
+            {
+                image: 'Sports Image',
+                imageGradient: 'linear-gradient(45deg, #ffafbd, #ffc3a0)',
+                category: 'Sports',
+                subcategory: 'Olympics',
+                title: 'Highlights from the Summer Olympics 2024',
+                excerpt: 'Relive the most thrilling moments and incredible achievements from the recent Summer Olympics. Relive the glory!',
+                author: 'Sports Fanatic',
+                date: 'August 4, 2025'
+            },
+            {
+                image: 'Science Image',
+                imageGradient: 'linear-gradient(45deg, #2193b0, #6dd5ed)',
+                category: 'Science',
+                subcategory: 'Space',
+                title: 'Recent Discoveries in Exoplanet Research',
+                excerpt: 'Journey beyond our solar system with the latest breakthroughs in exoplanet discovery and the search for habitable worlds.',
+                author: 'Astro-Geek',
+                date: 'August 3, 2025'
+            },
+            {
+                image: 'Art Image',
+                imageGradient: 'linear-gradient(45deg, #acb6e5, #86fde8)',
+                category: 'Entertainment',
+                subcategory: 'Film',
+                title: 'The Evolution of Independent Cinema',
+                excerpt: 'Dive into the world of indie films and explore how independent cinema continues to challenge norms and innovate storytelling.',
+                author: 'Film Buff',
+                date: 'August 2, 2025'
+            },
+            {
+                image: 'Fashion Image',
+                imageGradient: 'linear-gradient(45deg, #dad4ec, #f3e7e9)',
+                category: 'Fashion',
+                subcategory: 'Trends',
+                title: 'Sustainable Fashion: Beyond the Hype',
+                excerpt: 'Unpack the true meaning of sustainable fashion and discover brands leading the way towards an eco-friendlier wardrobe.',
+                author: 'Style Savvy',
+                date: 'August 1, 2025'
+            },
+            {
+                image: 'Politics Image',
+                imageGradient: 'linear-gradient(45deg, #e0c3fc, #8ec5fc)',
+                category: 'Opinion',
+                subcategory: 'Politics',
+                title: 'Analyzing Global Geopolitical Shifts',
+                excerpt: 'An in-depth look at the major geopolitical developments shaping international relations and their potential impact on the future.',
+                author: 'Political Commentator',
+                date: 'July 31, 2025'
+            },
+            {
+                image: 'Youth Image',
+                imageGradient: 'linear-gradient(45deg, #96e6a1, #d4fc79)',
+                category: 'Youth',
+                subcategory: 'Education',
+                title: 'The Future of Online Learning Platforms',
+                excerpt: 'Explore how online learning is evolving, from personalized curricula to immersive virtual classrooms, transforming education for the next generation.',
+                author: 'Edu-Tech Expert',
+                date: 'July 30, 2025'
+            }
+        ];
+
+        let articlesToShow = 6;
+        const articlesPerLoad = 3;
+        const articleGrid = document.getElementById('articleGrid');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+        function createArticleCard(article) {
+            const card = document.createElement('div');
+            card.className = 'article-card';
+            card.innerHTML = `
+                <div class="article-image-placeholder" style="background: ${article.imageGradient};">
+                    ${article.image}
+                </div>
+                <div class="article-card-content">
+                    <div class="category-breadcrumb">
+                        <a href="#" class="category-pill">${article.category}</a>
+                        <a href="#" class="subcategory-pill">${article.subcategory}</a>
+                    </div>
+                    <h3 class="article-card-title">${article.title}</h3>
+                    <p class="article-card-excerpt">${article.excerpt}</p>
+                    <p class="article-card-meta">By ${article.author} • ${article.date}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        function loadArticles() {
+            const currentArticles = allArticles.slice(0, articlesToShow);
+            articleGrid.innerHTML = ''; // Clear existing articles before re-rendering
+            currentArticles.forEach(article => {
+                articleGrid.appendChild(createArticleCard(article));
+            });
+
+            if (articlesToShow >= allArticles.length) {
+                loadMoreBtn.textContent = 'No More Articles';
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.querySelector('.arrow-icon').style.display = 'none';
+            } else {
+                loadMoreBtn.textContent = 'Load More Articles';
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.querySelector('.arrow-icon').style.display = 'inline-block';
+            }
+        }
+
+        loadMoreBtn.addEventListener('click', function () {
+            articlesToShow += articlesPerLoad;
+            loadArticles();
+        });
+
+        // Initial load of articles
+        loadArticles();
+
+
+
+    </script>
+</body>
+
+</html>
