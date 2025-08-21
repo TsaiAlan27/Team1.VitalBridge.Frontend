@@ -145,12 +145,19 @@ export async function register(dto) {
         let bodyText = '';
         try { bodyText = await res.text(); } catch { bodyText = ''; }
         let msg = '註冊失敗';
+        // 嘗試從 JSON 取訊息
         try {
             const data = bodyText ? JSON.parse(bodyText) : null;
             msg = data?.message || data?.Message || data?.error || data?.title || msg;
         } catch { /* not json */ }
+        // 若本文包含「重複/已註冊/已存在」等關鍵字，改為明確訊息，方便欄位提示
+        if (/(Email|信箱).*?(已被註冊|已註冊|已存在)/i.test(bodyText) || /(duplicate|already\s*exists|already\s*taken|in\s*use)/i.test(bodyText)) {
+            msg = 'Email已註冊';
+        }
         console.error('Register API failed', { status: res.status, body: bodyText });
-        throw new Error(msg || bodyText || '註冊失敗');
+        const err = new Error(msg || (bodyText || '註冊失敗'));
+        try { err.status = res.status; err.body = bodyText; } catch { }
+        throw err;
     }
     return await res.json().catch(() => null);
 }
@@ -158,10 +165,28 @@ export async function register(dto) {
 export async function login(dto, remember = false) {
     const res = await fetch(API_BASE + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dto), credentials: 'include' });
     if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || '登入失敗');
+        let body = '';
+        try { body = await res.text(); } catch { body = ''; }
+        let msg = '登入失敗';
+        let data = null;
+        try { data = body ? JSON.parse(body) : null; } catch { /* plain text */ }
+        if (data && typeof data === 'object') {
+            if (typeof data.message === 'string' && data.message) msg = data.message;
+        } else if (/帳號或密碼錯誤/i.test(body)) {
+            msg = '帳號或密碼錯誤';
+        }
+        const err = new Error(msg || body || '登入失敗');
+        try { err.status = res.status; err.body = body; if (data) err.data = data; } catch { }
+        throw err;
     }
     const data = await res.json();
+    // 若後端採用 { success, message, data } 包裝，且 success=false，視為失敗
+    if (data && typeof data === 'object' && 'success' in data && data.success === false) {
+        const msg = (typeof data.message === 'string' && data.message) ? data.message : '登入失敗';
+        const err = new Error(msg);
+        try { err.status = 400; err.body = JSON.stringify(data); err.data = data; } catch { }
+        throw err;
+    }
     if (data?.accessToken) {
         accessToken = data.accessToken;
     }
@@ -254,6 +279,28 @@ function setupDomHandlers() {
             const password = document.getElementById('loginPassword').value;
             const remember = document.getElementById('rememberMe').checked;
             const alertEl = document.getElementById('loginAlert');
+            // helpers for field error rendering (login)
+            const setInvalid = (el, msg) => {
+                if (!el) return;
+                el.classList.add('is-invalid');
+                let fb = el.nextElementSibling;
+                const needCreate = !(fb && fb.classList && fb.classList.contains('invalid-feedback'));
+                if (needCreate) {
+                    fb = document.createElement('div');
+                    fb.className = 'invalid-feedback';
+                    el.parentNode && el.parentNode.insertBefore(fb, el.nextSibling);
+                }
+                fb.textContent = msg || '';
+            };
+            const clearInvalid = (el) => {
+                if (!el) return;
+                el.classList.remove('is-invalid');
+                const fb = el.nextElementSibling;
+                if (fb && fb.classList && fb.classList.contains('invalid-feedback')) fb.textContent = '';
+            };
+            // clear previous state
+            clearInvalid(document.getElementById('loginEmail'));
+            clearInvalid(document.getElementById('loginPassword'));
             try {
                 await login({ email, password }, remember);
                 if (alertEl) { alertEl.classList.remove('d-none', 'alert-danger'); alertEl.classList.add('alert-success'); alertEl.textContent = '登入成功'; }
@@ -263,7 +310,12 @@ function setupDomHandlers() {
                 // 重新載入頁面或更新 UI
                 window.location.reload();
             } catch (err) {
-                if (alertEl) { alertEl.classList.remove('d-none', 'alert-success'); alertEl.classList.add('alert-danger'); alertEl.textContent = err.message || '登入失敗'; }
+                const msg = (err && err.message) ? err.message : '登入失敗';
+                // 對於密碼錯誤或 400/401，顯示在密碼欄位下方
+                if (/帳號或密碼錯誤/i.test(msg) || err?.status === 400 || err?.status === 401) {
+                    setInvalid(document.getElementById('loginPassword'), '帳號或密碼錯誤');
+                }
+                if (alertEl) { alertEl.classList.remove('d-none', 'alert-success'); alertEl.classList.add('alert-danger'); alertEl.textContent = msg; }
             }
         });
     }
@@ -347,8 +399,9 @@ function setupDomHandlers() {
             } catch (err) {
                 if (alertEl) { alertEl.classList.remove('d-none', 'alert-success'); alertEl.classList.add('alert-danger'); alertEl.textContent = err.message || '註冊失敗'; }
                 // 如果是常見的帳號已存在，標示在 Email 欄位
-                if ((err?.message || '').match(/(已存在|exist|已被使用|duplicate|衝突|conflict)/i)) {
-                    setInvalid(emailInput, '此 Email 已被使用');
+                const msg = (err?.message || '') + ' ' + (err?.body || '');
+                if (/(已存在|exist|已被使用|duplicate|衝突|conflict|已註冊)/i.test(msg)) {
+                    setInvalid(emailInput, 'Email已註冊');
                 }
             }
             finally {
