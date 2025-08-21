@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>範本頁</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- 自己想改的樣式放這邊 -->
+  <style>
+    /* 這裡可以加入自定義的 CSS 樣式 */
+  </style>
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div>
+
+
+  <main class="container py-5" id="lc-guide">
+
+    <!-- Scoped styles -->
+    <style>
+      #lc-guide {
+        --brand: #3d76d1;
+        --brand-2: #72b4ff;
+        --ink: #1e293b;
+        --muted: #64748b;
+        --bg-soft: #f8fafc;
+        --success-soft: #e8f8ef;
+        --warning-soft: #fff7e6;
+        --danger-soft: #ffecec;
+      }
+
+      #lc-guide .section-title {
+        position: relative;
+        padding-bottom: .5rem;
+        margin-bottom: 1.25rem;
+      }
+
+      #lc-guide .section-title .eyebrow {
+        display: inline-block;
+        font-weight: 600;
+        font-size: .85rem;
+        color: var(--brand);
+        background: linear-gradient(90deg, rgba(61, 118, 209, .15), rgba(114, 180, 255, .15));
+        padding: .25rem .5rem;
+        border-radius: 999px;
+        letter-spacing: .04em;
+      }
+
+      #lc-guide .section-title h2,
+      #lc-guide .section-title h3 {
+        margin: .5rem 0 0;
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      #lc-guide .lead {
+        color: var(--muted);
+      }
+
+      /* Card */
+      #lc-guide .lc-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, .04);
+        transition: transform .2s ease, box-shadow .2s ease;
+        height: 100%;
+      }
+
+      #lc-guide .lc-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .08);
+      }
+
+      #lc-guide .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: .75rem;
+        display: inline-grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #fff;
+        font-size: 1.25rem;
+      }
+
+      /* Comparison table — 增加欄高與行距 */
+      #lc-guide table.table {
+        border-radius: .75rem;
+        overflow: hidden;
+      }
+
+      #lc-guide table.table th,
+      #lc-guide table.table td {
+        padding: 1.1rem 1rem !important;
+        line-height: 1.65;
+        vertical-align: middle;
+        word-break: break-word;
+      }
+
+      #lc-guide .badge-pill {
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-weight: 600;
+      }
+
+      #lc-guide .pro {
+        background: var(--success-soft);
+        color: #107347;
+      }
+
+      #lc-guide .con {
+        background: var(--danger-soft);
+        color: #b81f24;
+      }
+
+      /* Callouts */
+      #lc-guide .callout {
+        border-left: 6px solid var(--brand);
+        background: var(--bg-soft);
+        padding: 1rem 1.25rem;
+        border-radius: .75rem;
+      }
+
+      /* Accordion */
+      #lc-guide .accordion-button {
+        font-weight: 600;
+      }
+
+      #lc-guide .accordion-button:not(.collapsed) {
+        color: var(--ink);
+        background: #eef6ff;
+      }
+
+      /* Quiz (條列式) */
+      #lc-guide .quiz-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+      }
+
+      #lc-guide .quiz-item {
+        border: 1px dashed #e5e7eb;
+        border-radius: .75rem;
+        padding: 1rem;
+        background: #fafcff;
+      }
+
+      #lc-guide .quiz-option {
+        border: 1px solid #e5e7eb;
+        border-radius: .75rem;
+        padding: .75rem;
+        cursor: pointer;
+      }
+
+      #lc-guide .quiz-option:focus-within {
+        outline: 3px solid #cfe5ff;
+      }
+
+      #lc-guide .quiz-result {
+        border-radius: .75rem;
+      }
+
+      /* CTA */
+      #lc-guide .cta {
+        background: linear-gradient(135deg, #f0f7ff, #ffffff);
+        border: 1px solid #e6efff;
+        border-radius: 1rem;
+      }
+
+      /* Utilities */
+      #lc-guide .divider {
+        height: 1px;
+        background: #e5e7eb;
+        margin: 1.5rem 0;
+      }
+    </style>
+
+    <!-- Hero -->
+    <section class="text-center mb-5">
+      <div class="section-title">
+        <span class="eyebrow">Long-Term Care Guide</span>
+        <h2>長照導覽：找到適合你的照顧方案</h2>
+      </div>
+      <p class="lead mx-auto" style="max-width:820px;">
+        長期照顧是一套全面「支持系統」。本頁帶你快速理解長照、比較照顧方式、查看政府資源，
+        並透過小測驗提供方向建議，幫助你做出更安心的選擇。
+      </p>
+    </section>
+
+    <!-- 照顧選擇 -->
+    <section class="mb-5" aria-labelledby="care-choices-title">
+      <div class="section-title">
+        <span class="eyebrow">Options</span>
+        <h3 id="care-choices-title">有哪些照顧選擇？</h3>
+      </div>
+      <div class="row g-4 text-start">
+        <div class="col-md-4">
+          <article class="p-4 lc-card h-100">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <span class="icon bi bi-house-heart-fill" aria-hidden="true"></span>
+              <h4 class="h5 m-0">自己照顧</h4>
+            </div>
+            <p class="mb-2 text-muted">由家人或親屬在家照護，情感支持強、彈性高。</p>
+            <ul class="mb-0">
+              <li><span class="badge badge-pill pro">親情陪伴</span>、費用掌控、生活連續性高</li>
+              <li><span class="badge badge-pill con">照顧者疲勞</span>、專業資源需補強</li>
+            </ul>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="p-4 lc-card h-100">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <span class="icon bi bi-hospital-fill" aria-hidden="true"></span>
+              <h4 class="h5 m-0">機構照顧</h4>
+            </div>
+            <p class="mb-2 text-muted">入住安養中心、護理之家等，享專業團隊與團體生活。</p>
+            <ul class="mb-0">
+              <li>24 小時專業照護、多元活動、穩定性高</li>
+              <li><span class="badge badge-pill con">費用較高</span>、適應團體生活</li>
+            </ul>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="p-4 lc-card h-100">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <span class="icon bi bi-person-hearts" aria-hidden="true"></span>
+              <h4 class="h5 m-0">聘請看護</h4>
+            </div>
+            <p class="mb-2 text-muted">專人到府照護，時段彈性、客製化程度高。</p>
+            <ul class="mb-0">
+              <li>高度客製、家居環境不中斷</li>
+              <li><span class="badge badge-pill con">成本與品質控管</span></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 三種方式比較表（已增加欄高） -->
+    <section class="mb-5" aria-labelledby="compare-title">
+      <div class="section-title">
+        <span class="eyebrow">Compare</span>
+        <h3 id="compare-title">三種方式比較</h3>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">方式</th>
+              <th scope="col">適合對象</th>
+              <th scope="col">優點</th>
+              <th scope="col">可能的挑戰</th>
+              <th scope="col">建議搭配資源</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">自己照顧</th>
+              <td>家庭可投入時間、失能程度輕中度</td>
+              <td><span class="badge badge-pill pro">親情支持</span>、費用掌控、生活連續性高</td>
+              <td><span class="badge badge-pill con">照顧者疲勞</span>、專業不足</td>
+              <td>到宅/喘息服務、居家復能、照顧者支持團體</td>
+            </tr>
+            <tr>
+              <th scope="row">機構照顧</th>
+              <td>需要全天候專業照護或復健</td>
+              <td>醫護團隊、活動社交、安全性高</td>
+              <td><span class="badge badge-pill con">費用較高</span>、需適應團體作息</td>
+              <td>政府補助、定期家屬會談、復健計畫</td>
+            </tr>
+            <tr>
+              <th scope="row">聘請看護</th>
+              <td>需要密集照護但希望居家</td>
+              <td>高度客製、時段彈性</td>
+              <td><span class="badge badge-pill con">品質控管與法律合規</span></td>
+              <td>個管師追蹤、居家護理、家屬教育訓練</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout mt-3" role="note" aria-label="比較表提示">
+        <strong class="me-2">小提醒：</strong> 不同階段可以「混搭」：例如先在家搭配喘息服務，狀況變化再評估機構或看護。
+      </div>
+    </section>
+
+    <!-- 情境小測驗（條列式） -->
+    <section class="mb-5" aria-labelledby="quiz-title">
+      <div class="section-title">
+        <span class="eyebrow">Helper</span>
+        <h3 id="quiz-title">不確定怎麼選？來做個小測驗</h3>
+      </div>
+
+      <div class="quiz-card p-4">
+        <form id="careQuiz" onsubmit="event.preventDefault(); computeQuiz();">
+          <!-- Q1 -->
+          <div class="quiz-item mb-3">
+            <label class="form-label fw-semibold d-block">Q1. 家庭可投入照顧時數</label>
+            <div class="d-grid gap-2">
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q1" value="self"
+                  required> 每日 6 小時以上</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q1" value="mix"> 每日 2–6
+                小時</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q1" value="other"> 每日 2
+                小時以下</label>
+            </div>
+          </div>
+          <!-- Q2 -->
+          <div class="quiz-item mb-3">
+            <label class="form-label fw-semibold d-block">Q2. 預算承擔能力（每月）</label>
+            <div class="d-grid gap-2">
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q2" value="institution"
+                  required> 可負擔 4–6 萬以上</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q2" value="flex"> 2–4
+                萬</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q2" value="limit"> 2
+                萬以下</label>
+            </div>
+          </div>
+          <!-- Q3 -->
+          <div class="quiz-item mb-3">
+            <label class="form-label fw-semibold d-block">Q3. 醫療/復健專業需求</label>
+            <div class="d-grid gap-2">
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q3" value="institution"
+                  required> 需要 24h 專業照護</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q3" value="mix">
+                需要定期專業到宅</label>
+              <label class="quiz-option"><input class="form-check-input me-2" type="radio" name="q3" value="flex">
+                無特別需求</label>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-magic"></i> 產生建議</button>
+            <button type="button" class="btn btn-outline-secondary"
+              onclick="document.getElementById('quizResult').innerHTML=''; document.getElementById('careQuiz').reset();">重設</button>
+          </div>
+        </form>
+
+        <div id="quizResult" class="mt-4 p-3 quiz-result border" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- 政府資源與資訊網站（移除 1955） -->
+    <section class="mb-5" aria-labelledby="gov-title">
+      <div class="section-title">
+        <span class="eyebrow">Resources</span>
+        <h3 id="gov-title">政府資源與資訊網站</h3>
+      </div>
+
+      <div class="accordion" id="govAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-1966">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c-1966"
+              aria-expanded="true" aria-controls="c-1966">
+              1966 長照服務專線
+            </button>
+          </h2>
+          <div id="c-1966" class="accordion-collapse collapse show" aria-labelledby="h-1966"
+            data-bs-parent="#govAccordion">
+            <div class="accordion-body">
+              受理長照需求評估、服務轉介、補助申請等。建議先撥打了解你的區域資源與申請流程。
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-ltc2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-ltc2"
+              aria-expanded="false" aria-controls="c-ltc2">
+              長照 2.0 與地方長照中心
+            </button>
+          </h2>
+          <div id="c-ltc2" class="accordion-collapse collapse" aria-labelledby="h-ltc2" data-bs-parent="#govAccordion">
+            <div class="accordion-body">
+              包含居家服務、日照、交通接送、營養餐飲、復能等多元服務；各縣市皆有長照中心可就近申請與諮詢。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="lc-card p-3 h-100">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-telephone-inbound-fill"></i>
+              <strong>快捷電話</strong>
+            </div>
+            <ul class="mb-0 text-muted">
+              <li>1966 長照服務</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="lc-card p-3 h-100">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-globe2"></i>
+              <strong>常用資訊入口</strong>
+            </div>
+            <p class="mb-2 text-muted">可放置你平台的連結聚合或各部會資源超連結。</p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge rounded-pill text-bg-light">長照中心查詢</span>
+              <span class="badge rounded-pill text-bg-light">補助申請流程</span>
+              <span class="badge rounded-pill text-bg-light">日照據點地圖</span>
+              <span class="badge rounded-pill text-bg-light">照顧者支持資源</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 輔具與居家環境改造（重點：重要性＋未改善的風險） -->
+    <section class="mb-5" aria-labelledby="home-mod-title">
+      <div class="section-title">
+        <span class="eyebrow">Home & Aids</span>
+        <h3 id="home-mod-title">輔具與居家環境改造的重要性</h3>
+      </div>
+
+      <article class="lc-card p-4">
+        <!-- 為什麼重要 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">為什麼一定要做？</h4>
+        <p class="mb-3">
+          輔具與無障礙改造的核心目標是：<strong>降低意外風險、延長居家自立、減輕照顧者負擔</strong>。
+          當移動、洗澡、如廁、移位等高風險情境被重新設計後，能有效避免跌倒與二次傷害，並減少反覆就醫與再住院的機會。
+        </p>
+
+        <!-- 未改善的風險 -->
+        <div class="callout mb-3" style="border-left-color:#b81f24; background:#fff5f5;">
+          <strong>若缺乏輔具或無障礙環境，常見風險包括：</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>跌倒與骨折：</strong> 浴室濕滑、門檻突起、夜間照明不足，都是高風險熱點。</li>
+            <li><strong>壓瘡與皮膚損傷：</strong> 長時間臥床但無壓力分散床墊、翻身照護不便。</li>
+            <li><strong>吞嚥嗆咳與吸入性肺炎：</strong> 缺乏餐具輔具、坐姿與床頭角度調整不易。</li>
+            <li><strong>衛浴與廚房燙傷/滑倒：</strong> 沒有扶手、防滑處理與溫度安全控管。</li>
+          </ul>
+        </div>
+
+        <!-- 評估流程 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">1) 先做評估，再選方案</h4>
+        <ul>
+          <li><strong>功能評估：</strong> 由職能/物理治療師或個管師評估移動、移位、沐浴、如廁、進食等能力缺口。</li>
+          <li><strong>環境評估：</strong> 盤點動線、門檻、門寬、地面材質、照明、收納高度與障礙物。</li>
+          <li><strong>優先順序：</strong> 先解決「高風險＋高頻使用」場域（浴室、臥室、走道、出入口）。</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <!-- 常見改造 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">2) 常見環境改造</h4>
+        <ul class="mb-3">
+          <li><strong>衛浴：</strong> 防滑地面／墊、抓握扶手、無門檻淋浴、坐式淋浴椅、加高馬桶座。</li>
+          <li><strong>出入口與通道：</strong> 斜坡、門檻緩降、門寬 ≥ 90cm、轉彎處留足迴轉空間。</li>
+          <li><strong>臥室：</strong> 電動病床、床邊護欄、移位滑墊/移位機、夜間感應燈、床邊呼叫鈴。</li>
+          <li><strong>公共空間：</strong> 清除絆腳物、線材收束、家具抗撞防角、均勻照明（走道/樓梯重點補光）。</li>
+        </ul>
+
+        <!-- 輔具選購 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">3) 輔具選購指南</h4>
+        <ul class="mb-3">
+          <li><strong>尺寸與居家相容：</strong> 身高體重配適、通行寬度、收納/充電空間。</li>
+          <li><strong>使用與清潔：</strong> 把手粗細、防滑材質、可拆洗、耗材/電池更換便利。</li>
+          <li><strong>維修與保固：</strong> 在地維修據點、零件供應、試用與教學。</li>
+          <li><strong>常見搭配：</strong> 助行器＋便攜座、輪椅＋折疊斜坡板、病床＋防翻身氣墊、移位帶＋滑墊。</li>
+        </ul>
+
+        <div class="callout mb-3">
+          <strong>實際效益（ROI）：</strong> 減少跌倒/住院與照顧者傷害，間接降低醫療與看護支出；同時提升被照顧者自主性與生活品質（如可自行如廁/洗澡），有助延長在地老化。
+        </div>
+
+        <!-- 補助與申請 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">4) 補助與申請</h4>
+        <ul class="mb-3">
+          <li>多數縣市提供<strong>輔具與環境改善補助</strong>，通常需專業評估報告與費用估價單。</li>
+          <li>建議先撥打 <strong>1966</strong> 了解你所在地的申請流程、資格與補助項目。</li>
+          <li>保留收據與照片紀錄，方便核銷與後續保固維修。</li>
+        </ul>
+
+        <!-- 快速檢核 -->
+        <h4 class="h6 text-uppercase text-muted mb-3">5) 居家安全快速檢核</h4>
+        <ul class="mb-0">
+          <li>夜間動線是否有感應燈？地面是否防滑、無鬆動地毯？</li>
+          <li>浴廁是否有足夠扶手與坐椅？門檻是否緩降或移除？</li>
+          <li>床旁是否可安全移位？有呼叫鈴與可及的手機/遙控器嗎？</li>
+          <li>走失風險是否有門窗安全鎖與簡易定位方案？</li>
+          <li>照顧者是否受過正確移位技巧訓練，避免腰背受傷？</li>
+        </ul>
+      </article>
+    </section>
+
+
+
+
+    <!-- 行動區 CTA -->
+    <section
+      class="cta p-4 p-md-5 d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
+      <div>
+        <h4 class="mb-1">下一步：建立你的照護計畫</h4>
+        <p class="text-muted mb-0">可立即發起需求評估、查看附近服務據點，或預約諮詢。</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="/apply/assessment" class="btn btn-primary"><i class="bi bi-clipboard2-check"></i> 發起需求評估</a>
+        <a href="/map/services" class="btn btn-outline-primary"><i class="bi bi-geo-alt"></i> 查詢附近據點</a>
+        <a href="/contact/consult" class="btn btn-outline-secondary"><i class="bi bi-chat-dots"></i> 預約諮詢</a>
+      </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+      function computeQuiz() {
+        const get = n => document.querySelector('input[name="' + n + '"]:checked')?.value || "";
+        const q1 = get("q1"), q2 = get("q2"), q3 = get("q3");
+
+        let score = { self: 0, institution: 0, caregiver: 0, mix: 0 };
+
+        if (q1 === "self") score.self += 2;
+        else if (q1 === "mix") score.mix += 1;
+        else score.caregiver += 2;
+
+        if (q2 === "institution") score.institution += 2;
+        else if (q2 === "flex") score.caregiver += 1, score.mix += 1;
+        else score.self += 1, score.mix += 1;
+
+        if (q3 === "institution") score.institution += 3;
+        else if (q3 === "mix") score.mix += 2;
+        else score.self += 1, score.caregiver += 1;
+
+        const ranked = Object.entries(score).sort((a, b) => b[1] - a[1]);
+        const top = ranked[0][0];
+
+        const msg = {
+          self: "主軸建議：以「自己照顧」為核心，建議申請到宅與喘息服務減輕負擔。",
+          institution: "主軸建議：考慮「機構照顧」，可獲 24h 專業照護與安全環境。",
+          caregiver: "主軸建議：建議「聘請看護」，保留家庭生活並取得個別化照顧。",
+          mix: "主軸建議：採「混合模式」，按時段與需求靈活搭配資源。"
+        }[top];
+
+        const addon = (top === "institution")
+          ? "可與政府補助、家屬探視方案搭配，定期與機構會談。"
+          : (top === "caregiver")
+            ? "建議搭配個管師追蹤、居家護理與復能計畫。"
+            : (top === "self")
+              ? "建議同步規劃喘息服務、日照/到宅服務，以及照顧者支持團體。"
+              : "可彈性安排日照、到宅、短期機構托顧與喘息服務。";
+
+        const html = `
+        <div class="d-flex gap-3 align-items-start">
+          <div class="icon bi bi-stars" style="width:44px;height:44px;border-radius:.75rem;display:inline-grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;"></div>
+          <div>
+            <div class="fw-bold mb-1">${msg}</div>
+            <div class="text-muted">加值建議：${addon}</div>
+            <div class="mt-2">
+              <a class="btn btn-sm btn-primary me-2" href="#gov-title">查看政府資源</a>
+              <a class="btn btn-sm btn-outline-secondary" href="/apply/assessment">預約評估</a>
+            </div>
+          </div>
+        </div>
+      `;
+        const box = document.getElementById("quizResult");
+        box.innerHTML = html;
+        box.className = "mt-4 p-3 quiz-result border";
+      }
+    </script>
+  </main>
+
+
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+
+
+
+
+
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { return { message: "✅ Vue 測試文字：讀取成功！" }; },
+          // methods: { ... }, mounted() { ... } 等可在此加入
+        }).mount('#hero');
+
+
+
+
+        console.log("✅ Vue mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>
