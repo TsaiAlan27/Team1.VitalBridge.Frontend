@@ -116,6 +116,36 @@
             border-radius: 10px;
         }
 
+        .card-img-container {
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .no-image-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .card-img-container.no-image {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img-container.no-image::after {
+            content: "📷\A暫無照片";
+            white-space: pre;
+            text-align: center;
+            color: #6c757d;
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
         .org-title {
             color: #2c3e50;
             font-weight: 700;
@@ -246,7 +276,7 @@
                                 </label>
                                 <select class="form-select" id="city" v-model="searchForm.cityId" @change="onCityChange"
                                     aria-label="選擇縣市">
-                                    <option value="">請選擇縣市</option>
+                                    <option value="0">全部縣市</option>
                                     <option v-for="city in cities" :key="city.id" :value="city.id">
                                         {{ city.name }}
                                     </option>
@@ -259,8 +289,8 @@
                                     <i class="bi bi-map me-2"></i>鄉鎮區
                                 </label>
                                 <select class="form-select" id="district" v-model="searchForm.districtId"
-                                    :disabled="!searchForm.cityId" aria-label="選擇鄉鎮區">
-                                    <option value="">請選擇鄉鎮區</option>
+                                    :disabled="!searchForm.cityId || searchForm.cityId === 0" aria-label="選擇鄉鎮區">
+                                    <option value="0">全部鄉鎮區</option>
                                     <option v-for="district in districts" :key="district.id" :value="district.id">
                                         {{ district.name }}
                                     </option>
@@ -282,10 +312,10 @@
                                 </div>
                             </div>
 
-                            <!-- 機構特色 -->
+                            <!-- 機構類型 -->
                             <div class="col-md-6">
                                 <label class="form-label">
-                                    <i class="bi bi-star me-2"></i>機構特色
+                                    <i class="bi bi-building me-2"></i>機構類型
                                 </label>
                                 <div class="checkbox-group">
                                     <div class="form-check">
@@ -338,9 +368,19 @@
                             <div class="card org-card h-100">
                                 <div class="row g-0 h-100">
                                     <div class="col-md-5">
-                                        <img :src="getImageUrl(org.photoUrl)" :alt="org.name + '機構照片'"
-                                            class="img-fluid org-image w-100 h-100" loading="lazy"
-                                            @error="handleImageError($event)">
+                                        <div class="card-img-container position-relative">
+                                            <img v-if="getImageUrl(org.photoUrl)" :src="getImageUrl(org.photoUrl)"
+                                                :data-filename="org.photoUrl" :alt="org.name + '機構照片'"
+                                                class="img-fluid org-image w-100 h-100" loading="lazy"
+                                                @error="handleImageError($event)">
+                                            <div v-else
+                                                class="no-image-placeholder d-flex align-items-center justify-content-center h-100">
+                                                <div class="text-center text-muted">
+                                                    <i class="bi bi-building fs-1 mb-2"></i>
+                                                    <div class="small">暫無照片</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="card-body d-flex flex-column h-100">
@@ -465,7 +505,7 @@
 
                 // Axios 配置
                 const apiClient = axios.create({
-                    baseURL: 'https://localhost:7104',
+                    baseURL: 'https://localhost:7184',
                     timeout: 30000,
                     headers: {
                         'Content-Type': 'application/json'
@@ -497,10 +537,10 @@
                             // 搜尋表單
                             searchForm: {
                                 keyword: '',
-                                cityId: '',
-                                districtId: '',
+                                cityId: 0,
+                                districtId: 0,
                                 minPrice: 0,
-                                maxPrice: 50000,
+                                maxPrice: 100000,
                                 organizationTypeIds: [],
                                 featureServiceIds: []
                             },
@@ -558,10 +598,13 @@
                         // 載入城市列表
                         async loadCities() {
                             try {
+                                console.log('開始載入城市列表...');
                                 const response = await apiClient.get('/api/Organizations/cities');
+                                console.log('城市列表載入成功:', response.data);
                                 this.cities = response.data;
                             } catch (error) {
                                 console.error('載入城市列表失敗:', error);
+                                console.error('錯誤詳情:', error.response?.data);
                                 this.errorMessage = error.message;
                             }
                         },
@@ -569,20 +612,23 @@
                         // 載入機構類型
                         async loadOrganizationTypes() {
                             try {
+                                console.log('開始載入機構類型...');
                                 const response = await apiClient.get('/api/Organizations/organization-types');
+                                console.log('機構類型載入成功:', response.data);
                                 this.organizationTypes = response.data;
                             } catch (error) {
                                 console.error('載入機構類型失敗:', error);
+                                console.error('錯誤詳情:', error.response?.data);
                                 this.errorMessage = error.message;
                             }
                         },
 
                         // 城市變更時載入區域
                         async onCityChange() {
-                            this.searchForm.districtId = '';
+                            this.searchForm.districtId = 0;
                             this.districts = [];
 
-                            if (this.searchForm.cityId) {
+                            if (this.searchForm.cityId && this.searchForm.cityId !== 0) {
                                 try {
                                     const response = await apiClient.get(`/api/Organizations/cities/${this.searchForm.cityId}/districts`);
                                     this.districts = response.data;
@@ -617,19 +663,40 @@
                             this.currentPage = page;
 
                             try {
-                                const searchData = {
-                                    keyword: this.searchForm.keyword || null,
-                                    cityId: this.searchForm.cityId || null,
-                                    districtId: this.searchForm.districtId || null,
-                                    minPrice: this.searchForm.minPrice || null,
-                                    maxPrice: this.searchForm.maxPrice || null,
-                                    organizationTypeIds: this.searchForm.organizationTypeIds,
-                                    featureServiceIds: this.searchForm.featureServiceIds,
-                                    page: page,
-                                    pageSize: this.pageSize
+                                // 根據後端API期待的格式構建請求
+                                const searchDto = {
+                                    keyword: this.searchForm.keyword || '',
+                                    cityId: this.searchForm.cityId ? parseInt(this.searchForm.cityId) : 0,
+                                    districtId: this.searchForm.districtId ? parseInt(this.searchForm.districtId) : 0,
+                                    minPrice: this.searchForm.minPrice || 0,
+                                    maxPrice: this.searchForm.maxPrice || 100000,
+                                    organizationTypeIds: this.searchForm.organizationTypeIds || [],
+                                    featureServiceIds: this.searchForm.featureServiceIds || []
                                 };
 
-                                const response = await apiClient.post('/api/Organizations/search', searchData);
+                                const requestData = {
+                                    searchDto: searchDto,
+                                    page: parseInt(page) || 1,
+                                    pageSize: parseInt(this.pageSize) || 10
+                                };
+
+                                console.log('搜尋請求資料:', requestData);
+
+                                const response = await apiClient.post('/api/Organizations/search', requestData);
+                                console.log('搜尋回應:', response.data);
+                                console.log('機構列表:', response.data.items);
+
+                                // Debug: 檢查第一個機構的圖片檔名
+                                if (response.data.items && response.data.items.length > 0) {
+                                    console.log('第一個機構數據:', response.data.items[0]);
+                                    console.log('圖片檔名欄位:', {
+                                        photoUrl: response.data.items[0].photoUrl,
+                                        imageUrl: response.data.items[0].imageUrl,
+                                        photo: response.data.items[0].photo,
+                                        image: response.data.items[0].image,
+                                        fileName: response.data.items[0].fileName
+                                    });
+                                }
 
                                 this.searchResults = response.data.items || [];
                                 this.totalResults = response.data.totalCount || 0;
@@ -637,9 +704,37 @@
                                 this.totalPages = response.data.totalPages || 1;
                                 this.hasSearched = true;
 
+                                // 清除錯誤訊息
+                                this.errorMessage = '';
+
                             } catch (error) {
                                 console.error('搜尋機構失敗:', error);
-                                this.errorMessage = error.message;
+                                console.error('錯誤回應:', error.response?.data);
+                                console.error('錯誤狀態:', error.response?.status);
+                                console.error('錯誤標頭:', error.response?.headers);
+                                console.error('完整錯誤:', JSON.stringify(error, null, 2));
+
+                                // 根據後端回傳的錯誤格式改善錯誤訊息
+                                if (error.response?.status === 400) {
+                                    const errorData = error.response.data;
+                                    if (errorData && errorData.errors) {
+                                        // 顯示詳細的驗證錯誤
+                                        const errorMessages = [];
+                                        for (const [field, messages] of Object.entries(errorData.errors)) {
+                                            errorMessages.push(...messages);
+                                        }
+                                        this.errorMessage = `請求參數錯誤：${errorMessages.join('; ')}`;
+                                    } else {
+                                        this.errorMessage = '搜尋參數有誤，請檢查輸入條件';
+                                    }
+                                } else if (error.response?.status === 500) {
+                                    this.errorMessage = '伺服器內部錯誤，請稍後再試';
+                                } else if (error.code === 'NETWORK_ERROR' || error.message.includes('Network Error')) {
+                                    this.errorMessage = '網路連線錯誤，請檢查網路狀態';
+                                } else {
+                                    this.errorMessage = `搜尋失敗：${error.message || '未知錯誤'}`;
+                                }
+
                                 this.searchResults = [];
                                 this.totalResults = 0;
                             } finally {
@@ -668,15 +763,39 @@
 
                         // 取得圖片 URL
                         getImageUrl(fileName) {
+                            console.log('取得圖片URL - 檔名:', fileName);
                             if (!fileName) {
-                                return '/assets/img/placeholder.jpg'; // 預設圖片
+                                console.log('無圖片檔名，回傳 null');
+                                return null;
                             }
-                            return `http://localhost:5232/api/UploadFile/GetFile?fileName=${fileName}`;
+
+                            // 使用正確的後台API端點
+                            const imageUrl = `https://localhost:7184/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}`;
+                            console.log('產生的圖片URL:', imageUrl);
+                            return imageUrl;
                         },
 
                         // 圖片載入錯誤處理
                         handleImageError(event) {
-                            event.target.src = '/assets/img/placeholder.jpg';
+                            console.log('圖片載入失敗:', event.target.src);
+                            const img = event.target;
+
+                            // 直接顯示預設圖片樣式
+                            console.log('圖片不存在，顯示預設樣式');
+                            this.showDefaultImage(img);
+                        },
+
+                        // 顯示預設圖片樣式
+                        showDefaultImage(img) {
+                            // 隱藏圖片，顯示預設樣式
+                            img.style.display = 'none';
+                            // 顯示父容器的預設背景
+                            const parent = img.closest('.card-img-container');
+                            if (parent) {
+                                parent.classList.add('no-image');
+                            }
+                            // 避免無限循環載入錯誤
+                            img.onerror = null;
                         }
                     }
                 }).mount('#searchApp');
