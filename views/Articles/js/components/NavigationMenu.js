@@ -9,7 +9,7 @@ export default {
     name: 'NavigationMenu',
     components: { MenuItem },
     template: `
-        <nav class="nav-menu" id="navMenu">
+        <nav class="nav-menu" id="nav-Menu">
             <ul>
                 <menu-item v-for="item in menuItems" :key="item.name" :item="item"></menu-item>
             </ul>

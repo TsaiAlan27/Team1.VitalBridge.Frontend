@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic News Portal</title>
+
+    <link rel="stylesheet" href="css/ArticleIndex.css">
+</head>
+
+<body>
+    <div class="pageBody" id="app">
+
+
+        <header class="pageHeader">
+            <div class="pageHeader-left">
+                <div class="hamburger-icon" id="hamburgerIcon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="pageHeader-home-link">All</div>
+            </div>
+            <div class="pageHeader-right">
+                <input type="search" class="search-input" placeholder="Search...">
+            </div>
+        </header>
+
+        <!-- Sliding Navigation Menu -->
+        <!-- The Navigation Menu Component -->
+        <navigation-menu></navigation-menu>
+
+        <!-- Main Content Area -->
+        <div class="pageContainer">
+            <main class="main-content">
+                <section class="articles-column">
+                    <!-- Featured Article -->
+                    <!-- <article class="featured-article">
+                        <div class="featured-image-placeholder">
+                            Featured Article Image
+                        </div>
+                        <div class="featured-content">
+                            <div class="category-breadcrumb">
+                                <a href="#" class="category-pill">Business</a>
+                                <a href="#" class="subcategory-pill">Success</a>
+                            </div>
+                            <h1 class="featured-headline">The Art of Building a Resilient Company Culture in 2025
+                            </h1>
+                            <p class="featured-excerpt">Explore key strategies for fostering a robust and adaptive
+                                organizational culture that thrives in uncertain times, focusing on innovation and
+                                employee
+                                well-being.</p>
+                            <p class="article-meta">By John Doe • August 15, 2025</p>
+                        </div>
+                    </article> -->
+
+                    <article-card></article-card>
+                    <!-- Article Grid -->
+                    <div class="article-grid" id="articleGrid">
+                        <!-- Articles will be loaded here by JavaScript -->
+                    </div>
+
+                    <!-- Load More Articles Button -->
+                    <div class="load-more-btn-wrapper">
+                        <button class="load-more-btn" id="loadMoreBtn">
+                            Load More Articles
+                        </button>
+                    </div>
+                </section>
+
+                <aside class="sidebar-column">
+                    <!-- Popular Categories Widget -->
+                    <div class="widget-box" id="popularCategoriesWidget">
+                        <h3 class="widget-title">熱門分類 (Popular Categories)</h3>
+                        <ul class="widget-list">
+                            <li><a href="#">心靈</a> <span class="badge first-trending-badge">第一熱度</span></li>
+                            <li><a href="#">運動與健康</a> <span class="badge count-badge">50</span></li>
+                            <li><a href="#">理財</a> <span class="badge count-badge">42</span></li>
+                            <li><a href="#">生活</a> <span class="badge count-badge">67</span></li>
+                            <li><a href="#">Health & Fitness</a> <span class="badge count-badge">55</span></li>
+                            <li><a href="#">Technology</a> <span class="badge count-badge">10</span></li>
+                            <li><a href="#">Football</a> <span class="badge count-badge">5</span></li>
+                            <li><a href="#">Cricket</a> <span class="badge count-badge">67</span></li>
+                            <li><a href="#">Covid 19</a> <span class="badge count-badge">12</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Trending Now Widget -->
+                    <div class="widget-box">
+                        <h3 class="widget-title">最近熱門 (Trending Now)</h3>
+                        <ul class="widget-list">
+                            <li><span class="badge ">1</span> <a href="#">如何培養美好的心靈讓你每天過得舒適</a></li>
+                            <li><span class="badge ">2</span> <a href="#">Being self-controlled child may lead
+                                    to healthier middle-age</a></li>
+                            <li><span class="badge ">3</span> <a href="#">Best things you can do on a solo
+                                    mountain climb</a></li>
+                            <li><span class="badge ">4</span> <a href="#">How to burn calories with pleasant
+                                    activities</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Call-to-Action (CTA) Banner -->
+                    <div class="cta-banner">
+                        <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
+                        <p class="cta-subtitle">Experience the change!</p>
+                        <button class="purchase-btn">PURCHASE NOW</button>
+                    </div>
+                </aside>
+            </main>
+        </div>
+
+
+    </div>
+
+
+
+    <!-- script start -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
+
+    <!-- <script src="/views/Johnny/js/ArticleIndex0.js"></script> -->
+    <script type="module" src="/views/Johnny/js/ArticleIndex.js"></script>
+</body>
+
+</html>

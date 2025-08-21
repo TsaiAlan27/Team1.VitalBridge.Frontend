@@ -1,13 +1,15 @@
 
 import NavigationMenu from "./components/NavigationMenu.js"
 import MenuItem from './components/MenuItem.js' // Also import MenuItem as NavigationMenu depends on it
-
+import ArticleCard from "./components/ArticleCard.js";
 
 // Clean Vue script template
 const vueApp = {
     components: {
         'navigation-menu': NavigationMenu,
-        'menu-item': MenuItem
+        'menu-item': MenuItem,
+        'article-card': ArticleCard
+
     },
     data() {
         return {
@@ -20,7 +22,7 @@ const vueApp = {
     mounted() {
         // Hamburger Menu Toggle
         const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const navMenu = document.getElementById('navMenu');
+        const navMenu = document.getElementById('nav-Menu');
 
         if (hamburgerIcon && navMenu) {
             hamburgerIcon.addEventListener('click', function () {
