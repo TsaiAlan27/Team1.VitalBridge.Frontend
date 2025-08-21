@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>長照機構搜尋 - 樂齡橋 VitalBridge</title>
+    <meta name="description" content="搜尋適合的長照機構，提供復健中心、日間照護中心、護理之家等多種服務類型">
+    <meta name="keywords" content="長照機構,養護中心,護理之家,日間照護,復健中心,在宅養護">
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="長照機構搜尋 - 樂齡橋 VitalBridge">
+    <meta property="og:description" content="搜尋適合的長照機構，提供復健中心、日間照護中心、護理之家等多種服務類型">
+    <meta property="og:type" content="website">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <!-- 自己想改的樣式放這邊 -->
+    <style>
+        /* 機構搜尋頁面自訂樣式 */
+        .search-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2rem 0;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.75rem;
+        }
+
+        .price-range-container {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .price-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .checkbox-group {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .form-check-input:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .search-btn {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        .org-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .org-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .org-image {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card-img-container {
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .no-image-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .card-img-container.no-image {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img-container.no-image::after {
+            content: "📷\A暫無照片";
+            white-space: pre;
+            text-align: center;
+            color: #6c757d;
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
+        .org-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .org-location {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .org-price {
+            color: #28a745;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .detail-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .detail-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .loading-spinner {
+            color: #007bff;
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .page-link {
+            border-radius: 8px;
+            margin: 0 2px;
+            border: none;
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .page-link:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        .page-item.active .page-link {
+            background: #007bff;
+            border-color: #007bff;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+            color: #6c757d;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="headerpage"></div>
+
+    <main class="main">
+        <!-- Breadcrumb Navigation -->
+        <section class="py-2">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index.html">首頁</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">找機構</li>
+                    </ol>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="searchApp" class="section">
+            <div class="container">
+                <div class="search-container">
+                    <div class="text-center mb-4">
+                        <h1 class="fw-bold text-primary">長照機構搜尋</h1>
+                        <p class="lead text-muted">找到最適合的長照機構</p>
+                    </div>
+
+                    <div class="search-form">
+                        <div class="row g-3">
+                            <!-- 關鍵字搜尋 -->
+                            <div class="col-md-6">
+                                <label for="keyword" class="form-label">
+                                    <i class="bi bi-search me-2"></i>機構名稱
+                                </label>
+                                <input type="text" class="form-control" id="keyword" v-model="searchForm.keyword"
+                                    placeholder="請輸入機構名稱關鍵字" aria-label="機構名稱搜尋">
+                            </div>
+
+                            <!-- 縣市選擇 -->
+                            <div class="col-md-3">
+                                <label for="city" class="form-label">
+                                    <i class="bi bi-geo-alt me-2"></i>縣市
+                                </label>
+                                <select class="form-select" id="city" v-model="searchForm.cityId" @change="onCityChange"
+                                    aria-label="選擇縣市">
+                                    <option value="0">全部縣市</option>
+                                    <option v-for="city in cities" :key="city.id" :value="city.id">
+                                        {{ city.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- 鄉鎮區選擇 -->
+                            <div class="col-md-3">
+                                <label for="district" class="form-label">
+                                    <i class="bi bi-map me-2"></i>鄉鎮區
+                                </label>
+                                <select class="form-select" id="district" v-model="searchForm.districtId"
+                                    :disabled="!searchForm.cityId || searchForm.cityId === 0" aria-label="選擇鄉鎮區">
+                                    <option value="0">全部鄉鎮區</option>
+                                    <option v-for="district in districts" :key="district.id" :value="district.id">
+                                        {{ district.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- 價格範圍 -->
+                            <div class="col-md-6">
+                                <label for="priceRange" class="form-label">
+                                    <i class="bi bi-currency-dollar me-2"></i>價格範圍
+                                </label>
+                                <div class="price-range-container">
+                                    <input type="range" class="form-range" id="priceRange" v-model="searchForm.maxPrice"
+                                        min="0" max="100000" step="1000" aria-label="價格範圍選擇">
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span class="price-display">NT$ 0</span>
+                                        <span class="price-display">NT$ {{ formatPrice(searchForm.maxPrice) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 機構類型 -->
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="bi bi-building me-2"></i>機構類型
+                                </label>
+                                <div class="checkbox-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="selectAll"
+                                            v-model="selectAll" @change="toggleSelectAll" aria-label="選擇全部機構特色">
+                                        <label class="form-check-label fw-bold" for="selectAll">
+                                            全部
+                                        </label>
+                                    </div>
+                                    <div v-for="type in organizationTypes" :key="type.id" class="form-check">
+                                        <input class="form-check-input" type="checkbox" :id="'type_' + type.id"
+                                            :value="type.id" v-model="searchForm.organizationTypeIds"
+                                            @change="onTypeChange" :aria-label="'選擇' + type.name">
+                                        <label class="form-check-label" :for="'type_' + type.id">
+                                            {{ type.name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 搜尋按鈕 -->
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-primary search-btn" @click="searchOrganizations"
+                                    :disabled="loading" aria-label="搜尋機構">
+                                    <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status"
+                                        aria-hidden="true"></span>
+                                    <i v-else class="bi bi-search me-2"></i>
+                                    {{ loading ? '搜尋中...' : '搜尋機構' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div v-if="errorMessage" class="error-message" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ errorMessage }}
+                </div>
+
+                <!-- Search Results -->
+                <div v-if="searchResults.length > 0">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>搜尋結果 ({{ totalResults }} 筆)</h3>
+                        <small class="text-muted">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</small>
+                    </div>
+
+                    <div class="row">
+                        <div v-for="org in searchResults" :key="org.id" class="col-lg-6 col-xl-4">
+                            <div class="card org-card h-100">
+                                <div class="row g-0 h-100">
+                                    <div class="col-md-5">
+                                        <div class="card-img-container position-relative">
+                                            <img v-if="getImageUrl(org.photoUrl)" :src="getImageUrl(org.photoUrl)"
+                                                :data-filename="org.photoUrl" :alt="org.name + '機構照片'"
+                                                class="img-fluid org-image w-100 h-100" loading="lazy"
+                                                @error="handleImageError($event)">
+                                            <div v-else
+                                                class="no-image-placeholder d-flex align-items-center justify-content-center h-100">
+                                                <div class="text-center text-muted">
+                                                    <i class="bi bi-building fs-1 mb-2"></i>
+                                                    <div class="small">暫無照片</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body d-flex flex-column h-100">
+                                            <h5 class="card-title org-title">{{ org.name }}</h5>
+                                            <p class="org-location">
+                                                <i class="bi bi-geo-alt me-1"></i>
+                                                {{ org.cityName }}{{ org.districtName }}
+                                            </p>
+                                            <p class="card-text text-muted small">{{ org.address }}</p>
+                                            <div class="mt-auto">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <small class="text-muted">床位數: {{ org.bedCount }}</small><br>
+                                                        <span class="org-price">NT$ {{ formatPrice(org.minMonthlyPrice)
+                                                            }}
+                                                            起</span>
+                                                    </div>
+                                                    <button type="button" class="btn btn-success detail-btn"
+                                                        @click="viewDetail(org.id)"
+                                                        :aria-label="'查看' + org.name + '詳細資料'">
+                                                        詳細資料
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="搜尋結果分頁">
+                        <ul class="pagination">
+                            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                                <button class="page-link" @click="goToPage(currentPage - 1)"
+                                    :disabled="currentPage === 1" aria-label="上一頁">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                            </li>
+
+                            <li v-for="page in visiblePages" :key="page" class="page-item"
+                                :class="{ active: currentPage === page }">
+                                <button class="page-link" @click="goToPage(page)" :aria-label="'第' + page + '頁'">
+                                    {{ page }}
+                                </button>
+                            </li>
+
+                            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                                <button class="page-link" @click="goToPage(currentPage + 1)"
+                                    :disabled="currentPage === totalPages" aria-label="下一頁">
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- No Results -->
+                <div v-else-if="!loading && hasSearched" class="no-results">
+                    <i class="bi bi-search display-1 text-muted"></i>
+                    <h3 class="mt-3">找不到符合條件的機構</h3>
+                    <p>請調整搜尋條件後再試一次</p>
+                </div>
+
+                <!-- Initial State -->
+                <div v-else-if="!loading && !hasSearched" class="no-results">
+                    <i class="bi bi-building display-1 text-muted"></i>
+                    <h3 class="mt-3">請設定搜尋條件</h3>
+                    <p>輸入關鍵字或選擇篩選條件開始搜尋</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="footerpage"></div>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/php-email-form/validate.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+    <!-- 其他要裝的js放在這之前 -->
+    <script src="/assets/js/fragment-loader.js" defer></script>
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+    (function onFullyReady(run) {
+        function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+        function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+        function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+        Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+    })(function () {
+        // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+
+        //Vue的部分寫這邊
+        (function mountVue() {
+            // 把頁面專屬的 Vue 程式寫在這個函式裡
+            function initPageVue() {
+                if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+                if (typeof axios === 'undefined') return; // 若未載入 axios 則跳過
+
+                const { createApp } = Vue;
+
+                // API 配置常數
+                const API_BASE_URL = 'https://localhost:7104';
+                const BACKEND_BASE_URL = 'https://localhost:7184'; // 後台 API 基礎 URL
+
+                // 機構相關 API 服務
+                const orgApi = {
+                    getCities: () => apiClient.get('/api/Organizations/cities'),
+                    getOrganizationTypes: () => apiClient.get('/api/Organizations/organization-types'),
+                    getDistricts: (cityId) => apiClient.get(`/api/Organizations/cities/${cityId}/districts`),
+                    searchOrganizations: (data) => apiClient.post('/api/Organizations/search', data)
+                };
+
+                // 圖片服務 - 使用後台 API 直接取得圖片（與 LoadPlate.js 相同方式）
+                const getImageUrl = (fileName) => fileName ? `${BACKEND_BASE_URL}/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}` : null;
+
+                // Axios 配置
+                const apiClient = axios.create({
+                    baseURL: API_BASE_URL,
+                    timeout: 30000,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Axios 錯誤攔截器
+                apiClient.interceptors.response.use(
+                    response => response,
+                    error => {
+                        console.error('API Error:', error);
+                        let errorMessage = '網路連線異常，請稍後再試';
+
+                        if (error.response) {
+                            // 伺服器回應錯誤
+                            errorMessage = `伺服器錯誤 (${error.response.status})`;
+                        } else if (error.request) {
+                            // 請求已發送但無回應
+                            errorMessage = '無法連線到伺服器，請檢查網路連線';
+                        }
+
+                        return Promise.reject({ message: errorMessage, originalError: error });
+                    }
+                );
+
+                createApp({
+                    data() {
+                        return {
+                            // 搜尋表單
+                            searchForm: {
+                                keyword: '',
+                                cityId: 0,
+                                districtId: 0,
+                                minPrice: 0,
+                                maxPrice: 100000,
+                                organizationTypeIds: [],
+                                featureServiceIds: []
+                            },
+
+                            // 下拉選單資料
+                            cities: [],
+                            districts: [],
+                            organizationTypes: [],
+
+                            // 搜尋結果
+                            searchResults: [],
+                            totalResults: 0,
+                            currentPage: 1,
+                            totalPages: 1,
+                            pageSize: 12,
+
+                            // 狀態管理
+                            loading: false,
+                            hasSearched: false,
+                            errorMessage: '',
+                            selectAll: false
+                        };
+                    },
+
+                    computed: {
+                        visiblePages() {
+                            const pages = [];
+                            const start = Math.max(1, this.currentPage - 2);
+                            const end = Math.min(this.totalPages, this.currentPage + 2);
+
+                            for (let i = start; i <= end; i++) {
+                                pages.push(i);
+                            }
+                            return pages;
+                        }
+                    },
+
+                    async mounted() {
+                        await this.loadInitialData();
+                    },
+
+                    methods: {
+                        // 載入初始資料
+                        async loadInitialData() {
+                            try {
+                                await Promise.all([
+                                    this.loadCities(),
+                                    this.loadOrganizationTypes()
+                                ]);
+                            } catch (error) {
+                                this.errorMessage = '載入基本資料失敗，請重新整理頁面';
+                            }
+                        },
+
+                        // 載入城市列表
+                        async loadCities() {
+                            try {
+                                console.log('開始載入城市列表...');
+                                const response = await orgApi.getCities();
+                                console.log('城市列表載入成功:', response.data);
+                                this.cities = response.data;
+                            } catch (error) {
+                                console.error('載入城市列表失敗:', error);
+                                console.error('錯誤詳情:', error.response?.data);
+                                this.errorMessage = error.message;
+                            }
+                        },
+
+                        // 載入機構類型
+                        async loadOrganizationTypes() {
+                            try {
+                                console.log('開始載入機構類型...');
+                                const response = await orgApi.getOrganizationTypes();
+                                console.log('機構類型載入成功:', response.data);
+                                this.organizationTypes = response.data;
+                            } catch (error) {
+                                console.error('載入機構類型失敗:', error);
+                                console.error('錯誤詳情:', error.response?.data);
+                                this.errorMessage = error.message;
+                            }
+                        },
+
+                        // 城市變更時載入區域
+                        async onCityChange() {
+                            this.searchForm.districtId = 0;
+                            this.districts = [];
+
+                            if (this.searchForm.cityId && this.searchForm.cityId !== 0) {
+                                try {
+                                    const response = await orgApi.getDistricts(this.searchForm.cityId);
+                                    this.districts = response.data;
+                                } catch (error) {
+                                    console.error('載入區域列表失敗:', error);
+                                    this.errorMessage = error.message;
+                                }
+                            }
+                        },
+
+                        // 全選邏輯
+                        toggleSelectAll() {
+                            if (this.selectAll) {
+                                this.searchForm.organizationTypeIds = this.organizationTypes.map(type => type.id);
+                            } else {
+                                this.searchForm.organizationTypeIds = [];
+                            }
+                        },
+
+                        // 機構類型變更
+                        onTypeChange() {
+                            const allSelected = this.organizationTypes.every(type =>
+                                this.searchForm.organizationTypeIds.includes(type.id)
+                            );
+                            this.selectAll = allSelected;
+                        },
+
+                        // 搜尋機構
+                        async searchOrganizations(page = 1) {
+                            this.loading = true;
+                            this.errorMessage = '';
+                            this.currentPage = page;
+
+                            try {
+                                // 根據後端API期待的格式構建請求
+                                const searchDto = {
+                                    keyword: this.searchForm.keyword || '',
+                                    cityId: this.searchForm.cityId ? parseInt(this.searchForm.cityId) : 0,
+                                    districtId: this.searchForm.districtId ? parseInt(this.searchForm.districtId) : 0,
+                                    minPrice: this.searchForm.minPrice || 0,
+                                    maxPrice: this.searchForm.maxPrice || 100000,
+                                    organizationTypeIds: this.searchForm.organizationTypeIds || [],
+                                    featureServiceIds: this.searchForm.featureServiceIds || []
+                                };
+
+                                const requestData = {
+                                    searchDto: searchDto,
+                                    page: parseInt(page) || 1,
+                                    pageSize: parseInt(this.pageSize) || 10
+                                };
+
+                                console.log('搜尋請求資料:', requestData);
+
+                                const response = await orgApi.searchOrganizations(requestData);
+                                console.log('搜尋回應:', response.data);
+                                console.log('機構列表:', response.data.items);
+
+                                // Debug: 檢查第一個機構的圖片檔名
+                                if (response.data.items && response.data.items.length > 0) {
+                                    console.log('第一個機構數據:', response.data.items[0]);
+                                    console.log('圖片檔名欄位:', {
+                                        photoUrl: response.data.items[0].photoUrl,
+                                        imageUrl: response.data.items[0].imageUrl,
+                                        photo: response.data.items[0].photo,
+                                        image: response.data.items[0].image,
+                                        fileName: response.data.items[0].fileName
+                                    });
+                                }
+
+                                this.searchResults = response.data.items || [];
+                                this.totalResults = response.data.totalCount || 0;
+                                this.currentPage = response.data.pageNumber || 1;
+                                this.totalPages = response.data.totalPages || 1;
+                                this.hasSearched = true;
+
+                                // 清除錯誤訊息
+                                this.errorMessage = '';
+
+                            } catch (error) {
+                                console.error('搜尋機構失敗:', error);
+                                console.error('錯誤回應:', error.response?.data);
+                                console.error('錯誤狀態:', error.response?.status);
+                                console.error('錯誤標頭:', error.response?.headers);
+                                console.error('完整錯誤:', JSON.stringify(error, null, 2));
+
+                                // 根據後端回傳的錯誤格式改善錯誤訊息
+                                if (error.response?.status === 400) {
+                                    const errorData = error.response.data;
+                                    if (errorData && errorData.errors) {
+                                        // 顯示詳細的驗證錯誤
+                                        const errorMessages = [];
+                                        for (const [field, messages] of Object.entries(errorData.errors)) {
+                                            errorMessages.push(...messages);
+                                        }
+                                        this.errorMessage = `請求參數錯誤：${errorMessages.join('; ')}`;
+                                    } else {
+                                        this.errorMessage = '搜尋參數有誤，請檢查輸入條件';
+                                    }
+                                } else if (error.response?.status === 500) {
+                                    this.errorMessage = '伺服器內部錯誤，請稍後再試';
+                                } else if (error.code === 'NETWORK_ERROR' || error.message.includes('Network Error')) {
+                                    this.errorMessage = '網路連線錯誤，請檢查網路狀態';
+                                } else {
+                                    this.errorMessage = `搜尋失敗：${error.message || '未知錯誤'}`;
+                                }
+
+                                this.searchResults = [];
+                                this.totalResults = 0;
+                            } finally {
+                                this.loading = false;
+                            }
+                        },
+
+                        // 分頁導航
+                        goToPage(page) {
+                            if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+                                this.searchOrganizations(page);
+                                // 滾動到頂部
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        },
+
+                        // 查看詳細資料
+                        viewDetail(organizationId) {
+                            window.location.href = `/orgs/orgDetail.html?id=${organizationId}`;
+                        },
+
+                        // 格式化價格
+                        formatPrice(price) {
+                            return new Intl.NumberFormat('zh-TW').format(price);
+                        },
+
+                        // 取得圖片 URL - 使用後台 API（與 LoadPlate.js 相同方式）
+                        getImageUrl(fileName) {
+                            console.log('取得圖片URL - 檔名:', fileName);
+                            if (!fileName) {
+                                console.log('無圖片檔名，回傳 null');
+                                return null;
+                            }
+
+                            // 使用後台 API 直接取得圖片，與 LoadPlate.js 保持一致
+                            const imageUrl = `${BACKEND_BASE_URL}/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}`;
+                            console.log('產生的圖片URL (後台API):', imageUrl);
+                            return imageUrl;
+                        },
+
+                        // 圖片載入錯誤處理 - 使用後台 API
+                        handleImageError(event) {
+                            const img = event.target;
+                            const fileName = img.getAttribute('data-filename');
+                            console.log('圖片載入失敗 - 後台API URL:', img.src);
+                            console.log('原始檔名:', fileName);
+
+                            // 避免無限循環載入錯誤
+                            img.onerror = null;
+
+                            // 直接顯示預設圖片樣式
+                            console.log('圖片不存在，顯示預設樣式');
+                            this.showDefaultImage(img);
+                        },
+
+                        // 顯示預設圖片樣式
+                        showDefaultImage(img) {
+                            // 隱藏圖片，顯示預設樣式
+                            img.style.display = 'none';
+                            // 顯示父容器的預設背景
+                            const parent = img.closest('.card-img-container');
+                            if (parent) {
+                                parent.classList.add('no-image');
+                            }
+                            // 避免無限循環載入錯誤
+                            img.onerror = null;
+                        }
+                    }
+                }).mount('#searchApp');
+
+                console.log("✅ 機構搜尋 Vue mount 成功！");
+            }
+
+            // 立即執行（外層 post-load 已確保時機正確）
+            initPageVue();
+        })();
+
+        // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    });
+</script>
+
+</html>
