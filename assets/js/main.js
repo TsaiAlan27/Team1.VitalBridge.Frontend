@@ -207,12 +207,32 @@
     return onceEvent('load');
   }
 
+  // 等待驗證（auth.js 完成初始化與 refresh 嘗試）
+  function waitAuthReady(timeoutMs = 1500) {
+    // 已就緒
+    if (window.auth && typeof window.auth.waitReady === 'function') {
+      return Promise.race([
+        window.auth.waitReady(),
+        new Promise(function (resolve) { setTimeout(resolve, timeoutMs); })
+      ]);
+    }
+    // 尚未掛載 window.auth，改等事件或逾時
+    return Promise.race([
+      new Promise(function (resolve) {
+        function handler() { window.removeEventListener('vb:auth-ready', handler); resolve(); }
+        window.addEventListener('vb:auth-ready', handler, { once: true });
+      }),
+      new Promise(function (resolve) { setTimeout(resolve, timeoutMs); })
+    ]);
+  }
+
   async function runAfterAllLoaded() {
     try {
-      await Promise.all([waitAppReady(), waitWindowLoad()]);
+  // 等待：頁面片段載入完成、window onload、以及 auth 初始化完成
+  await Promise.all([waitAppReady(), waitWindowLoad(), waitAuthReady()]);
 
       // Put code that must run after all fragments, vendor and resources are loaded here
-      function initMyFeature() {
+  function initMyFeature() {
         // TODO: replace with your logic
       }
 

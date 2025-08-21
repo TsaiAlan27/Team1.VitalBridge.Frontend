@@ -34,6 +34,19 @@
                 await loadIfNeeded('/assets/js/main.js').catch(function (e) { console.error(e); });
                 window._mainLoaded = true;
             }
+            // 在宣告 app:ready 前，等待 auth 初始化（最多 1.5 秒，避免阻塞）
+            try {
+                await Promise.race([
+                    new Promise(function (resolve) {
+                        if (window.auth && typeof window.auth.waitReady === 'function') return resolve(window.auth.waitReady());
+                        function handler() { window.removeEventListener('vb:auth-ready', handler); resolve(); }
+                        window.addEventListener('vb:auth-ready', handler, { once: true });
+                        // 後備：若事件未觸發，逾時後繼續
+                        setTimeout(resolve, 1500);
+                    }),
+                    new Promise(function (resolve) { setTimeout(resolve, 1500); })
+                ]);
+            } catch (e) { /* ignore */ }
             // signal readiness to page scripts
             await loadIfNeeded('/assets/js/LoadPlate.js');
             if (typeof LoadPlateByNow === 'function') LoadPlateByNow();

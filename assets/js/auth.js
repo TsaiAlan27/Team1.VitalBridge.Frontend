@@ -17,6 +17,8 @@ const API_BASE = 'https://localhost:7104/api/Auth';
 let accessToken = null; // 記憶體中的 access token
 let isRefreshing = false;
 let refreshPromise = null;
+let __authReady = false;
+let __authReadyEmitted = false;
 
 // Helper: 取得 cookie
 function getCookie(name) {
@@ -470,6 +472,13 @@ function setupDomHandlers() {
     } catch (e) {
         // ignore
     }
+    // 標記 auth 初始化完成（無論是否取得 token）
+    __authReady = true;
+    if (!__authReadyEmitted) {
+        try { window.dispatchEvent(new CustomEvent('vb:auth-ready')); } catch { }
+        __authReadyEmitted = true;
+        try { window.authReadyAt = Date.now(); } catch { }
+    }
     // 若由 Vue 控制畫面，略過 DOM 綁定與 UI 畫面更新
     const useVue = !!window.__VB_AUTH_VUE_ACTIVE;
     if (useVue) return;
@@ -494,9 +503,20 @@ try {
         apiFetch,
         ensureRefreshed,
         updateHeaderUI,
-        getAccessToken: () => accessToken
+        getAccessToken: () => accessToken,
+        waitReady: () => {
+            if (__authReady) return Promise.resolve();
+            return new Promise((resolve) => {
+                try { window.addEventListener('vb:auth-ready', () => resolve(), { once: true }); } catch { resolve(); }
+            });
+        },
+        authedFetch: async (path, opts = {}) => {
+            // 等待 auth 初始化；若無 token，ensureRefreshed 會嘗試使用 refresh cookie
+            try { await (window.auth.waitReady ? window.auth.waitReady() : Promise.resolve()); } catch { }
+            // 呼叫包裝過的 apiFetch（會自帶 Authorization/CSRF 與 401→refresh 重試）
+            return apiFetch(path, opts);
+        }
     });
-    try { window.dispatchEvent(new CustomEvent('vb:auth-ready')); } catch (e) { }
 } catch (e) {
     // ignore (e.g., non-browser env)
 }
