@@ -136,6 +136,34 @@
 
         apiRow.appendChild(testApiFetchBtn);
         apiRow.appendChild(testAuthedFetchBtn);
+
+        // getAllNotify 測試按鈕
+        var testNotifyApiFetchBtn = document.createElement('button');
+        testNotifyApiFetchBtn.type = 'button';
+        testNotifyApiFetchBtn.textContent = '測試 /getAllNotify (apiFetch)';
+        testNotifyApiFetchBtn.style.background = '#6f42c1';
+        testNotifyApiFetchBtn.style.color = '#fff';
+        testNotifyApiFetchBtn.style.border = 'none';
+        testNotifyApiFetchBtn.style.borderRadius = '4px';
+        testNotifyApiFetchBtn.style.padding = '4px 8px';
+        testNotifyApiFetchBtn.style.cursor = 'pointer';
+        testNotifyApiFetchBtn.style.marginLeft = '6px';
+        testNotifyApiFetchBtn.addEventListener('click', function () { window.AuthStatusTester && window.AuthStatusTester.call('/getAllNotify', { method: 'GET' }, false); });
+
+        var testNotifyAuthedFetchBtn = document.createElement('button');
+        testNotifyAuthedFetchBtn.type = 'button';
+        testNotifyAuthedFetchBtn.textContent = '測試 /getAllNotify (authedFetch)';
+        testNotifyAuthedFetchBtn.style.background = '#ffc107';
+        testNotifyAuthedFetchBtn.style.color = '#3b2f00';
+        testNotifyAuthedFetchBtn.style.border = 'none';
+        testNotifyAuthedFetchBtn.style.borderRadius = '4px';
+        testNotifyAuthedFetchBtn.style.padding = '4px 8px';
+        testNotifyAuthedFetchBtn.style.cursor = 'pointer';
+        testNotifyAuthedFetchBtn.style.marginLeft = '6px';
+        testNotifyAuthedFetchBtn.addEventListener('click', function () { window.AuthStatusTester && window.AuthStatusTester.call('/getAllNotify', { method: 'GET' }, true); });
+
+        apiRow.appendChild(testNotifyApiFetchBtn);
+        apiRow.appendChild(testNotifyAuthedFetchBtn);
         panel.appendChild(apiRow);
         panel.appendChild(apiResult);
 

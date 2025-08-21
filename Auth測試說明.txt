@@ -25,4 +25,8 @@ await AuthStatusTester.call('/me', { method: 'GET' }, true) // authedFetch
 await window.auth.waitReady()，或
 改用 window.auth.authedFetch(path, opts)
 
+
+在瀏覽器 Console 執行： 
+delete window.VB_AUTH_TEST_TARGET; document.querySelector('#auth-test')?.remove(); AuthStatusTester.render();
+面板就會出現，按鈕也會有
 ```

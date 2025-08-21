@@ -54,6 +54,17 @@
     } catch { }
   }
 
+  // 安全呼叫全域 isLogin / isLogout（若存在且為函式）
+  function safeInvoke(name) {
+    try {
+      const fn = window && window[name];
+      if (typeof fn === 'function') {
+        const args = Array.prototype.slice.call(arguments, 1);
+        fn.apply(window, args);
+      }
+    } catch { }
+  }
+
   // 共享狀態/方法：讓註冊 Modal 也能用 Vue 綁定
   let api = null; // 由主 app mounted 後設置
   const regForm = reactive({ name: '', email: '', password: '', alert: { type: '', msg: '' } });
@@ -143,6 +154,8 @@
         } catch {
           user.value = null;
         } finally {
+          // 通知外部：登入/登出狀態
+          if (user.value) safeInvoke('isLogin', 0); else safeInvoke('isLogout');
           ready.value = true;
         }
       }
@@ -156,6 +169,8 @@
           await api.login({ email: loginForm.email, password: loginForm.password }, loginForm.remember);
           closeModal('loginModal');
           await refreshUser();
+          // 再次確保呼叫登入通知
+          safeInvoke('isLogin', 0);
           window.location.reload();
         } catch (e) {
           const status = e?.status;
@@ -190,7 +205,7 @@
       }
 
       async function doLogout() {
-        try { if (api && api.logout) await api.logout(); } finally { window.location.reload(); }
+        try { if (api && api.logout) await api.logout(); } finally { safeInvoke('isLogout'); window.location.reload(); }
       }
 
       function openLogin() { openModal('loginModal'); }
