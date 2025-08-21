@@ -10,19 +10,19 @@
 </head>
 
 <body>
-    <div id="app">
+    <div class="pageBody" id="app">
 
-        
-        <header class="header">
-            <div class="header-left">
+
+        <header class="pageHeader">
+            <div class="pageHeader-left">
                 <div class="hamburger-icon" id="hamburgerIcon">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-                <div class="header-home-link">All</div>
+                <div class="pageHeader-home-link">All</div>
             </div>
-            <div class="header-right">
+            <div class="pageHeader-right">
                 <input type="search" class="search-input" placeholder="Search...">
             </div>
         </header>
@@ -32,7 +32,7 @@
         <navigation-menu></navigation-menu>
 
         <!-- Main Content Area -->
-        <div class="container">
+        <div class="pageContainer">
             <main class="main-content">
                 <section class="articles-column">
                     <!-- Featured Article -->
@@ -45,7 +45,8 @@
                                 <a href="#" class="category-pill">Business</a>
                                 <a href="#" class="subcategory-pill">Success</a>
                             </div>
-                            <h1 class="featured-headline">The Art of Building a Resilient Company Culture in 2025</h1>
+                            <h1 class="featured-headline">The Art of Building a Resilient Company Culture in 2025
+                            </h1>
                             <p class="featured-excerpt">Explore key strategies for fostering a robust and adaptive
                                 organizational culture that thrives in uncertain times, focusing on innovation and
                                 employee
@@ -108,19 +109,17 @@
             </main>
         </div>
 
-        <!-- Return to Top Button -->
-        <a href="#top" class="return-to-top" id="returnToTopBtn">
-            &#x2191;
-        </a>
+
     </div>
+
 
 
     <!-- script start -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
-
     <script>
+
         // Article Data (example data for loading more articles)
         const allArticles = [
             {
@@ -245,7 +244,7 @@
             }
         ];
 
-        let articlesToShow = 6;
+        let articlesToShow = 3;
         const articlesPerLoad = 3;
         const articleGrid = document.getElementById('articleGrid');
         const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -290,11 +289,12 @@
             articlesToShow += articlesPerLoad;
             loadArticles();
         });
-
         // Initial load of articles
         loadArticles();
+
     </script>
-    <script type="module" src="./js/ArticleIndex.js"></script>
+    <!-- <script src="/views/Johnny/js/ArticleIndex0.js"></script> -->
+    <script type="module" src="/views/Johnny/js/ArticleIndex.js"></script>
 </body>
 
 </html>

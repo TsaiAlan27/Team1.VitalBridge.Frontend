@@ -2,6 +2,7 @@
 import NavigationMenu from "./components/NavigationMenu.js"
 import MenuItem from './components/MenuItem.js' // Also import MenuItem as NavigationMenu depends on it
 
+
 // Clean Vue script template
 const vueApp = {
     components: {

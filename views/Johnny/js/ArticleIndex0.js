@@ -1,0 +1,173 @@
+
+// Article Data (example data for loading more articles)
+const allArticles = [
+    {
+        image: 'Article Image',
+        imageGradient: 'linear-gradient(45deg, #a8e063, #56ab2f)',
+        category: 'Technology',
+        subcategory: 'Gadgets',
+        title: 'Top 5 Innovative Gadgets for 2025',
+        excerpt: 'Discover the cutting-edge devices shaping our future, from smart home assistants to portable AI companions. Get a glimpse of tomorrow\'s tech todaysssssssss ssssssssssssss ssssssssssssss ssssssssssssss ssssssssssssss sssssss ssssssss ssssssssssssssssssssssssssssssssssssssssssssssssssss.',
+        author: 'Jane Smith',
+        date: 'August 10, 2025'
+    },
+    {
+        image: 'Recipe Image',
+        imageGradient: 'linear-gradient(45deg, #fceabb, #fbcc8b)',
+        category: 'Food',
+        subcategory: 'Recipes',
+        title: 'Delicious Vegan Recipes for Quick Dinners',
+        excerpt: 'Whip up savory and healthy vegan meals in under 30 minutes with these easy-to-follow recipes. Perfect for busy weeknights!',
+        author: 'Chef Leo',
+        date: 'August 9, 2025'
+    },
+    {
+        image: 'Travel Image',
+        imageGradient: 'linear-gradient(45deg, #4facfe, #00f2fe)',
+        category: 'Travel',
+        subcategory: 'Destinations',
+        title: 'Exploring Hidden Gems in Southeast Asia',
+        excerpt: 'Venture off the beaten path to uncover breathtaking landscapes, rich cultures, and unforgettable experiences across Southeast Asia.',
+        author: 'Wanderlust Explorer',
+        date: 'August 8, 2025'
+    },
+    {
+        image: 'Finance Image',
+        imageGradient: 'linear-gradient(45deg, #fbd786, #f7797d)',
+        category: 'Business',
+        subcategory: 'Investment',
+        title: 'Understanding the Latest Stock Market Trends',
+        excerpt: 'Stay informed on the dynamic world of finance with an overview of current stock market trends and expert insights for savvy investors.',
+        author: 'Financial Guru',
+        date: 'August 7, 2025'
+    },
+    {
+        image: 'Health Image',
+        imageGradient: 'linear-gradient(45deg, #c79081, #dfa390)',
+        category: 'Health',
+        subcategory: 'Fitness',
+        title: 'Effective Home Workouts for Busy Professionals',
+        excerpt: 'Maximize your fitness with these efficient home workout routines designed for professionals with packed schedules. No gym required!',
+        author: 'FitLife Coach',
+        date: 'August 6, 2025'
+    },
+    {
+        image: 'Culture Image',
+        imageGradient: 'linear-gradient(45deg, #eecda3, #ef629f)',
+        category: 'Lifestyle',
+        subcategory: 'Culture',
+        title: 'The Resurgence of Traditional Crafts',
+        excerpt: 'Witness the comeback of timeless artistry as traditional crafts find new life in modern society. A celebration of heritage and skill.',
+        author: 'Cultural Analyst',
+        date: 'August 5, 2025'
+    },
+    {
+        image: 'Sports Image',
+        imageGradient: 'linear-gradient(45deg, #ffafbd, #ffc3a0)',
+        category: 'Sports',
+        subcategory: 'Olympics',
+        title: 'Highlights from the Summer Olympics 2024',
+        excerpt: 'Relive the most thrilling moments and incredible achievements from the recent Summer Olympics. Relive the glory!',
+        author: 'Sports Fanatic',
+        date: 'August 4, 2025'
+    },
+    {
+        image: 'Science Image',
+        imageGradient: 'linear-gradient(45deg, #2193b0, #6dd5ed)',
+        category: 'Science',
+        subcategory: 'Space',
+        title: 'Recent Discoveries in Exoplanet Research',
+        excerpt: 'Journey beyond our solar system with the latest breakthroughs in exoplanet discovery and the search for habitable worlds.',
+        author: 'Astro-Geek',
+        date: 'August 3, 2025'
+    },
+    {
+        image: 'Art Image',
+        imageGradient: 'linear-gradient(45deg, #acb6e5, #86fde8)',
+        category: 'Entertainment',
+        subcategory: 'Film',
+        title: 'The Evolution of Independent Cinema',
+        excerpt: 'Dive into the world of indie films and explore how independent cinema continues to challenge norms and innovate storytelling.',
+        author: 'Film Buff',
+        date: 'August 2, 2025'
+    },
+    {
+        image: 'Fashion Image',
+        imageGradient: 'linear-gradient(45deg, #dad4ec, #f3e7e9)',
+        category: 'Fashion',
+        subcategory: 'Trends',
+        title: 'Sustainable Fashion: Beyond the Hype',
+        excerpt: 'Unpack the true meaning of sustainable fashion and discover brands leading the way towards an eco-friendlier wardrobe.',
+        author: 'Style Savvy',
+        date: 'August 1, 2025'
+    },
+    {
+        image: 'Politics Image',
+        imageGradient: 'linear-gradient(45deg, #e0c3fc, #8ec5fc)',
+        category: 'Opinion',
+        subcategory: 'Politics',
+        title: 'Analyzing Global Geopolitical Shifts',
+        excerpt: 'An in-depth look at the major geopolitical developments shaping international relations and their potential impact on the future.',
+        author: 'Political Commentator',
+        date: 'July 31, 2025'
+    },
+    {
+        image: 'Youth Image',
+        imageGradient: 'linear-gradient(45deg, #96e6a1, #d4fc79)',
+        category: 'Youth',
+        subcategory: 'Education',
+        title: 'The Future of Online Learning Platforms',
+        excerpt: 'Explore how online learning is evolving, from personalized curricula to immersive virtual classrooms, transforming education for the next generation.',
+        author: 'Edu-Tech Expert',
+        date: 'July 30, 2025'
+    }
+];
+
+let articlesToShow = 3;
+const articlesPerLoad = 3;
+const articleGrid = document.getElementById('articleGrid');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+function createArticleCard(article) {
+    const card = document.createElement('div');
+    card.className = 'article-card';
+    card.innerHTML = `
+                <div class="article-image-placeholder" style="background: ${article.imageGradient};">
+                    ${article.image}
+                </div>
+                <div class="article-card-content">
+                    <div class="category-breadcrumb">
+                        <a href="#" class="category-pill">${article.category}</a>
+                        <a href="#" class="subcategory-pill">${article.subcategory}</a>
+                    </div>
+                    <h3 class="article-card-title">${article.title}</h3>
+                    <p class="article-card-excerpt">${article.excerpt}</p>
+                    <p class="article-card-meta">By ${article.author} • ${article.date}</p>
+                </div>
+            `;
+    return card;
+}
+
+function loadArticles() {
+    const currentArticles = allArticles.slice(0, articlesToShow);
+    articleGrid.innerHTML = ''; // Clear existing articles before re-rendering
+    currentArticles.forEach(article => {
+        articleGrid.appendChild(createArticleCard(article));
+    });
+
+    if (articlesToShow >= allArticles.length) {
+        loadMoreBtn.textContent = 'No More Articles';
+        loadMoreBtn.disabled = true;
+    } else {
+        loadMoreBtn.textContent = 'Load More Articles';
+        loadMoreBtn.disabled = false;
+    }
+}
+
+loadMoreBtn.addEventListener('click', function () {
+    articlesToShow += articlesPerLoad;
+    loadArticles();
+});
+
+// Initial load of articles
+loadArticles();
