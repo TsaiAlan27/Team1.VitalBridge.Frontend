@@ -19,14 +19,14 @@
 
 /* Fixed Header */
 .pageHeader {
-    position: fixed;
-    top: 10px;
+    /* position: fixed; */
+    top: 90px;
     /* Small distance from top border */
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
+    left: 45%;
+    /* transform: translateX(-50%); */
+    /* width: calc(100% - 40px); */
     /* Small distance away from side borders (20px each side) */
-    max-width: 400px;
+    max-width: 300px;
     /* Fixed small width */
     background-color: #fff;
     padding: 10px 20px;
@@ -104,10 +104,10 @@
 /* --- Base Navigation Menu Styles --- */
 .nav-menu {
     position: fixed;
-    top: 80px;
+    top: 150px;
     left: 0;
     /* Start off-screen */
-    width: 250px;
+    width: 255px;
     /* Width of the menu */
     height: calc(85% - 70px);
     background-color: #333;

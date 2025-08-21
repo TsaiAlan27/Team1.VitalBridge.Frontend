@@ -34,7 +34,7 @@ const vueApp = {
 
         // Close nav menu when clicking outside
         const outsideClickListener = function (event) {
-            const currentNavMenu = document.getElementById('navMenu');
+            const currentNavMenu = document.getElementById('nav-Menu');
             const currentHamburgerIcon = document.getElementById('hamburgerIcon');
 
             if (currentNavMenu && currentHamburgerIcon) {
