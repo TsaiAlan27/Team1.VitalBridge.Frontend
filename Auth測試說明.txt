@@ -1,0 +1,28 @@
+```
+新增測試工具檔
+檔案：assets/js/auth-status-tester.js
+功能：
+顯示目前登入狀態（ready/loggedIn/hasToken/user）
+右下角浮動面板，或渲染到指定容器
+兩個一鍵測試按鈕：
+測試 /me (apiFetch)：直接走 window.auth.apiFetch（你的組員用法）
+測試 /me (authedFetch)：走我包裝過的 authedFetch（會先等就緒、處理 401→refresh）
+全域 API：
+AuthStatusTester.check()
+AuthStatusTester.render(selector?)
+AuthStatusTester.call(path, opts, useAuthed)
+AuthStatusTester.startAutoRefresh()/stopAutoRefresh()
+
+指定區塊測
+頁面放：<div id="auth-test"></div> <script src="/assets/js/auth-status-tester.js"></script>
+
+
+手動在 Console 測
+await AuthStatusTester.call('/me', { method: 'GET' }, false) // 直接 apiFetch
+await AuthStatusTester.call('/me', { method: 'GET' }, true) // authedFetch
+
+要避免競態，請在呼叫前：
+await window.auth.waitReady()，或
+改用 window.auth.authedFetch(path, opts)
+
+```
