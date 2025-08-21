@@ -46,12 +46,22 @@ function setCookie(name, value, days) {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = '; expires=' + date.toUTCString();
     }
-    document.cookie = name + '=' + encodeURIComponent(value || '') + expires + '; path=/';
+    // 強化 cookie 屬性：預設 SameSite=Lax；https 下加 Secure
+    let attrs = '; path=/; SameSite=Lax';
+    try { if (typeof location !== 'undefined' && location.protocol === 'https:') attrs += '; Secure'; } catch { }
+    document.cookie = name + '=' + encodeURIComponent(value || '') + expires + attrs;
 }
 
 // Helper: 刪除 cookie
 function deleteCookie(name) {
     document.cookie = name + '=; Max-Age=0; path=/';
+}
+
+// Event helper：對外發布身分狀態改變（不自動綁定 UI，以避免重複）
+function emitAuthChanged(action, detail = {}) {
+    try {
+        window.dispatchEvent(new CustomEvent('auth:changed', { detail: { action, ...detail } }));
+    } catch { }
 }
 
 async function apiFetch(path, opts = {}, retry = true) {
@@ -104,16 +114,18 @@ async function ensureRefreshed() {
             if (data?.accessToken) {
                 accessToken = data.accessToken;
                 console.debug('ensureRefreshed: obtained accessToken');
-                // 自動更新 header UI（不等待也可，但 await 可確保 UI 立即反映）
-                try { await updateHeaderUI(); } catch (e) { console.debug('updateHeaderUI failed', e); }
+                // 對外發出事件，讓有需要者自行更新 UI
+                emitAuthChanged('refreshed', { authenticated: true });
                 return true;
             }
             console.warn('ensureRefreshed: refresh response missing accessToken', data);
             clearAuth();
+            emitAuthChanged('refresh-invalid', { authenticated: false });
             return false;
         } catch (e) {
             console.error('refresh failed', e);
             clearAuth();
+            emitAuthChanged('refresh-error', { authenticated: false, error: (e && e.message) || 'unknown' });
             return false;
         } finally {
             isRefreshing = false;
@@ -197,6 +209,8 @@ export async function login(dto, remember = false) {
     }
     // 更新 header UI
     try { await updateHeaderUI(); } catch (e) { }
+    // 廣播事件，便於其他模組同步（例如動態 header）
+    emitAuthChanged('login', { authenticated: true });
     return data;
 }
 
@@ -207,10 +221,14 @@ export async function logout() {
     } catch (e) { }
     clearAuth();
     isLogout();
+    emitAuthChanged('logout', { authenticated: false });
 }
 
 // 取得目前使用者並更新 header 顯示
 export async function updateHeaderUI() {
+    //檢查誰呼叫
+    // console.count('updateHeaderUI called');
+    // console.trace();
     const container = document.getElementById('authArea');
     if (!container) return;
     try {
@@ -460,6 +478,13 @@ function setupDomHandlers() {
 // 初始化
 // 初始化：總是嘗試透過 refresh 取得 access token（支援 HttpOnly cookie）
 (async function init() {
+    // 防重複初始化（避免腳本被載入兩次時，事件與 UI 初始化重跑）
+    try {
+        if (typeof window !== 'undefined') {
+            if (window.__AUTH_INIT_DONE) { console.debug('auth.js: init skipped (already done)'); return; }
+            window.__AUTH_INIT_DONE = true;
+        }
+    } catch { }
     try {
         await ensureRefreshed();
     } catch (e) {
