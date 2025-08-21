@@ -503,9 +503,24 @@
 
                 const { createApp } = Vue;
 
+                // API 配置常數
+                const API_BASE_URL = 'https://localhost:7104';
+                const BACKEND_BASE_URL = 'https://localhost:7184'; // 後台 API 基礎 URL
+
+                // 機構相關 API 服務
+                const orgApi = {
+                    getCities: () => apiClient.get('/api/Organizations/cities'),
+                    getOrganizationTypes: () => apiClient.get('/api/Organizations/organization-types'),
+                    getDistricts: (cityId) => apiClient.get(`/api/Organizations/cities/${cityId}/districts`),
+                    searchOrganizations: (data) => apiClient.post('/api/Organizations/search', data)
+                };
+
+                // 圖片服務 - 使用後台 API 直接取得圖片（與 LoadPlate.js 相同方式）
+                const getImageUrl = (fileName) => fileName ? `${BACKEND_BASE_URL}/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}` : null;
+
                 // Axios 配置
                 const apiClient = axios.create({
-                    baseURL: 'https://localhost:7184',
+                    baseURL: API_BASE_URL,
                     timeout: 30000,
                     headers: {
                         'Content-Type': 'application/json'
@@ -599,7 +614,7 @@
                         async loadCities() {
                             try {
                                 console.log('開始載入城市列表...');
-                                const response = await apiClient.get('/api/Organizations/cities');
+                                const response = await orgApi.getCities();
                                 console.log('城市列表載入成功:', response.data);
                                 this.cities = response.data;
                             } catch (error) {
@@ -613,7 +628,7 @@
                         async loadOrganizationTypes() {
                             try {
                                 console.log('開始載入機構類型...');
-                                const response = await apiClient.get('/api/Organizations/organization-types');
+                                const response = await orgApi.getOrganizationTypes();
                                 console.log('機構類型載入成功:', response.data);
                                 this.organizationTypes = response.data;
                             } catch (error) {
@@ -630,7 +645,7 @@
 
                             if (this.searchForm.cityId && this.searchForm.cityId !== 0) {
                                 try {
-                                    const response = await apiClient.get(`/api/Organizations/cities/${this.searchForm.cityId}/districts`);
+                                    const response = await orgApi.getDistricts(this.searchForm.cityId);
                                     this.districts = response.data;
                                 } catch (error) {
                                     console.error('載入區域列表失敗:', error);
@@ -682,7 +697,7 @@
 
                                 console.log('搜尋請求資料:', requestData);
 
-                                const response = await apiClient.post('/api/Organizations/search', requestData);
+                                const response = await orgApi.searchOrganizations(requestData);
                                 console.log('搜尋回應:', response.data);
                                 console.log('機構列表:', response.data.items);
 
@@ -761,7 +776,7 @@
                             return new Intl.NumberFormat('zh-TW').format(price);
                         },
 
-                        // 取得圖片 URL
+                        // 取得圖片 URL - 使用後台 API（與 LoadPlate.js 相同方式）
                         getImageUrl(fileName) {
                             console.log('取得圖片URL - 檔名:', fileName);
                             if (!fileName) {
@@ -769,16 +784,21 @@
                                 return null;
                             }
 
-                            // 使用正確的後台API端點
-                            const imageUrl = `https://localhost:7184/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}`;
-                            console.log('產生的圖片URL:', imageUrl);
+                            // 使用後台 API 直接取得圖片，與 LoadPlate.js 保持一致
+                            const imageUrl = `${BACKEND_BASE_URL}/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}`;
+                            console.log('產生的圖片URL (後台API):', imageUrl);
                             return imageUrl;
                         },
 
-                        // 圖片載入錯誤處理
+                        // 圖片載入錯誤處理 - 使用後台 API
                         handleImageError(event) {
-                            console.log('圖片載入失敗:', event.target.src);
                             const img = event.target;
+                            const fileName = img.getAttribute('data-filename');
+                            console.log('圖片載入失敗 - 後台API URL:', img.src);
+                            console.log('原始檔名:', fileName);
+
+                            // 避免無限循環載入錯誤
+                            img.onerror = null;
 
                             // 直接顯示預設圖片樣式
                             console.log('圖片不存在，顯示預設樣式');
