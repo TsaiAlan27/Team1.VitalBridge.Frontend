@@ -1,0 +1,80 @@
+<!-- 購物專用導覽列 -->
+<nav class="shop-navbar bg-light border-bottom">
+    <div class="container-fluid">
+        <div class="row align-items-center py-2">
+            <!-- 商品分類導覽 -->
+            <div class="col-md-8">
+                <ul class="nav nav-pills shop-categories">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/shop-index.html" data-category="all">
+                            <i class="bi bi-house-door me-1"></i>商城首頁
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/category.html?type=health-food" data-category="health-food">
+                            <i class="bi bi-heart-pulse me-1"></i>保健食品
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/category.html?type=senior-food" data-category="senior-food">
+                            <i class="bi bi-cup-hot me-1"></i>銀髮食品
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/category.html?type=healthcare" data-category="healthcare">
+                            <i class="bi bi-shield-plus me-1"></i>保健照護
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 購物車和搜尋 -->
+            <div class="col-md-4 text-end">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <!-- 搜尋框 -->
+                    <div class="search-box">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" placeholder="搜尋商品..." id="shop-search">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 購物車 -->
+                    <a href="/cart.html" class="btn btn-outline-primary position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="cart-count">
+                            0
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 購物導覽列專用樣式 -->
+<style>
+    .shop-navbar {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .shop-categories .nav-link {
+        color: #6c757d;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .shop-categories .nav-link:hover,
+    .shop-categories .nav-link.active {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .search-box {
+        min-width: 200px;
+    }
+</style>

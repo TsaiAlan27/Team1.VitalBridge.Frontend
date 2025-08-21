@@ -25,6 +25,11 @@
                 loadFragment('.headerpage', headerUrl),
                 loadFragment('.footerpage', footerUrl)
             ]);
+            // 如果頁面有購物導覽區域，則載入 shop-header
+            const shopHeaderElement = document.querySelector('.shop-headerpage');
+            if (shopHeaderElement) {
+                await loadFragment('.shop-headerpage', '/partials/shop-header.html');
+            }
 
             // hide preloader if present
             if (typeof $ !== 'undefined' && $('#preloader').length) $('#preloader').fadeOut(200);
