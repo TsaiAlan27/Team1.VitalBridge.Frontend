@@ -88,7 +88,7 @@
           <hr class="dropdown-divider" />
         </li>
         <li>
-          <a class="dropdown-item text-center text-muted" href="#"
+          <a class="dropdown-item text-center text-muted" href="/VitalBridge/notifyCenter.html"
             >查看全部通知</a
           >
         </li>
@@ -220,13 +220,14 @@
         const html = result.map(item => {
             return `
                 <li class="notify-item ">
-                    <a href="${item.notifysUrl ? item.notifysUrl : ''}">
+                    ${item.notifysUrl ? `<a href="${item.notifysUrl}">` : ''}
                         <span class="notify-content">
                         <strong>${item.name}</strong>（${item.title}）
                         </span>
                         <br>
                         <span class="notify-date">${item.sendDate}</span>
-                    </a>
+                    ${item.notifysUrl ? `</a>` : ''}
+
                     
                 </li>
             `;
