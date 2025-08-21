@@ -1,0 +1,28 @@
+現況
+
+login()、init() 會直接呼叫 updateHeaderUI()。
+ensureRefreshed() 不再動 UI，只會 emit auth:changed（action: refreshed / refresh-invalid / refresh-error）。
+所以「身分/claims 改變」若只發生在 refresh 取得的新 token 才會有事件；沒 refresh 的情況 UI 不會自動變。
+建議處理方式
+
+監聽事件，統一刷新 UI（最簡單）
+把這段放在載入 header 的地方（DOM 準備好後執行）：
+window.addEventListener('auth:changed', () => { updateHeaderUI(); });
+身分可能變更的操作之後手動觸發
+例如：使用者修改暱稱、驗證信箱、後端回傳成功但沒發新 token。
+在該操作成功後呼叫：
+await ensureRefreshed().catch(() => {}); await updateHeaderUI();
+
+---
+
+現在會呼叫 updateHeaderUI() 的時候
+
+頁面初始化後一次：
+IIFE init() 最後在 DOM 準備好後呼叫（DOMContentLoaded 內或立即）。這是每次載入/重整都會跑的那次。
+登入成功後一次：
+login() 在拿到 token 後會 await updateHeaderUI()，然後你的表單送出邏輯又會 window.location.reload()，重整後會再觸發上一條的初始化那次。
+手動呼叫：
+你有把它掛到 window.auth.updateHeaderUI，可在 Console 或其他模組自行呼叫。
+不會再呼叫的地方
+
+ensureRefreshed()：已移除 UI 更新，不再在 refresh 成功時直接呼叫 updateHeaderUI（改用事件 auth:changed）。
