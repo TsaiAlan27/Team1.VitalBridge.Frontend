@@ -233,9 +233,35 @@
     }
 </style>
 <script>
-    async function isLogin() {
-        isLogout();
+    function isLogin() {
+        // isLogout();
+        const messenger = document.querySelector("df-messenger");
+        if (!messenger) {
+            createMessenger();
+        }
+
+    }
+    function isLogout() {
+        const messenger = document.querySelector("df-messenger");
+        if (messenger) {
+            messenger.remove();
+        }
+    }
+    async function createMessenger(){
         const user = await auth.me();
+        // localStorage
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith("df-messenger-")) {
+            localStorage.removeItem(k);
+            }
+        });
+
+        // sessionStorage
+        Object.keys(sessionStorage).forEach(k => {
+            if (k.startsWith("df-messenger-")) {
+            sessionStorage.removeItem(k);
+            }
+        });
         const messenger = document.createElement("df-messenger");
         messenger.setAttribute("project-id", "vitalbridge");
         messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
@@ -248,14 +274,6 @@
         messenger.addEventListener('df-messenger-loaded', () => {
             messenger.sendQuery(`這段訊息是要告訴你uid 非使用者發送 不必回覆 uid:${user.id} 使用者姓名:${user.name}`);
         });
-
-
-    }
-    function isLogout() {
-        const messenger = document.querySelector("df-messenger");
-        if (messenger) {
-            messenger.remove();
-        }
     }
 
 </script>
