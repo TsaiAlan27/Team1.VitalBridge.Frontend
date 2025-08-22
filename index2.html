@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>樂齡橋 VitalBridge｜長照資訊整合平台</title>
+    <link rel="stylesheet" href="assets/css/main3.css" />
+    <style>
+        /* 只做最小的排版輔助，避免影響你現有風格 */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .hero {
+            background: var(--primary-light);
+            padding: 3rem 1rem;
+            border-radius: 12px;
+        }
+
+        .hero h1 {
+            margin-top: 0;
+            font-family: var(--heading-font);
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.25rem;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 動態載入的 Header（請用你的機制注入） -->
+    <div class="headerpage"></div>
+
+    <main class="main">
+        <!-- Hero / 首屏 -->
+        <section class="container">
+            <div class="hero shadow">
+                <h1>用溫度，串起長照資訊</h1>
+                <p class="muted">樂齡橋 VitalBridge：為家屬、照服員與專業團隊打造的一站式長照資訊整合平台。</p>
+                <div class="cta">
+                    <a class="btn btn-primary" href="#services">了解服務</a>
+                    <a class="btn btn-outline" href="#cases">看看案例</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 三大重點服務 -->
+        <section id="services" class="container">
+            <h2>我們的服務</h2>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>資源整合諮詢</h3>
+                    <p class="muted">快速彙整補助、機構、輔具與居家改造資訊，幫你找到合適方案。</p>
+                    <a class="btn btn-outline" href="#">瞭解更多</a>
+                </article>
+                <article class="card">
+                    <h3>照護計畫導航</h3>
+                    <p class="muted">依個案狀況建立個人化照護計畫，追蹤目標與狀態，降低照顧壓力。</p>
+                    <a class="btn btn-outline" href="#">瞭解更多</a>
+                </article>
+                <article class="card">
+                    <h3>社工/專業轉介</h3>
+                    <p class="muted">與在地專業連結，從評估到執行一條龍服務，縮短等待與溝通成本。</p>
+                    <a class="btn btn-outline" href="#">瞭解更多</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- 溫暖數據 / 信任背書 -->
+        <section class="container">
+            <div class="grid-3">
+                <div class="stat shadow">
+                    <h3>3,200+</h3>
+                    <p class="muted">已服務家庭</p>
+                </div>
+                <div class="stat shadow">
+                    <h3>95%</h3>
+                    <p class="muted">滿意度回饋</p>
+                </div>
+                <div class="stat shadow">
+                    <h3>72 小時內</h3>
+                    <p class="muted">完成初步方案建議</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 真實案例（溫馨但誠實） -->
+        <section id="cases" class="container">
+            <h2>真實案例</h2>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>長輩跌倒後的在宅照護</h3>
+                    <p class="muted">阿雄伯在家中跌倒造成髖部骨折。平台協助安排復能、床邊安全與通報機制，三週內降低再跌倒風險。</p>
+                    <a class="btn btn-outline" href="#">查看細節</a>
+                </article>
+                <article class="card">
+                    <h3>照顧者喘息與資源串接</h3>
+                    <p class="muted">主要照顧者身心俱疲，透過喘息服務與臨托支援，維持家庭運作並避免危機事件發生。</p>
+                    <a class="btn btn-outline" href="#">查看細節</a>
+                </article>
+                <article class="card">
+                    <h3>失智早期的環境友善化</h3>
+                    <p class="muted">導入環境標示、夜間感應燈與走失預防措施，提升生活自理與安全感。</p>
+                    <a class="btn btn-outline" href="#">查看細節</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- 行動召喚 -->
+        <section class="container">
+            <div class="card text-center">
+                <h3>需要幫忙嗎？</h3>
+                <p class="muted">留下需求，我們的照護導引專員將盡快與你聯繫，提供初步方案建議。</p>
+                <a class="btn btn-primary" href="#contact">聯絡我們</a>
+            </div>
+        </section>
+
+        <!-- 預留聯絡區塊（可接表單） -->
+        <section id="contact" class="container">
+            <h2>聯絡我們</h2>
+            <div class="card">
+                <p class="muted">Email：service@vitalbridge.tw　｜　客服專線：02-1234-5678（週一～週五 09:00-18:00）</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 動態載入的 Footer（請用你的機制注入） -->
+    <div class="footerpage"></div>
+
+    <!-- 你原本的 header/footer 注入腳本（範例） -->
+    <!-- <script src="assets/js/fragment-loader.js"></script> -->
+</body>
+
+</html>
