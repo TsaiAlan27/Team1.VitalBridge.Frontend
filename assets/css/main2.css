@@ -1,0 +1,126 @@
+/* ===== VitalBridge Soft Gray Theme ===== */
+
+/* Base Colors */
+:root {
+    --background-color: #e9e8e6;
+    /* Header/Footer 背景 */
+    --surface-color: #ffffff;
+    /* 卡片、表單白底 */
+    --content-background: #f9f9f8;
+    /* 內文背景，比 header/footer 更淺 */
+
+    --default-color: #555555;
+    /* 內文文字，比 header 更柔和 */
+    --muted-color: #777777;
+    /* 次要文字 */
+    --heading-color: #222222;
+    /* 標題維持清晰 */
+    --contrast-color: #ffffff;
+    /* 文字對比 */
+
+    --accent-color: #34b7a7;
+    /* 品牌強調色 */
+    --accent-600: #2ea091;
+    /* hover/active 深一階 */
+    --accent-100: #e7f5f2;
+    /* 提示/標籤背景 */
+
+    --accent-warm: #8a6a50;
+    /* 次要暖色（登入/註冊） */
+    --accent-warm-600: #745a44;
+    /* hover 狀態 */
+}
+
+/* Header/Footer 維持主體感 */
+.header,
+.footer,
+.page-title {
+    background-color: var(--background-color);
+    border-bottom: 1px solid #d9d8d6;
+    color: #3b3b3b;
+    /* header/footer 用較深灰，維持重心 */
+}
+
+/* 內文區塊：更淺灰白背景，文字更柔和 */
+section,
+.main,
+.section {
+    background-color: var(--content-background);
+    color: var(--default-color);
+}
+
+/* 次要文字 */
+.section p,
+.section small,
+.section .text-muted {
+    color: var(--muted-color);
+}
+
+/* 卡片、表單保持白底 */
+.card,
+.contact .info-wrap,
+.contact .php-email-form,
+.portfolio-details .portfolio-info {
+    background-color: var(--surface-color);
+    color: var(--default-color);
+    border: 1px solid #ecebea;
+}
+
+/* 連結顏色 */
+a {
+    color: var(--accent-color);
+    transition: 0.3s;
+}
+
+a:hover {
+    color: var(--accent-600);
+}
+
+/* 導覽選單 */
+.navmenu a {
+    color: #3b3b3b;
+}
+
+.navmenu li:hover>a,
+.navmenu .active {
+    color: var(--accent-color);
+}
+
+/* 登入/註冊按鈕用暖色 */
+.header .header-auth .btn.btn-outline-accent {
+    color: var(--accent-warm);
+    border-color: var(--accent-warm);
+}
+
+.header .header-auth .btn.btn-outline-accent:hover {
+    color: #fff;
+    background-color: var(--accent-warm);
+    border-color: var(--accent-warm);
+}
+
+/* 成功/錯誤提示（保留原色） */
+.alert-success,
+.badge-success {
+    background-color: #e8f7f2;
+    color: #059652;
+}
+
+.alert-danger,
+.badge-danger {
+    background-color: #fdeaea;
+    color: #df1529;
+}
+
+/* Icon、Placeholder 顏色更柔和 */
+::placeholder {
+    color: #9a9a9a;
+}
+
+/* Hover/Focus 陰影 */
+.header .header-auth .btn.btn-accent {
+    box-shadow: 0 2px 10px rgba(52, 183, 167, .15);
+}
+
+.header .header-auth .btn:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 70%);
+}

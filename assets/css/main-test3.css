@@ -1,0 +1,332 @@
+/* ==========================================================
+   VitalBridge Theme — main-test3.css
+   風格：穩重信賴風（專業醫療感）
+   主色：#FFCC66，深色：#264653，輔助綠：#2A9D8F
+   ========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap");
+
+:root {
+    --primary: #ffcc66;
+    --secondary: #264653;
+    /* 墨藍綠 */
+    --accent: #2a9d8f;
+    /* 醫療綠 */
+
+    --bg: #fafafa;
+    --bg-alt: #ffffff;
+
+    --text: #222222;
+    --text-muted: #667085;
+
+    --border: #e7e7ea;
+    --shadow: 0 10px 28px rgba(0, 0, 0, .09);
+    --radius: 14px;
+}
+
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans TC", Montserrat, system-ui, sans-serif;
+    line-height: 1.62;
+}
+
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    color: #23867e;
+}
+
+/* Layout */
+.headerpage,
+.footerpage {
+    background: var(--secondary);
+    color: #fff;
+}
+
+.main {
+    background: var(--bg);
+}
+
+.container {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: var(--secondary);
+    color: #fff;
+}
+
+.site-header .brand {
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.site-header .nav {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding: 14px 0;
+}
+
+.site-header .nav a {
+    color: #e6f2f1;
+    padding: 8px 10px;
+    border-radius: 10px;
+}
+
+.site-header .nav a:hover,
+.site-header .nav a.active {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+}
+
+/* Hero */
+.hero {
+    padding: 60px 0 38px;
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+}
+
+.hero .title {
+    margin: 0 0 10px;
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 44px);
+    color: #1f2e35;
+}
+
+.hero .subtitle {
+    color: var(--text-muted);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: .7rem 1.1rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .24s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #111;
+}
+
+.btn-primary:hover {
+    box-shadow: var(--shadow);
+}
+
+.btn-accent {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-accent:hover {
+    filter: brightness(1.05);
+    box-shadow: var(--shadow);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-outline:hover {
+    background: #fff;
+    color: var(--secondary);
+}
+
+/* Sections */
+.section {
+    padding: 50px 0;
+}
+
+.section.alt {
+    background: var(--bg-alt);
+}
+
+.section-title {
+    margin: 0 0 16px;
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    color: #18313a;
+    font-size: clamp(20px, 2.6vw, 30px);
+}
+
+.section-desc {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+/* Cards */
+.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .03);
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.card .card-body {
+    padding: 18px;
+}
+
+.card .card-title {
+    margin: 0 0 8px;
+    font-weight: 700;
+    color: #18313a;
+}
+
+/* Icon highlight */
+.icon-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(42, 157, 143, .18);
+    display: inline-block;
+}
+
+/* Links */
+.vb-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: #1e3a3f;
+}
+
+.vb-link:hover {
+    background: #fff;
+    box-shadow: var(--shadow);
+    color: var(--accent);
+}
+
+/* Footer */
+.site-footer {
+    padding: 28px 0;
+}
+
+.site-footer .cols {
+    display: grid;
+    grid-template-columns: 1.2fr .9fr 1fr;
+    gap: 26px;
+}
+
+.site-footer h4 {
+    margin: 0 0 10px;
+    font-weight: 700;
+}
+
+.site-footer a {
+    color: #e6f2f1;
+}
+
+.site-footer a:hover {
+    color: #fff;
+}
+
+.site-footer .copyright {
+    margin-top: 16px;
+    color: #cfe3e1;
+    font-size: .92rem;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 26px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #dbe5e3;
+}
+
+.timeline-item {
+    position: relative;
+    margin: 12px 0;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 204, 102, .22);
+}
+
+/* Animations */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.reveal-on-scroll.is-visible {
+    animation: rise .6s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .btn,
+    .card,
+    .reveal-on-scroll {
+        transition: none !important;
+        animation: none !important;
+    }
+}

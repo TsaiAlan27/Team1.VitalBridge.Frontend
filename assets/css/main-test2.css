@@ -1,0 +1,314 @@
+/* ==========================================================
+   VitalBridge Theme — main-test2.css
+   風格：清新柔和風（閱讀舒適）
+   主色：#FFCC66，次色：#6CA6CD
+   ========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap");
+
+:root {
+    --primary: #ffcc66;
+    --secondary: #6ca6cd;
+    /* 柔和藍灰 */
+    --accent: #3b82f6;
+    /* 點綴藍，可當連結/hover */
+
+    --bg: #ffffff;
+    --bg-alt: #f2f4f7;
+
+    --text: #444444;
+    --text-muted: #7a828a;
+
+    --border: #e5e7eb;
+    --shadow: 0 8px 24px rgba(15, 23, 42, .06);
+    --radius: 16px;
+}
+
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans TC", Inter, system-ui, sans-serif;
+    line-height: 1.65;
+}
+
+a {
+    color: var(--secondary);
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+.headerpage,
+.footerpage {
+    background: var(--secondary);
+    color: #fff;
+}
+
+.main {
+    background: var(--bg-alt);
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--secondary);
+    color: #fff;
+}
+
+.site-header .nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+}
+
+.site-header .nav a {
+    color: #eef6ff;
+    padding: 8px 10px;
+    border-radius: 12px;
+}
+
+.site-header .nav a:hover,
+.site-header .nav a.active {
+    background: rgba(255, 255, 255, .16);
+    color: #fff;
+}
+
+/* Hero */
+.hero {
+    padding: 56px 0 34px;
+    background: linear-gradient(180deg, #fff 0%, var(--bg-alt) 100%);
+}
+
+.hero .title {
+    font-weight: 700;
+    font-size: clamp(24px, 3.2vw, 40px);
+    color: #1f3340;
+    margin: 0 0 8px;
+}
+
+.hero .subtitle {
+    color: var(--text-muted);
+    margin: 0 0 18px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: .68rem 1.1rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    cursor: pointer;
+    transition: box-shadow .22s ease, transform .12s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #111;
+}
+
+.btn-primary:hover {
+    box-shadow: var(--shadow);
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    filter: brightness(1.05);
+    box-shadow: var(--shadow);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-outline:hover {
+    background: var(--secondary);
+    color: #fff;
+}
+
+/* Sections */
+.section {
+    padding: 46px 0;
+}
+
+.section.alt {
+    background: #fff;
+}
+
+.section-title {
+    margin: 0 0 14px;
+    font-weight: 700;
+    color: #1f3340;
+    font-size: clamp(18px, 2.4vw, 26px);
+}
+
+.section-desc {
+    color: var(--text-muted);
+    margin-bottom: 18px;
+}
+
+/* Cards */
+.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .02);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.card .card-body {
+    padding: 18px;
+}
+
+.card .card-title {
+    margin: 0 0 6px;
+    font-weight: 700;
+    color: #1f3340;
+}
+
+/* List/links */
+.vb-link {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: #1f3340;
+}
+
+.vb-link:hover {
+    background: #fff;
+    box-shadow: var(--shadow);
+    color: var(--secondary);
+}
+
+/* Footer */
+.site-footer {
+    padding: 26px 0;
+}
+
+.site-footer .cols {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 22px;
+}
+
+.site-footer h4 {
+    margin: 0 0 8px;
+    font-weight: 700;
+}
+
+.site-footer a {
+    color: #eef6ff;
+}
+
+.site-footer a:hover {
+    color: #fff;
+}
+
+.site-footer .copyright {
+    margin-top: 14px;
+    color: #e7f1ff;
+    font-size: .9rem;
+}
+
+/* Timeline (淡化風格) */
+.timeline {
+    position: relative;
+    padding-left: 22px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e8eef4;
+}
+
+.timeline-item {
+    position: relative;
+    margin: 12px 0;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 204, 102, .22);
+}
+
+/* Animations */
+@keyframes softIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.reveal-on-scroll.is-visible {
+    animation: softIn .55s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .btn,
+    .card,
+    .reveal-on-scroll {
+        transition: none !important;
+        animation: none !important;
+    }
+}
