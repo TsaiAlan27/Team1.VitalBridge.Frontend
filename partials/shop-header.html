@@ -614,7 +614,9 @@
 
 <!-- JavaScript for mobile dropdown toggle -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+    function initSearchFunction() {
+        console.log('初始化搜尋功能...');
 
         // 處理搜尋表單提交
         function handleSearch(searchInputId) {
@@ -632,6 +634,8 @@
 
 
         }
+
+
         // 綁定搜尋事件
         // 桌面版搜尋
         const desktopSearchBtn = document.querySelector('.search-box .btn');
@@ -645,6 +649,9 @@
                     handleSearch('shop-search');
                 }
             });
+            console.log('桌面版搜尋已綁定');
+        } else {
+            console.log('桌面版搜尋元素未找到');
         }
         // 手機版搜尋
         const mobileSearchBtn = document.querySelector('#mobileSearch .btn');
@@ -658,7 +665,13 @@
                     handleSearch('mobile-shop-search');
                 }
             });
+            console.log('搜尋功能已綁定'); // 除錯用
         }
+        else {
+            console.log('搜尋元素未找到'); // 除錯用
+        }
+
+
         // 手機版點擊切換下拉選單
         if (window.innerWidth <= 768) {
             const dropdownToggles = document.querySelectorAll('.shop-categories .dropdown-toggle');
@@ -690,5 +703,40 @@
 
 
 
-    });
+    };
+
+    // 正確的事件監聽設置
+    (function onFullyReady(run) {
+        function once(ev) {
+            return new Promise(res => {
+                function h(e) {
+                    window.removeEventListener(ev, h);
+                    res(e);
+                }
+                window.addEventListener(ev, h);
+            });
+        }
+        function waitAppReady() {
+            if (window.appReadyAt !== undefined) return Promise.resolve();
+            return once('app:ready');
+        }
+        function waitWindowLoad() {
+            if (document.readyState === 'complete') return Promise.resolve();
+            return once('load');
+        }
+        Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) {
+            console.error('搜尋功能初始化錯誤', e);
+        });
+    })(initSearchFunction);
+
+    // 備用初始化 - 如果上面的方式失敗
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🔄 DOMContentLoaded 觸發，嘗試初始化搜尋');
+            setTimeout(initSearchFunction, 500);
+        });
+    } else {
+        console.log('🔄 DOM 已載入，直接初始化搜尋');
+        setTimeout(initSearchFunction, 500);
+    }
 </script>
