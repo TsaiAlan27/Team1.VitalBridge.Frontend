@@ -825,25 +825,25 @@
                             this.currentPage = page;
 
                             try {
-                                // 根據後端API期待的格式構建請求
-                                const searchDto = {
-                                    keyword: this.searchForm.keyword || '',
-                                    cityId: this.searchForm.cityId ? parseInt(this.searchForm.cityId) : 0,
-                                    districtId: this.searchForm.districtId ? parseInt(this.searchForm.districtId) : 0,
-                                    // 價格篩選邏輯：當價格範圍為 0 時，只搜尋價格為 0 的機構；否則排除價格為 0 的機構
-                                    minPrice: this.searchForm.maxPrice === 0 ? 0 : 1,
-                                    maxPrice: this.searchForm.maxPrice || 100000,
-                                    organizationTypeIds: this.searchForm.organizationTypeIds || [],
-                                    featureServiceIds: this.searchForm.featureServiceIds || []
-                                };
-
+                                // 根據後端API期待的格式構建請求 - 直接扁平化參數
                                 const requestData = {
-                                    searchDto: searchDto,
+                                    keyword: this.searchForm.keyword || '',
+                                    cityId: (this.searchForm.cityId && this.searchForm.cityId != 0 && this.searchForm.cityId != '0') ? parseInt(this.searchForm.cityId) : null,
+                                    districtId: (this.searchForm.districtId && this.searchForm.districtId != 0 && this.searchForm.districtId != '0') ? parseInt(this.searchForm.districtId) : null,
+                                    // 暫時移除價格篩選，看看是否會顯示所有機構
+                                    minPrice: null,
+                                    maxPrice: null,
+                                    organizationTypeIds: this.searchForm.organizationTypeIds || [],
+                                    featureServiceIds: this.searchForm.featureServiceIds || [],
                                     page: parseInt(page) || 1,
-                                    pageSize: parseInt(this.pageSize) || 10
+                                    pageSize: parseInt(this.pageSize) || 20 // 增加 pageSize 確保一頁能顯示所有機構
                                 };
 
-                                console.log('搜尋請求資料:', requestData);
+                                console.log('🚀 搜尋請求資料 (移除價格篩選):', requestData);
+                                console.log('🔍 原始 cityId:', this.searchForm.cityId, '型別:', typeof this.searchForm.cityId);
+                                console.log('🔍 處理後 cityId:', requestData.cityId, '型別:', typeof requestData.cityId);
+                                console.log('🔍 原始 districtId:', this.searchForm.districtId, '型別:', typeof this.searchForm.districtId);
+                                console.log('🔍 處理後 districtId:', requestData.districtId, '型別:', typeof requestData.districtId);
 
                                 const response = await orgApi.searchOrganizations(requestData);
                                 console.log('搜尋回應:', response.data);
@@ -870,8 +870,33 @@
                                     }
                                 }
 
-                                this.searchResults = response.data.items || [];
-                                this.totalResults = response.data.totalCount || 0;
+                                // 前端篩選：確保搜尋結果符合選定的縣市和鄉鎮區
+                                let filteredResults = response.data.items || [];
+                                console.log('API 回傳的原始機構數量:', filteredResults.length);
+                                console.log('搜尋條件 - cityId:', this.searchForm.cityId, 'districtId:', this.searchForm.districtId);
+
+                                // 詳細顯示所有機構的縣市資訊
+                                console.log('=== 所有機構的縣市資訊 ===');
+                                filteredResults.forEach((org, index) => {
+                                    console.log(`機構 ${index + 1}:`, {
+                                        名稱: org.name,
+                                        cityId: org.cityId,
+                                        cityName: org.cityName,
+                                        districtId: org.districtId,
+                                        districtName: org.districtName
+                                    });
+                                });
+                                console.log('================================');
+
+                                // 暫時不進行前端篩選，看看後端到底回傳什麼
+                                console.log('🔍 暫時不進行前端篩選，直接顯示後端回傳的結果');
+                                console.log('🔍 這樣可以看到後端API是否有正確篩選');
+
+                                console.log('最終篩選結果數量:', filteredResults.length);
+
+                                // 使用原始的分頁資訊，但顯示篩選後的結果
+                                this.searchResults = filteredResults;
+                                this.totalResults = response.data.totalCount || 0; // 保持原始總數
                                 this.currentPage = response.data.pageNumber || 1;
                                 this.totalPages = response.data.totalPages || 1;
                                 this.hasSearched = true;
