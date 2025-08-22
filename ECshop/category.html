@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>商品分類 - 樂齡商城</title>
+    <meta name="description" content="專為銀髮族設計的健康商城 - 商品分類">
+    <meta name="keywords" content="銀髮食品,保健食品,健康飲品,保健照護">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="/assets/css/main.css" rel="stylesheet">
+    <style>
+        /* 商品卡片樣式 (沿用首頁設計) */
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-color: #198754;
+        }
+
+        /* 圖片容器 - 確保正方形 */
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            /* 1:1 比例 */
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .product-image:hover {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+            min-height: 2.8em;
+        }
+
+        .product-name:hover {
+            color: #198754;
+        }
+
+        .product-keypoint {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+            min-height: 2.6em;
+            flex: 1;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .btn-cart {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin-right: 8px;
+        }
+
+        .btn-cart:hover {
+            background-color: #157347;
+            border-color: #146c43;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-favorite {
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: #ccc;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 8px;
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-favorite:hover {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+            transform: scale(1.1);
+        }
+
+        .btn-favorite.active {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        /* 分頁控件樣式 */
+        .pagination .page-link {
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 12px;
+            transition: all 0.2s ease;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e8f5e8;
+            border-color: #198754;
+            color: #198754;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .product-image {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="headerpage"></div> <!-- 主導覽 -->
+    <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+
+    <main class="main">
+        <div id="category-app">
+            <div class="container">
+                <!-- 標題區域 -->
+                <section class="page-title-section py-4">
+                    <h1 class="page-title">{{ pageTitle }}</h1>
+                    <p class="page-subtitle text-muted">{{ pageSubtitle }}</p>
+                </section>
+
+                <!-- 測試區域 -->
+                <section class="test-section py-4">
+                    <div class="alert alert-info rounded-3">
+                        <h5>測試資訊：</h5>
+                        <p><strong>當前分類ID：</strong>{{ currentCategoryId || '無' }}</p>
+                        <p><strong>搜尋關鍵字：</strong>{{ currentSearchQuery || '無' }}</p>
+                        <p><strong>當前頁碼：</strong>{{ currentPage }}</p>
+                        <p><strong>每頁數量：</strong>{{ pageSize }}</p>
+                    </div>
+                </section>
+                <!-- 商品數量資訊和篩選控件 -->
+                <div class="products-info mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-0" v-if="searchInfo">
+                                找到 <strong>{{ searchInfo.totalFound }}</strong> 個商品
+                                <span v-if="currentSearchQuery">包含「{{ currentSearchQuery }}」</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row g-2">
+                                <!-- 排序選擇 -->
+                                <div class="col-6">
+                                    <select class="form-select form-select-sm rounded-3" v-model="currentSortBy"
+                                        @change="handleSortChange">
+                                        <option value="newest">最新上架</option>
+                                        <option value="price_asc">價格：低 → 高</option>
+                                        <option value="price_desc">價格：高 → 低</option>
+                                    </select>
+                                </div>
+                                <!-- 每頁顯示數量 -->
+                                <div class="col-6">
+                                    <select class="form-select form-select-sm rounded-3" v-model="pageSize"
+                                        @change="handlePageSizeChange">
+                                        <option value="12">顯示 12 個</option>
+                                        <option value="24">顯示 24 個</option>
+                                        <option value="36">顯示 36 個</option>
+                                        <option value="48">顯示 48 個</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品列表區域  -->
+                <section class="products-section">
+                    <!-- 載入狀態 -->
+                    <div v-if="loading" class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">載入中...</span>
+                        </div>
+                        <p class="mt-3 text-muted">載入商品資料中...</p>
+                    </div>
+
+                    <!-- 錯誤狀態 -->
+                    <div v-else-if="error" class="alert alert-danger rounded-3" role="alert">
+                        <h5 class="alert-heading">載入失敗</h5>
+                        <p>{{ error }}</p>
+                        <hr>
+                        <button class="btn btn-outline-danger" @click="fetchProducts">重新載入</button>
+                    </div>
+
+                    <!-- 無商品結果 -->
+                    <div v-else-if="products.length === 0" class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="bi bi-search" style="font-size: 4rem; color: #6c757d;"></i>
+                        </div>
+                        <h4 class="text-muted">找不到符合條件的商品</h4>
+                        <p class="text-muted">
+                            <span v-if="currentSearchQuery">試試其他關鍵字</span>
+                            <span v-else-if="currentCategoryId">此分類目前沒有商品</span>
+                            <span v-else>目前沒有可顯示的商品</span>
+                        </p>
+                    </div>
+                    <!-- 商品網格 -->
+                    <div v-else>
+                        <!-- 商品數量資訊 -->
+                        <div class="products-info mb-4">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <p class="text-muted mb-0" v-if="searchInfo">
+                                        找到 <strong>{{ searchInfo.totalFound }}</strong> 個商品
+                                        <span v-if="currentSearchQuery">包含「{{ currentSearchQuery }}」</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 商品列表 -->
+                        <div class="row g-4">
+                            <div class="col-lg-3 col-md-6 col-6" v-for="product in products" :key="product.id">
+                                <div class="card product-card">
+                                    <div class="product-image-container">
+                                        <img :src="getImageUrl(product.imageFileName)" :alt="product.name"
+                                            class="product-image" @click="goToProduct(product.id)"
+                                            @error="handleImageError">
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name" @click="goToProduct(product.id)">
+                                            {{ truncateName(product.name) }}
+                                        </h5>
+                                        <p class="product-keypoint">{{ product.keypoint }}</p>
+                                        <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                                        <div class="product-actions">
+                                            <button class="btn btn-cart" @click="addToCart(product)">
+                                                <i class="bi bi-cart-plus"></i> 加入購物車
+                                            </button>
+                                            <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                                                @click="toggleFavorite(product.id)">
+                                                <i class="bi bi-heart-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 分頁控件 -->
+                        <div class="pagination-section mt-5" v-if="pagination && pagination.totalPages > 1">
+                            <nav aria-label="商品分頁導航">
+                                <ul class="pagination justify-content-center">
+                                    <!-- 上一頁 -->
+                                    <li class="page-item" :class="{ disabled: !pagination.hasPreviousPage }">
+                                        <button class="page-link rounded-3 me-2"
+                                            @click="goToPage(pagination.currentPage - 1)"
+                                            :disabled="!pagination.hasPreviousPage">
+                                            <i class="bi bi-chevron-left"></i> 上一頁
+                                        </button>
+                                    </li>
+
+                                    <!-- 頁碼 -->
+                                    <li class="page-item" v-for="pageNum in getPageNumbers()" :key="pageNum"
+                                        :class="{ active: pageNum === pagination.currentPage }">
+                                        <button class="page-link rounded-3 mx-1" @click="goToPage(pageNum)"
+                                            :class="{ 'bg-success border-success': pageNum === pagination.currentPage }">
+                                            {{ pageNum }}
+                                        </button>
+                                    </li>
+
+                                    <!-- 下一頁 -->
+                                    <li class="page-item" :class="{ disabled: !pagination.hasNextPage }">
+                                        <button class="page-link rounded-3 ms-2"
+                                            @click="goToPage(pagination.currentPage + 1)"
+                                            :disabled="!pagination.hasNextPage">
+                                            下一頁 <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <!-- 分頁資訊 -->
+                            <div class="text-center mt-3">
+                                <small class="text-muted">
+                                    第 {{ pagination.currentPage }} 頁，共 {{ pagination.totalPages }} 頁
+                                    (總共 {{ pagination.totalItems }} 個商品)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div class="footerpage"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/assets/js/fragment-loader.js" defer></script>
+
+</body>
+
+<!-- Vue 邏輯 -->
+<script>
+    (function onFullyReady(run) {
+        function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+        function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+        function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+        Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+    })(function () {
+
+        (function mountVue() {
+            if (typeof Vue === 'undefined') return;
+            const { createApp } = Vue;
+
+            createApp({
+                data() {
+                    return {
+                        // URL 參數
+                        currentCategoryId: null,
+                        currentSearchQuery: null,
+                        currentPage: 1,
+                        pageSize: 12,
+                        currentSortBy: 'newest', // 新增：排序選項// 預設為最新上架
+
+                        // 頁面資訊
+                        pageTitle: '載入中...',
+                        pageSubtitle: '',
+                        // API 資料
+                        products: [],           // 商品列表
+                        pagination: null,       // 分頁資訊
+                        searchInfo: null,       // 搜尋資訊
+
+                        // 狀態管理
+                        loading: false,         // 載入狀態
+                        error: null,           // 錯誤訊息
+
+                        // 我的最愛 (沿用首頁邏輯)
+                        favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
+
+
+                    };
+                },
+
+                mounted() {
+                    console.log('Category page Vue mounted');
+                    this.parseUrlParams();
+                    this.updatePageTitle();
+                    this.fetchProducts(); // 新增：載入商品資料
+                },
+
+                methods: {
+                    // 解析 URL 參數
+                    parseUrlParams() {
+                        const urlParams = new URLSearchParams(window.location.search);
+
+                        // 讀取參數
+                        this.currentCategoryId = urlParams.get('categoryId') ? parseInt(urlParams.get('categoryId')) : null;
+                        this.currentSearchQuery = urlParams.get('searchQuery') || null;
+                        this.currentPage = urlParams.get('page') ? parseInt(urlParams.get('page')) : 1;
+                        this.pageSize = urlParams.get('pageSize') ? parseInt(urlParams.get('pageSize')) : 12;
+
+                        console.log('解析的 URL 參數:', {
+                            categoryId: this.currentCategoryId,
+                            searchQuery: this.currentSearchQuery,
+                            page: this.currentPage,
+                            pageSize: this.pageSize
+                        });
+                    },
+
+                    // 更新頁面標題
+                    updatePageTitle() {
+                        if (this.currentSearchQuery) {
+                            this.pageTitle = `搜尋結果`;
+                            this.pageSubtitle = `關鍵字：${this.currentSearchQuery}`;
+                        } else if (this.currentCategoryId) {
+                            this.pageTitle = `商品分類`;
+                            this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                        } else {
+                            this.pageTitle = '所有商品';
+                            this.pageSubtitle = '瀏覽全部商品';
+                        }
+                    },
+                    // 新增：API 呼叫方法
+                    async fetchProducts() {
+                        this.loading = true;
+                        this.error = null;
+
+                        try {
+                            // 建構 API URL
+                            const params = new URLSearchParams();
+
+
+                            if (this.currentCategoryId) {
+                                params.append('categoryId', this.currentCategoryId);
+                            }
+
+                            if (this.currentSearchQuery) {
+                                params.append('searchQuery', this.currentSearchQuery);
+                            }
+                            if (this.currentSortBy && this.currentSortBy !== 'newest') {
+                                params.append('sortBy', this.currentSortBy);
+                            }
+
+                            params.append('page', this.currentPage);
+                            params.append('pageSize', this.pageSize);
+
+                            const apiUrl = `https://localhost:7104/api/ProductsApi/Products?${params.toString()}`;
+                            console.log('API 呼叫 URL:', apiUrl);
+
+                            // 呼叫 API
+                            const response = await fetch(apiUrl);
+
+                            if (!response.ok) {
+                                throw new Error(`API 呼叫失敗: ${response.status}`);
+                            }
+
+                            const data = await response.json();
+                            console.log('API 回傳資料:', data);
+
+                            // 更新資料
+                            this.products = data.products || [];
+                            this.pagination = data.pagination || null;
+                            this.searchInfo = data.searchInfo || null;
+
+                            // 更新頁面標題 (使用 API 回傳的分類名稱)
+                            if (this.searchInfo?.categoryName) {
+                                this.pageSubtitle = this.searchInfo.categoryName;
+                            }
+
+                        } catch (error) {
+                            console.error('載入商品失敗:', error);
+                            this.error = error.message;
+                            this.products = [];
+
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                    // 沿用首頁的方法：取得圖片 URL
+                    getImageUrl(fileName) {
+                        if (!fileName) return '/assets/img/default-product.jpg';
+                        return `/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+                    },
+
+                    // 沿用首頁的方法：圖片載入錯誤處理
+                    handleImageError(event) {
+                        event.target.src = '/assets/img/default-product.jpg';
+                    },
+
+                    // 沿用首頁的方法：價格格式化
+                    formatPrice(price) {
+                        if (!price) return '0';
+                        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    },
+
+                    // 沿用首頁的方法：商品名稱截斷
+                    truncateName(name) {
+                        if (!name) return '';
+                        if (name.length <= 50) return name;
+                        return name.substring(0, 50) + '...';
+                    },
+
+                    // 沿用首頁的方法：前往商品詳情
+                    goToProduct(productId) {
+                        window.location.href = `/ECshop/product-detail.html?id=${productId}`;
+                    },
+
+                    // 沿用首頁的方法：加入購物車
+                    async addToCart(product) {
+                        // TODO: 檢查登入狀態
+                        if (!this.checkLoginStatus()) {
+                            alert('請先登入會員才能加入購物車');
+                            window.location.href = '/login.html';
+                            return;
+                        }
+
+                        try {
+                            console.log('加入購物車:', product);
+                            alert(`${product.name} 已加入購物車！`);
+                        } catch (error) {
+                            console.error('加入購物車失敗:', error);
+                            alert('加入購物車時發生錯誤，請稍後再試');
+                        }
+                    },
+
+                    // 沿用首頁的方法：切換我的最愛
+                    toggleFavorite(productId) {
+                        const index = this.favorites.indexOf(productId);
+
+                        if (index > -1) {
+                            this.favorites.splice(index, 1);
+                        } else {
+                            this.favorites.push(productId);
+                        }
+
+                        localStorage.setItem('vitalbridge_favorites', JSON.stringify(this.favorites));
+                    },
+
+                    // 沿用首頁的方法：檢查是否為我的最愛
+                    isFavorite(productId) {
+                        return this.favorites.includes(productId);
+                    },
+
+                    // 沿用首頁的方法：檢查登入狀態
+                    checkLoginStatus() {
+                        // TODO: 實作真正的登入狀態檢查
+                        return false;
+                    },
+
+                    // 處理排序變更
+                    handleSortChange() {
+                        this.currentPage = 1; // 重置到第一頁
+                        this.updateUrlAndFetch();
+                    },
+
+                    // 處理每頁數量變更
+                    handlePageSizeChange() {
+                        this.currentPage = 1; // 重置到第一頁
+                        this.updateUrlAndFetch();
+                    },
+                    // 前往指定頁面
+                    goToPage(pageNumber) {
+                        if (pageNumber < 1 || pageNumber > this.pagination.totalPages) return;
+                        if (pageNumber === this.currentPage) return;
+
+                        this.currentPage = pageNumber;
+                        this.updateUrlAndFetch();
+                    },
+
+                    // 計算要顯示的頁碼
+                    getPageNumbers() {
+                        const current = this.pagination.currentPage;
+                        const total = this.pagination.totalPages;
+                        const range = 2; // 當前頁面前後顯示的頁數
+
+                        let start = Math.max(1, current - range);
+                        let end = Math.min(total, current + range);
+
+                        // 如果總頁數小於等於5，顯示全部
+                        if (total <= 5) {
+                            start = 1;
+                            end = total;
+                        }
+
+                        const pages = [];
+                        for (let i = start; i <= end; i++) {
+                            pages.push(i);
+                        }
+
+                        return pages;
+                    },
+                    // 更新 URL 並重新載入資料
+                    updateUrlAndFetch() {
+                        const params = new URLSearchParams();
+
+                        if (this.currentCategoryId) params.append('categoryId', this.currentCategoryId);
+                        if (this.currentSearchQuery) params.append('searchQuery', this.currentSearchQuery);
+                        if (this.currentSortBy !== 'newest') params.append('sortBy', this.currentSortBy);
+                        params.append('page', this.currentPage);
+                        if (this.pageSize !== 12) params.append('pageSize', this.pageSize);
+
+                        const newUrl = `${window.location.pathname}?${params.toString()}`;
+                        window.history.replaceState({}, '', newUrl);
+
+                        this.fetchProducts();
+                    }
+                }
+            }).mount('#category-app');
+
+            console.log("Category Vue mount 成功！");
+        })();
+
+    });
+</script>
+
+</html>

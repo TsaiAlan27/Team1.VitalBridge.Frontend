@@ -31,23 +31,6 @@
 
   <!-- 自己想改的樣式放這邊 -->
   <style>
-    /* 輪播圖預留區域 */
-    .hero-carousel {
-      height: 400px;
-      background: linear-gradient(135deg, #e3f2fd 0%, #f0f7ff 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      margin-bottom: 30px;
-    }
-
-    .hero-placeholder {
-      color: #6c757d;
-      font-size: 24px;
-      text-align: center;
-    }
-
     /* 廣告區塊 */
     .ad-section {
       margin-bottom: 40px;
@@ -260,17 +243,10 @@
     <!-- 你們的主要頁面內容放這邊下面 -->
     <div id="shop-app">
       <!-- 所有購物相關內容都放在這裡 -->
-      <!-- 輪播圖區域 (預留) -->
-      <div class="container">
-        <section class="hero-carousel" id="hero-carousel">
-          <div class="hero-placeholder">
-            <i class="bi bi-images"></i><br>
-            輪播圖區域<br>
-            <small>(後台管理)</small>
-          </div>
-        </section>
 
-        <!-- 廣告區塊 -->
+
+      <!-- 廣告區塊 -->
+      <div class="container">
         <section class="ad-section">
           <div class="row g-3">
             <div class="col-md-6">
@@ -298,7 +274,7 @@
       <!-- 銀髮食品區塊 -->
       <div class="container">
         <section class="product-category-section">
-          <h2 class="category-title">銀髮食品</h2>
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(5, '銀髮食品')">銀髮食品</h2>
           <div class="row g-4">
             <div class="col-lg-3 col-md-6 col-6" v-for="product in silverFood" :key="product.id">
               <div class="card product-card">
@@ -331,7 +307,7 @@
       <!-- 保健食品區塊 -->
       <div class="container">
         <section class="product-category-section">
-          <h2 class="category-title">保健食品</h2>
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(6, '保健食品')">保健食品</h2>
           <div class="row g-4">
             <div class="col-lg-3 col-md-6 col-6" v-for="product in healthFood" :key="product.id">
               <div class="card product-card">
@@ -364,7 +340,7 @@
       <!-- 健康飲品區塊 -->
       <div class="container">
         <section class="product-category-section">
-          <h2 class="category-title">健康飲品</h2>
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(15, '健康飲品')">健康飲品</h2>
           <div class="row g-4">
             <div class="col-lg-3 col-md-6 col-6" v-for="product in healthDrink" :key="product.id">
               <div class="card product-card">
@@ -392,41 +368,41 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <!-- 保健照護區塊 -->
-      <div class="container">
-        <section class="product-category-section">
-          <h2 class="category-title">保健照護</h2>
-          <div class="row g-4">
-            <div class="col-lg-3 col-md-6 col-6" v-for="product in healthCare" :key="product.id">
-              <div class="card product-card">
-                <div class="product-image-container">
-                  <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
-                    @click="goToProduct(product.id)" @error="handleImageError">
-                </div>
-                <div class="product-info">
-                  <h5 class="product-name" @click="goToProduct(product.id)">
-                    {{ truncateName(product.name) }}
-                  </h5>
-                  <p class="product-keypoint">{{ product.keypoint }}</p>
-                  <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
-                  <div class="product-actions">
-                    <button class="btn btn-cart" @click="addToCart(product)">
-                      <i class="bi bi-cart-plus"></i> 加入購物車
-                    </button>
-                    <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
-                      @click="toggleFavorite(product.id)">
-                      <i class="bi bi-heart-fill"></i>
-                    </button>
+
+        <!-- 保健照護區塊 -->
+        <div class="container">
+          <section class="product-category-section">
+            <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(10, '保健照護')">保健照護</h2>
+            <div class="row g-4">
+              <div class="col-lg-3 col-md-6 col-6" v-for="product in healthCare" :key="product.id">
+                <div class="card product-card">
+                  <div class="product-image-container">
+                    <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                      @click="goToProduct(product.id)" @error="handleImageError">
+                  </div>
+                  <div class="product-info">
+                    <h5 class="product-name" @click="goToProduct(product.id)">
+                      {{ truncateName(product.name) }}
+                    </h5>
+                    <p class="product-keypoint">{{ product.keypoint }}</p>
+                    <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                    <div class="product-actions">
+                      <button class="btn btn-cart" @click="addToCart(product)">
+                        <i class="bi bi-cart-plus"></i> 加入購物車
+                      </button>
+                      <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                        @click="toggleFavorite(product.id)">
+                        <i class="bi bi-heart-fill"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
-
 
 
 
@@ -540,7 +516,7 @@
             // 取得圖片 URL
             getImageUrl(fileName) {
               if (!fileName) return '/assets/img/default-product.jpg';
-              return `/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+              return `https://localhost:7104/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
             },
             // 圖片載入錯誤處理
             handleImageError(event) {
@@ -562,7 +538,7 @@
 
             // 前往商品詳情頁
             goToProduct(productId) {
-              window.location.href = `/ECshop/product-detail.html?id=${productId}`;
+              window.location.href = `/VitalBridge/ECshop/product-detail.html?id=${productId}`;
             },
             // 加入購物車
             async addToCart(product) {
@@ -605,12 +581,17 @@
               return this.favorites.includes(productId);
             },
 
+
+            // 前往分類頁面 (移到methods內)
+            goToCategory(categoryId, categoryName) {
+              window.location.href = `/VitalBridge/ECshop/category.html?categoryId=${categoryId}&name=${encodeURIComponent(categoryName)}`;
+            },
+
             // 檢查登入狀態 (暫時模擬)
             checkLoginStatus() {
-              // TODO: 實作真正的登入狀態檢查
-              // 暫時返回 false 進行測試
               return false;
             }
+
 
           },
           // methods: { ... }, mounted() { ... } 等可在此加入
