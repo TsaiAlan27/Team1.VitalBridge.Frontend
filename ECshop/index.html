@@ -516,7 +516,7 @@
             // 取得圖片 URL
             getImageUrl(fileName) {
               if (!fileName) return '/assets/img/default-product.jpg';
-              return `https://localhost:7104/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+              return `https://localhost:7184/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
             },
             // 圖片載入錯誤處理
             handleImageError(event) {

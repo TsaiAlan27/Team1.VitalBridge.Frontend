@@ -539,7 +539,7 @@
                     // 沿用首頁的方法：取得圖片 URL
                     getImageUrl(fileName) {
                         if (!fileName) return '/assets/img/default-product.jpg';
-                        return `/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+                        return `https://localhost:7184/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
                     },
 
                     // 沿用首頁的方法：圖片載入錯誤處理
