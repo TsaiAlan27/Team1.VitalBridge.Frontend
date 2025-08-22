@@ -956,3 +956,48 @@ summary {
     transform: translateY(-6px);
     box-shadow: var(--shadow-md)
 }
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: var(--primary-light);
+    color: var(--primary-ink);
+    border: 1px solid var(--border);
+    line-height: 1.2;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.badge.primary {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-dark);
+}
+
+.badge.success {
+    background: var(--success);
+    color: #fff;
+    border-color: var(--success);
+}
+
+.badge.info {
+    background: var(--info);
+    color: #fff;
+    border-color: var(--info);
+}
+
+.badge.warn {
+    background: var(--warn);
+    color: #fff;
+    border-color: var(--warn);
+}
+
+.badge.danger {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
