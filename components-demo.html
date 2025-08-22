@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VitalBridge 元件樣式參考</title>
+    <link rel="stylesheet" href="assets/css/main4.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container navbar">
+            <a class="brand" href="index.html"><span class="logo">VB</span><span>VitalBridge</span></a>
+            <nav class="nav">
+                <a href="index.html">首頁</a>
+                <a aria-current="page" href="#">元件</a>
+            </nav>
+            <div class="nav-cta"><a class="btn btn-primary" href="#">建立帳號</a></div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="section">
+            <div class="container">
+                <h1>元件總覽</h1>
+                <p class="muted">本頁展示常見 UI 元素，快速檢視在 `main3.css` 下的外觀。</p>
+                <hr>
+
+                <h2>按鈕 Buttons</h2>
+                <p>
+                    <a class="btn btn-primary">Primary</a>
+                    <a class="btn btn-outline">Outline</a>
+                    <a class="btn btn-ghost">Ghost</a>
+                    <a class="btn btn-primary" disabled>Disabled</a>
+                </p>
+
+                <h2 style="margin-top:22px">標籤 Badges</h2>
+                <p>
+                    <span class="badge">Default</span>
+                    <span class="badge primary">Primary</span>
+                </p>
+
+                <h2 style="margin-top:22px">警示 Alerts</h2>
+                <div class="alert info">這是資訊提示：一般通知或說明。</div>
+                <div class="alert success" style="margin-top:10px">這是成功提示：操作成功。</div>
+                <div class="alert warn" style="margin-top:10px">這是警告提示：需要注意。</div>
+                <div class="alert danger" style="margin-top:10px">這是危險提示：不可逆操作。</div>
+
+                <h2 style="margin-top:22px">表單 Forms</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <label class="label">姓名</label>
+                        <input class="input" placeholder="王大明">
+                        <label class="label" style="margin-top:10px">Email</label>
+                        <input class="input" type="email" placeholder="you@example.com">
+                        <label class="label" style="margin-top:10px">類別</label>
+                        <select>
+                            <option>一般諮詢</option>
+                            <option>專業轉介</option>
+                            <option>申請代辦</option>
+                        </select>
+                        <label class="label" style="margin-top:10px">需求</label>
+                        <textarea class="input" rows="4" placeholder="請描述需求…"></textarea>
+                        <div style="margin-top:12px"><button class="btn btn-primary">送出</button></div>
+                    </div>
+                    <div class="card">
+                        <h3>表單說明</h3>
+                        <p class="muted">輸入聚焦時的描邊與陰影已優化，提升可視性與可用性。</p>
+                        <ul class="list list-check">
+                            <li>一致的邊角與間距</li>
+                            <li>焦點狀態明顯</li>
+                            <li>行動裝置友善</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 style="margin-top:22px">卡片 Cards</h2>
+                <div class="grid grid-3">
+                    <article class="card floaty">
+                        <h3>卡片標題</h3>
+                        <p class="muted">卡片內文字與按鈕示意。</p>
+                        <a class="btn btn-outline" href="#">動作</a>
+                    </article>
+                    <article class="card floaty">
+                        <h3>另一張卡片</h3>
+                        <p class="muted">滑過會微微上浮並加陰影。</p>
+                        <a class="btn btn-outline" href="#">動作</a>
+                    </article>
+                    <article class="card floaty">
+                        <h3>卡片三</h3>
+                        <p class="muted">一致的視覺節奏。</p>
+                        <a class="btn btn-outline" href="#">動作</a>
+                    </article>
+                </div>
+
+                <h2 style="margin-top:22px">表格 Table</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>描述</th>
+                            <th>狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>轉介申請</td>
+                            <td>等待文件補件</td>
+                            <td><span class="badge">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>輔具評估</td>
+                            <td>預約 09/02</td>
+                            <td><span class="badge primary">Booked</span></td>
+                        </tr>
+                        <tr>
+                            <td>居家改造</td>
+                            <td>估價審核中</td>
+                            <td><span class="badge">Review</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 style="margin-top:22px">分頁 Pagination 與麵包屑 Breadcrumbs</h2>
+                <div class="breadcrumbs">
+                    <a href="#">首頁</a> ›
+                    <a href="#">文件</a> ›
+                    <span>元件</span>
+                </div>
+                <p style="margin-top:8px" class="pagination">
+                    <a class="page" href="#">‹ 上一頁</a>
+                    <a class="page active" href="#">1</a>
+                    <a class="page" href="#">2</a>
+                    <a class="page" href="#">3</a>
+                    <a class="page" href="#">下一頁 ›</a>
+                </p>
+
+                <h2 style="margin-top:22px">Tabs（純 CSS：使用 :target）</h2>
+                <div class="tabs">
+                    <div class="tabs-nav">
+                        <a href="#tab-a" aria-current="page">方案比較</a>
+                        <a href="#tab-b">注意事項</a>
+                        <a href="#tab-c">常見問題</a>
+                    </div>
+                    <div id="tab-a" class="tab-panel" style="display:block">
+                        <p class="muted">A：以速度見長；B：更客製；C：資源更完整。</p>
+                    </div>
+                    <div id="tab-b" class="tab-panel">
+                        <p class="muted">B：文件齊備讓流程更順；若跨縣市需加時。</p>
+                    </div>
+                    <div id="tab-c" class="tab-panel">
+                        <p class="muted">C：費用透明、先告知；可隨時中止委託。</p>
+                    </div>
+                </div>
+
+                <h2 style="margin-top:22px">Accordion（details）</h2>
+                <details open>
+                    <summary>申請前需要準備什麼？</summary>
+                    <p class="muted">身分證明、診斷書（若需要）、相關文件。</p>
+                </details>
+                <details>
+                    <summary>可以只做諮詢嗎？</summary>
+                    <p class="muted">可以，諮詢免費，若後續需要代辦再行委託。</p>
+                </details>
+
+                <h2 style="margin-top:22px">進度條 Progress</h2>
+                <div class="progress"><span style="width:66%"></span></div>
+
+                <h2 style="margin-top:22px">程式碼區塊</h2>
+                <pre><code>// 設定主題色
+:root { --primary-color: #FFCC66; }</code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="brand"><span class="logo">VB</span><span>VitalBridge</span></div>
+                <p style="margin-top:.5rem">這是元件示例頁的頁腳。</p>
+            </div>
+            <div>
+                <div class="footer-title">導覽</div>
+                <div class="footer-links">
+                    <a href="index.html">首頁</a>
+                    <a href="#">元件</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">文件</div>
+                <div class="footer-links">
+                    <a href="#">設計規範</a>
+                    <a href="#">無障礙</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">聯絡</div>
+                <div class="footer-links">
+                    <a href="mailto:service@vitalbridge.tw">service@vitalbridge.tw</a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-note">© 2025 VitalBridge. All rights reserved.</div>
+    </footer>
+</body>
+
+</html>

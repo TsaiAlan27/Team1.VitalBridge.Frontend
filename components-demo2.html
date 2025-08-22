@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VitalBridge 元件樣式參考（擴充）</title>
+    <link rel="stylesheet" href="assets/css/main5.css" />
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container navbar">
+            <a class="brand" href="index.html"><span class="logo">VB</span><span>VitalBridge</span></a>
+
+            <label for="menu" class="nav-toggle">選單 ▾</label>
+            <input id="menu" type="checkbox" hidden>
+
+            <nav class="nav">
+                <a href="index.html">首頁</a>
+                <a aria-current="page" href="#">元件</a>
+                <a href="#forms">表單</a>
+                <a href="#tables">表格</a>
+                <a href="#more">更多</a>
+            </nav>
+            <div class="nav-cta">
+                <a class="btn btn-ghost" href="#">登入</a>
+                <a class="btn btn-primary" href="#open-modal">開始諮詢</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="section">
+            <div class="container">
+                <div class="hero">
+                    <div class="grid grid-2" style="align-items:center">
+                        <div>
+                            <h1>元件總覽（擴充版）</h1>
+                            <p class="lead">此頁展示 <strong>main5.css</strong> 下常用 UI 元件的外觀與排版，方便你直接複製到專案中。</p>
+                            <div style="display:flex; gap:10px; margin-top:12px">
+                                <a class="btn btn-primary" href="#buttons">按鈕樣式</a>
+                                <a class="btn btn-outline" href="#cards">卡片樣式</a>
+                            </div>
+                            <div class="chips" style="margin-top:12px">
+                                <span class="chip">溫暖主色</span>
+                                <span class="chip">無框架</span>
+                                <span class="chip">純 CSS Modal / Tabs</span>
+                                <span class="chip">RWD 友善</span>
+                            </div>
+                        </div>
+                        <div class="floaty">
+                            <img src="https://images.unsplash.com/photo-1555421689-43cad7100751?q=80&w=1200&auto=format&fit=crop"
+                                alt="設計示意圖">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 版式與文字 -->
+        <section class="section" id="typography">
+            <div class="container">
+                <h2 class="section-title">排版與文字</h2>
+                <p class="section-desc">標題層級、引言、引用、分隔線等。</p>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h1>H1 首頁大標題</h1>
+                        <h2>H2 分區標題</h2>
+                        <h3>H3 內文小標</h3>
+                        <p>一般段落文字，<strong>粗體</strong>、<em>斜體</em>、<a href="#">超連結</a>。</p>
+                        <blockquote class="card" style="border-left:4px solid var(--primary-color)">
+                            <p class="muted">「把複雜變簡單，讓每個家庭都能安心。」</p>
+                        </blockquote>
+                        <hr>
+                        <ul class="list">
+                            <li>一般清單項目</li>
+                            <li>一般清單項目</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>徽章 & 標籤</h3>
+                        <p>
+                            <span class="badge">Default</span>
+                            <span class="badge primary">Primary</span>
+                            <span class="badge">資訊</span>
+                        </p>
+                        <h3 style="margin-top:12px">進度 / 骨架 / 轉圈</h3>
+                        <div class="progress" style="margin:8px 0 10px"><span style="width:60%"></span></div>
+                        <div class="skeleton" style="height:18px; width:70%"></div>
+                        <div class="skeleton" style="height:18px; width:50%; margin-top:8px"></div>
+                        <div class="inline" style="margin-top:12px">
+                            <div class="spinner"></div><span class="muted">讀取中…</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 按鈕 -->
+        <section class="section" id="buttons">
+            <div class="container">
+                <h2 class="section-title">按鈕 Buttons</h2>
+                <div class="card">
+                    <p>
+                        <button class="btn btn-primary">Primary</button>
+                        <button class="btn btn-outline">Outline</button>
+                        <button class="btn btn-ghost">Ghost</button>
+                        <button class="btn btn-success">Success</button>
+                        <button class="btn btn-info">Info</button>
+                        <button class="btn btn-danger">Danger</button>
+                    </p>
+                    <p style="margin-top:10px">
+                        <button class="btn btn-sm btn-primary">小尺寸</button>
+                        <button class="btn btn-primary">一般</button>
+                        <button class="btn btn-lg btn-primary">大尺寸</button>
+                    </p>
+                    <p style="margin-top:10px">
+                        <span class="btn-group">
+                            <button class="btn">日</button>
+                            <button class="btn">週</button>
+                            <button class="btn">月</button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 卡片 -->
+        <section class="section" id="cards">
+            <div class="container">
+                <h2 class="section-title">卡片 Cards</h2>
+                <div class="grid grid-3">
+                    <article class="card media">
+                        <img src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?q=80&w=600&auto=format&fit=crop"
+                            alt="" style="width:88px; height:88px; object-fit:cover; border-radius:12px">
+                        <div>
+                            <h3>媒體卡片</h3>
+                            <p class="muted">左圖右文的資訊展示，適合新聞、公告與案例摘要。</p>
+                            <button class="btn btn-outline">瞭解更多</button>
+                        </div>
+                    </article>
+
+                    <article class="card list">
+                        <div>
+                            <h3>清單式卡片</h3>
+                            <p class="muted">適合用於設定列、資料列。</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm">前往</button>
+                    </article>
+
+                    <article class="card image">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop"
+                            alt="">
+                        <div class="body">
+                            <h3>圖片卡片</h3>
+                            <p class="muted">帶圖片的宣傳或文章卡片。</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="grid grid-3" style="margin-top:18px">
+                    <article class="card overlay">
+                        <img src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?q=80&w=1200&auto=format&fit=crop"
+                            alt="">
+                        <div class="overlay-body">
+                            <h3>Overlay 卡片</h3>
+                            <p>以圖片為底、文字覆蓋。</p>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="feature">
+                            <div class="icon">🧭</div>
+                            <div>
+                                <h3>資源整合</h3>
+                                <p class="muted">將補助、機構、輔具整合成清楚的地圖。</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="feature">
+                            <div class="icon">🤝</div>
+                            <div>
+                                <h3>專業轉介</h3>
+                                <p class="muted">合法單位串接，節省等待與溝通成本。</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 表單 -->
+        <section class="section" id="forms">
+            <div class="container">
+                <h2 class="section-title">表單 Forms</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <label class="label" for="name">姓名</label>
+                        <input class="input" id="name" placeholder="王大明">
+
+                        <div class="grid grid-2" style="margin-top:10px">
+                            <div>
+                                <label class="label" for="email">Email</label>
+                                <input class="input" id="email" type="email" placeholder="you@example.com">
+                            </div>
+                            <div>
+                                <label class="label" for="phone">電話</label>
+                                <input class="input" id="phone" type="tel" placeholder="0912-345-678">
+                            </div>
+                        </div>
+
+                        <label class="label" for="type" style="margin-top:10px">諮詢類別</label>
+                        <select id="type">
+                            <option>一般諮詢</option>
+                            <option>專業轉介</option>
+                            <option>申請代辦</option>
+                        </select>
+
+                        <div class="inline" style="margin-top:10px">
+                            <label class="control"><input type="radio" name="prio"> 普通</label>
+                            <label class="control"><input type="radio" name="prio"> 加急</label>
+                        </div>
+
+                        <div class="inline" style="margin-top:6px">
+                            <label class="control"><input type="checkbox"> 同意服務條款</label>
+                            <label class="control"><input type="checkbox"> 訂閱電子報</label>
+                        </div>
+
+                        <div class="inline" style="margin-top:10px">
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span class="muted">啟用安全提示</span>
+                        </div>
+
+                        <label class="label" for="msg" style="margin-top:10px">需求描述</label>
+                        <textarea class="input" id="msg" rows="4" placeholder="請描述長輩狀況與地區…"></textarea>
+
+                        <div class="inline" style="margin-top:10px">
+                            <label class="file">
+                                <input type="file" />
+                                <span class="btn btn-outline">上傳附件</span>
+                            </label>
+                            <span class="hint">可附上診斷書、評估報告（選填）</span>
+                        </div>
+
+                        <div style="margin-top:12px">
+                            <button class="btn btn-primary">送出</button>
+                            <button class="btn btn-ghost">取消</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>表單狀態與提示</h3>
+                        <div class="alert info">提醒：填寫越完整，建議越精準。</div>
+                        <div class="alert success" style="margin-top:10px">已儲存草稿。</div>
+                        <div class="alert warn" style="margin-top:10px">部分欄位尚未填寫。</div>
+                        <div class="alert danger" style="margin-top:10px">無法送出，請稍後再試。</div>
+                        <hr>
+                        <p class="muted">聚焦時有明顯描邊；按鈕有 hover 與 active 态；Switch 與 Radio/Checkbox 一致風格。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 表格 -->
+        <section class="section" id="tables">
+            <div class="container">
+                <h2 class="section-title">表格 Tables</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3>一般表格</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>項目</th>
+                                    <th>描述</th>
+                                    <th>狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>轉介申請</td>
+                                    <td>等待文件補件</td>
+                                    <td><span class="badge">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>輔具評估</td>
+                                    <td>預約 09/02</td>
+                                    <td><span class="badge primary">Booked</span></td>
+                                </tr>
+                                <tr>
+                                    <td>居家改造</td>
+                                    <td>估價審核中</td>
+                                    <td><span class="badge">Review</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3>條紋／緊湊表格</h3>
+                        <table class="table striped compact">
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>地區</th>
+                                    <th>等級</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>林**</td>
+                                    <td>台北</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr>
+                                    <td>陳**</td>
+                                    <td>台中</td>
+                                    <td>B</td>
+                                </tr>
+                                <tr>
+                                    <td>黃**</td>
+                                    <td>高雄</td>
+                                    <td>A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 導覽 / Tabs / 麵包屑 / 分頁 -->
+        <section class="section" id="more">
+            <div class="container">
+                <h2 class="section-title">更多導覽與版面</h2>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3>麵包屑與分頁</h3>
+                        <div class="breadcrumbs">
+                            <a href="#">首頁</a> › <a href="#">文件</a> › <span>元件</span>
+                        </div>
+                        <p class="pagination" style="margin-top:10px">
+                            <a class="page" href="#">‹ 上一頁</a>
+                            <a class="page active" href="#">1</a>
+                            <a class="page" href="#">2</a>
+                            <a class="page" href="#">3</a>
+                            <a class="page" href="#">下一頁 ›</a>
+                        </p>
+                        <hr>
+                        <h3>下劃線 Tabs</h3>
+                        <div class="tabs">
+                            <div class="tabs-nav underline">
+                                <a href="#tab1" aria-current="page">方案</a>
+                                <a href="#tab2">注意事項</a>
+                                <a href="#tab3">FAQ</a>
+                            </div>
+                            <div id="tab1" class="tab-panel" style="display:block">
+                                <p class="muted">A：速度快；B：更客製；C：資源完整。</p>
+                            </div>
+                            <div id="tab2" class="tab-panel">
+                                <p class="muted">跨縣市需額外時程，文件齊備更順暢。</p>
+                            </div>
+                            <div id="tab3" class="tab-panel">
+                                <p class="muted">可隨時中止委託，費用透明。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Toast / 通知</h3>
+                        <p class="muted">在右下角彈出的小提示。將目標元素加上 <code>.show</code> 即可。</p>
+                        <p style="margin-top:10px">
+                            <a class="btn btn-primary btn-sm"
+                                onclick="document.getElementById('demo-toast').classList.add('show'); setTimeout(()=>document.getElementById('demo-toast').classList.remove('show'),1800)">顯示
+                                Toast</a>
+                        </p>
+                        <div id="demo-toast" class="toast">已完成！你的設定已儲存。</div>
+
+                        <hr>
+                        <h3>Modal（純 CSS）</h3>
+                        <a class="btn btn-outline btn-sm" id="open-modal" href="#modal-demo">打開 Modal</a>
+                        <div id="modal-demo" class="modal">
+                            <div class="dialog">
+                                <header>
+                                    <strong>確認送出</strong>
+                                    <a class="btn btn-ghost btn-sm" href="#">✕</a>
+                                </header>
+                                <p class="muted">送出後 1–2 個工作天內回覆，是否繼續？</p>
+                                <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end">
+                                    <a class="btn btn-ghost" href="#">取消</a>
+                                    <a class="btn btn-primary" href="#">確認</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar + Content -->
+                <div class="layout" style="margin-top:18px">
+                    <aside class="sidebar">
+                        <strong style="display:block; margin-bottom:8px">側邊導覽</strong>
+                        <a href="#typography">排版</a>
+                        <a href="#buttons">按鈕</a>
+                        <a href="#cards">卡片</a>
+                        <a href="#forms">表單</a>
+                        <a href="#tables">表格</a>
+                        <a href="#pricing">方案</a>
+                    </aside>
+                    <div>
+                        <div class="card">
+                            <h3>圖文區塊（Media Object）</h3>
+                            <div class="media" style="display:flex; gap:16px; align-items:center">
+                                <span class="avatar"><img
+                                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop"
+                                        alt="" style="width:100%; height:100%; object-fit:cover"></span>
+                                <div>
+                                    <strong>王照顧</strong>
+                                    <p class="muted" style="margin:.25rem 0 0">社工專員 · 北區</p>
+                                </div>
+                            </div>
+                            <p style="margin-top:10px" class="muted">此區塊可用於團隊介紹、留言、評論等。</p>
+                        </div>
+
+                        <section class="section" id="pricing" style="padding:24px 0 0">
+                            <h3 style="margin-bottom:8px">方案 Pricing</h3>
+                            <div class="pricing">
+                                <div class="price-card">
+                                    <h4>入門</h4>
+                                    <div class="price">$0</div>
+                                    <p class="muted">諮詢與資源清單</p>
+                                    <ul class="list list-check">
+                                        <li>線上諮詢</li>
+                                        <li>資料彙整</li>
+                                    </ul>
+                                    <button class="btn btn-outline" style="margin-top:8px">開始使用</button>
+                                </div>
+                                <div class="price-card featured">
+                                    <h4>導引</h4>
+                                    <div class="price">$1,990</div>
+                                    <p class="muted">專人導引與初步方案</p>
+                                    <ul class="list list-check">
+                                        <li>72 小時內回覆</li>
+                                        <li>個案化計畫</li>
+                                        <li>文件範例</li>
+                                    </ul>
+                                    <button class="btn btn-primary" style="margin-top:8px">立即選擇</button>
+                                </div>
+                                <div class="price-card">
+                                    <h4>代辦</h4>
+                                    <div class="price">客製</div>
+                                    <p class="muted">申請、轉介與追蹤</p>
+                                    <ul class="list list-check">
+                                        <li>跨域協作</li>
+                                        <li>進度追蹤</li>
+                                        <li>滿意度回饋</li>
+                                    </ul>
+                                    <button class="btn btn-outline" style="margin-top:8px">諮詢報價</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 內容區塊（Hero 變體） -->
+        <section class="section">
+            <div class="container">
+                <div class="hero alt">
+                    <div class="grid grid-3" style="align-items:center">
+                        <div>
+                            <h3>Hero 變體：純白表現</h3>
+                            <p class="muted">更輕量的視覺，適合次級頁面或公告區。</p>
+                        </div>
+                        <div class="stat">
+                            <div class="num">95%</div>
+                            <div class="label">滿意度回饋</div>
+                        </div>
+                        <div style="text-align:right">
+                            <a class="btn btn-primary">立即開始</a>
+                            <a class="btn btn-outline">瞭解更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="section">
+            <div class="container">
+                <h2 class="section-title">常見問題</h2>
+                <details class="card">
+                    <summary>需要醫囑或診斷書嗎？</summary>
+                    <p class="muted">依申請項目不同而異，我們會在初步評估後提供清單與範例。</p>
+                </details>
+                <details class="card">
+                    <summary>費用怎麼計算？</summary>
+                    <p class="muted">諮詢本身免費；若需專業轉介或代辦，將事前提供明細並徵詢同意。</p>
+                </details>
+                <details class="card">
+                    <summary>如何保護我的個資？</summary>
+                    <p class="muted">遵循地方法規與最小化蒐集原則，僅於必要時與合作單位共享。</p>
+                </details>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="brand"><span class="logo">VB</span><span>VitalBridge</span></div>
+                <p style="margin-top:.5rem">這是擴充元件頁的頁腳。</p>
+            </div>
+            <div>
+                <div class="footer-title">導覽</div>
+                <div class="footer-links">
+                    <a href="index.html">首頁</a>
+                    <a href="#">元件</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">文件</div>
+                <div class="footer-links">
+                    <a href="#">設計規範</a>
+                    <a href="#">無障礙</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">聯絡</div>
+                <div class="footer-links">
+                    <a href="mailto:service@vitalbridge.tw">service@vitalbridge.tw</a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-note">© 2025 VitalBridge. All rights reserved.</div>
+    </footer>
+
+    <script>
+        // Tabs：切換 aria-current（純展示，不改 CSS :target）
+        document.querySelectorAll('.tabs .tabs-nav a').forEach(a => {
+            a.addEventListener('click', e => {
+                const box = a.closest('.tabs');
+                box.querySelectorAll('.tabs-nav a').forEach(x => x.removeAttribute('aria-current'));
+                a.setAttribute('aria-current', 'page');
+            });
+        });
+    </script>
+</body>
+
+</html>
