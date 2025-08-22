@@ -31,6 +31,7 @@
 
   <!-- Johnny CSS -->
   <link rel="stylesheet" href="css/ArticleIndex.css">
+  <link rel="stylesheet" href="css/ArticleCategory.css">
 </head>
 
 <!-- <body class="index-page"> -->
@@ -118,7 +119,7 @@
       document.getElementById("content").innerHTML = doc.body.innerHTML;
 
       // 2. Import JS that depends on the fetched DOM
-      await import("/views/Articles/js/ArticleCatogry.js");
+      await import("/views/Articles/js/ArticleCategory.js");
     });
   </script>
 

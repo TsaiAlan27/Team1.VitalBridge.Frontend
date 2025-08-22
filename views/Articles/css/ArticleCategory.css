@@ -1,0 +1,104 @@
+/* Add this CSS to make paginated articles smaller */
+
+/* Override featured-article styles within paginated context */
+.paginated-articles-container .featured-article {
+    margin-bottom: 20px;
+    /* Reduce spacing between articles */
+}
+
+.paginated-articles-container .featured-image-placeholder {
+    height: 180px;
+    /* Smaller height instead of 250px */
+}
+
+.paginated-articles-container .featured-content {
+    padding: 20px;
+    /* Reduce padding from 25px */
+}
+
+.paginated-articles-container .featured-headline {
+    font-size: 1.8em;
+    /* Smaller font size instead of 2.2em */
+    margin-bottom: 8px;
+    /* Less margin */
+}
+
+.paginated-articles-container .featured-excerpt {
+    font-size: 1em;
+    /* Smaller font size instead of 1.1em */
+    margin-bottom: 12px;
+    /* Less margin */
+    -webkit-line-clamp: 2;
+    /* Limit to 2 lines instead of 3 */
+    line-clamp: 2;
+}
+
+.paginated-articles-container .article-meta {
+    font-size: 0.85em;
+    /* Slightly smaller */
+}
+
+/* Responsive adjustments for paginated articles */
+@media (max-width: 500px) {
+    .paginated-articles-container .featured-image-placeholder {
+        height: 140px;
+    }
+
+    .paginated-articles-container .featured-headline {
+        font-size: 1.5em;
+    }
+
+    .paginated-articles-container .featured-content {
+        padding: 15px;
+    }
+}
+
+/* Specific styles for numerical pagination */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.pagination-button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 50px;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #d0d0d0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pagination-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-button.active {
+    background: linear-gradient(45deg, #6a0dad, #8a2be2);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-button:disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+}

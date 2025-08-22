@@ -34,7 +34,7 @@ export default {
                     </div>
                     <div class="article-card-content">
                         <div class="category-breadcrumb">
-                            <a href="#" class="category-pill">{{ article.category }}</a>
+                            <a :href="'/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
                             <a href="#" class="subcategory-pill" v-if="article.subcategory">{{ article.subcategory }}</a>
                         </div>
                         <h3 class="article-card-title">{{ article.title }}</h3>

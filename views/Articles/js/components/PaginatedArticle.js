@@ -12,13 +12,14 @@ export default {
         }
     },
     template: `
-        <div class="articles-column">
-            <!-- Container for paginated articles -->
+        <section class="articles-column">
+            <!-- Container for paginated articles, now styled like featured articles -->
             <div class="paginated-articles-container" id="paginatedArticlesContainer">
                 <div v-if="isLoading && currentPage === 1" class="loading-indicator">
                     Loading articles...
                 </div>
                 
+                <!-- Paginated articles will be dynamically loaded here, each in the featured-article style -->
                 <article 
                     v-for="article in displayedArticles" 
                     :key="article.id || article.title"
@@ -27,23 +28,23 @@ export default {
                     style="cursor: pointer;"
                 >
                     <div class="featured-image-container">
-                        <img 
-                            v-if="article.coverPic" 
-                            :src="'data:image/jpeg;base64,' + article.coverPic" 
-                            :alt="article.title"
-                            class="featured-image"
-                            @error="handleImageError"
+                        <img
+                        v-if="article.coverPic"
+                        :src="'data:image/jpeg;base64,' + article.coverPic"
+                        :alt="article.title"
+                        class="featured-image"
+                        @error="handleImageError"
                         />
-                        <div 
-                            v-else
-                            class="featured-image-placeholder"
+                        <div
+                        v-else
+                        class="featured-image-placeholder"
                         >
-                            No Image
-                        </div>
+                            no image 
+                        </div> 
                     </div>
                     <div class="featured-content">
                         <div class="category-breadcrumb">
-                            <a href="#" class="category-pill">{{ article.category }}</a>
+                            <a :href="'/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
                             <a href="#" class="subcategory-pill" v-if="article.subcategory">{{ article.subcategory }}</a>
                         </div>
                         <h1 class="featured-headline">{{ article.title }}</h1>
@@ -86,27 +87,16 @@ export default {
             <div v-if="isLoading && currentPage > 1" class="loading-indicator">
                 Loading page {{ currentPage }}...
             </div>
-        </div>
+        </section>
     `,
     data() {
         return {
+            categoryId: null,
             displayedArticles: [],
             currentPage: 1,
             totalPages: 1,
             totalArticles: 0,
             isLoading: false,
-            // defaultGradients: [
-            //     'linear-gradient(45deg, #FF6F61, #DE4B4B)',
-            //     'linear-gradient(45deg, #1A2980, #26D0CE)',
-            //     'linear-gradient(45deg, #AA076B, #61045F)',
-            //     'linear-gradient(45deg, #2BC0E4, #EAECC6)',
-            //     'linear-gradient(45deg, #7F00FF, #E100FF)',
-            //     'linear-gradient(45deg, #DCE35B, #45B649)',
-            //     'linear-gradient(45deg, #00B4DB, #0083B0)',
-            //     'linear-gradient(45deg, #3CA55C, #B5AC49)',
-            //     'linear-gradient(45deg, #2F80ED, #56CCF2)',
-            //     'linear-gradient(45deg, #FFD700, #FFA500)'
-            // ]
         };
     },
     computed: {
@@ -167,6 +157,8 @@ export default {
 
         // Fetch articles for a specific page
         async fetchArticles(page = 1) {
+
+
             this.isLoading = true;
 
             const result = await this.fetchContentArticleWithPost(page, this.articlesPerPage, this.categoryId);
@@ -218,14 +210,6 @@ export default {
             }
         },
 
-        // // Get a default gradient for articles without images
-        // getDefaultGradient(article) {
-        //     // Use article ID or title to consistently assign the same gradient
-        //     const identifier = article.id || article.title || '';
-        //     const index = identifier.length % this.defaultGradients.length;
-        //     return this.defaultGradients[index];
-        // },
-
         // Format date for display
         formatDate(dateString) {
             if (!dateString) return '';
@@ -235,6 +219,9 @@ export default {
     },
 
     async mounted() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.categoryId = urlParams.get('id');
+        console.log("Category ID from URL:", this.categoryId);
         console.log('PaginatedArticles component mounted');
         await this.loadInitialArticles();
         console.log(`Loaded ${this.displayedArticles.length} articles, ${this.totalPages} pages total`);
