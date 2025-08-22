@@ -8,7 +8,7 @@
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="/VitalBridge/index.html">首頁</a></li>
-                <li><a href="#">長照導覽</a></li>
+                <li><a href="/VitalBridge/page/longterm-care-guide.html">長照導覽</a></li>
                 <li><a href="/orgs/orgSearch.html">找機構</a></li>
                 <li><a href="#">樂齡商城</a></li>
                 <li><a href="/views/Articles/ArticleIndexWithHeader.html">專欄文章</a></li>
@@ -101,6 +101,11 @@
                         <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
                     </div>
                     <div id="loginAlert" class="alert d-none" role="alert"></div>
+                    <div class="mb-2 d-none" id="loginResendBox">
+                        <button type="button" id="btnResendFromLogin" class="btn btn-sm btn-outline-secondary"
+                            disabled>重寄驗證信</button>
+                        <small class="text-muted ms-2" id="loginResendHint"></small>
+                    </div>
                     <button type="submit" class="btn btn-primary">登入</button>
                 </form>
             </div>
@@ -156,6 +161,7 @@
             </div>
             <div class="modal-footer">
                 <a href="/VitalBridge/index.html" class="btn btn-outline-secondary">回首頁</a>
+                <button type="button" id="btnResendFromSuccess" class="btn btn-outline-secondary">重寄驗證信</button>
                 <button type="button" id="btnOpenLoginFromSuccess" class="btn btn-primary">前往登入</button>
             </div>
         </div>

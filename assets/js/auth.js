@@ -18,6 +18,49 @@ let accessToken = null; // 記憶體中的 access token
 let isRefreshing = false;
 let refreshPromise = null;
 
+// ===== 驗證信重寄設定 =====
+const RESEND_VERIFY_ENDPOINT = API_BASE + '/resend-verification';
+const RESEND_COOLDOWN_MS = 60000; // 60 秒
+function _resendKey(email) { return 'vb_resend:' + (email || '').toLowerCase(); }
+function _setResendCooldown(email) { try { localStorage.setItem(_resendKey(email), Date.now().toString()); } catch { } }
+function _remainResend(email) { try { const ts = parseInt(localStorage.getItem(_resendKey(email)) || '0', 10); if (!ts) return 0; const r = RESEND_COOLDOWN_MS - (Date.now() - ts); return r > 0 ? r : 0; } catch { return 0; } }
+function _fmtS(ms) { return Math.ceil(ms / 1000); }
+function _startResendCountdown(btn, email, base) { if (!btn) return; function tick() { const r = _remainResend(email); if (r <= 0) { btn.disabled = false; btn.textContent = base; return; } btn.disabled = true; btn.textContent = base + ' (' + _fmtS(r) + 's)'; setTimeout(tick, 1000); } tick(); }
+async function resendVerificationEmail(email) {
+    if (!email) throw new Error('Email 空白');
+    const remain = _remainResend(email); if (remain > 0) throw new Error('請稍候 ' + _fmtS(remain) + ' 秒');
+    let last = null, text = '';
+    try {
+        // 1) application/json 直接根為字串，例如 "user@example.com"
+        let r = await fetch(RESEND_VERIFY_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(email), credentials: 'include' });
+        last = r; try { text = await r.text(); } catch { text = ''; }
+        if (!r.ok && [400, 415, 422].includes(r.status)) {
+            // 2) text/plain 單純字串
+            r = await fetch(RESEND_VERIFY_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: email, credentials: 'include' });
+            last = r; try { text = await r.text(); } catch { text = ''; }
+        }
+        if (!last.ok && [400, 415, 422].includes(last.status)) {
+            // 3) JSON 物件變體
+            const variants = [{ email }, { Email: email }, { email, type: 'verify' }];
+            for (const v of variants) {
+                const rr = await fetch(RESEND_VERIFY_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(v), credentials: 'include' });
+                last = rr; try { text = await rr.text(); } catch { text = ''; }
+                if (rr.ok) break; if (![400, 415, 422].includes(rr.status)) break;
+            }
+        }
+        if (!last.ok && [400, 415, 422].includes(last.status)) {
+            // 4) Query 參數 + 空 body（保底）
+            const rr = await fetch(RESEND_VERIFY_ENDPOINT + `?email=${encodeURIComponent(email)}`, { method: 'POST', credentials: 'include' });
+            last = rr; try { text = await rr.text(); } catch { text = ''; }
+        }
+    } catch (e) { last = null; text = e.message || 'network error'; }
+    let msg = '已送出驗證信';
+    if (text) { try { const d = JSON.parse(text); msg = d.message || d.result || d.title || msg; } catch { if (text.trim()) msg = text.trim(); } }
+    _setResendCooldown(email);
+    if (!last || !last.ok) throw new Error(msg);
+    return msg;
+}
+
 // Helper: 取得 cookie
 function getCookie(name) {
     const v = document.cookie.match('(?:^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
@@ -291,6 +334,20 @@ export async function me() {
 function setupDomHandlers() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
+        // 每次開啟登入視窗時重置重寄區塊
+        try {
+            const loginModalEl = document.getElementById('loginModal');
+            if (loginModalEl) {
+                loginModalEl.addEventListener('show.bs.modal', () => {
+                    const box = document.getElementById('loginResendBox');
+                    const btn = document.getElementById('btnResendFromLogin');
+                    const hint = document.getElementById('loginResendHint');
+                    if (box) box.classList.add('d-none');
+                    if (btn) { btn.disabled = true; btn.textContent = '重寄驗證信'; }
+                    if (hint) hint.textContent = '';
+                });
+            }
+        } catch { }
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
@@ -343,7 +400,7 @@ function setupDomHandlers() {
             } catch (err) {
                 const msg = (err && err.message) ? err.message : '登入失敗';
                 const isCred = /帳號或密碼錯誤/i.test(msg);
-                const isUnverified = /尚未驗證/i.test(msg);
+                const isUnverified = /尚未驗證|未驗證/i.test(msg);
                 const isBanned = /停權/i.test(msg);
                 const isFrozen = /凍結/i.test(msg);
                 const isLocked = /已鎖定/i.test(msg);
@@ -358,6 +415,28 @@ function setupDomHandlers() {
                     alertEl.classList.add('alert-danger');
                     alertEl.textContent = msg || '登入失敗';
                 }
+                // 若為未驗證顯示重寄按鈕
+                try {
+                    if (isUnverified) {
+                        const box = document.getElementById('loginResendBox');
+                        const btn = document.getElementById('btnResendFromLogin');
+                        const hint = document.getElementById('loginResendHint');
+                        if (box && btn) {
+                            box.classList.remove('d-none');
+                            const remain = _remainResend(email);
+                            btn.disabled = remain > 0;
+                            btn.textContent = '重寄驗證信';
+                            if (remain > 0) _startResendCountdown(btn, email, '重寄驗證信');
+                            btn.onclick = async () => {
+                                if (_remainResend(email) > 0) return;
+                                const old = btn.textContent; btn.disabled = true; btn.textContent = '寄送中...'; hint && (hint.textContent = '');
+                                try { const m = await resendVerificationEmail(email); hint.textContent = m; }
+                                catch (ex) { hint.textContent = ex.message || '失敗'; }
+                                finally { _startResendCountdown(btn, email, '重寄驗證信'); }
+                            };
+                        }
+                    }
+                } catch { }
             } finally {
                 restoreBtn();
             }
@@ -438,6 +517,12 @@ function setupDomHandlers() {
                     if (successModalEl && window.bootstrap && bootstrap.Modal) {
                         const successModal = new bootstrap.Modal(successModalEl);
                         successModal.show();
+                        // 成功 modal 重寄按鈕
+                        const btnSuc = document.getElementById('btnResendFromSuccess');
+                        if (btnSuc) {
+                            btnSuc.disabled = false; btnSuc.textContent = '重寄驗證信';
+                            btnSuc.onclick = async () => { if (_remainResend(email) > 0) return; const old = btnSuc.textContent; btnSuc.disabled = true; btnSuc.textContent = '寄送中...'; try { await resendVerificationEmail(email); btnSuc.textContent = '已寄出'; } catch (ex) { btnSuc.textContent = (ex.message || '失敗') + ' (再試)'; btnSuc.disabled = false; } finally { _startResendCountdown(btnSuc, email, '重寄驗證信'); } };
+                        }
                     }
                 } catch { }
             } catch (err) {
@@ -470,6 +555,7 @@ function setupDomHandlers() {
             try {
                 const m = new bootstrap.Modal(document.getElementById('loginModal'));
                 m.show();
+                // 不主動顯示重寄，需登入嘗試未驗證後才出現
             } catch { }
         }
     });
@@ -497,7 +583,7 @@ function setupDomHandlers() {
 
 // export default
 export default {
-    login, register, logout, me, apiFetch
+    login, register, logout, me, apiFetch, resendVerificationEmail
 };
 
 // 暴露給開發者在 Console 使用，方便 debug
@@ -509,6 +595,7 @@ try {
         logout,
         me,
         apiFetch,
+        resendVerificationEmail,
         ensureRefreshed,
         updateHeaderUI,
         getAccessToken: () => accessToken

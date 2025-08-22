@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>帳號驗證 - 樂齡橋 VitalBridge</title>
+    <link rel="icon" href="/assets/img/favicon.png" />
+    <!-- 主要樣式（沿用既有 bootstrap 與 main 樣式；header/footer 片段會再載入需要的） -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/assets/css/main.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .verify-wrapper {
+            max-width: 640px;
+            margin: 100px auto 60px;
+            padding: 40px 32px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .08);
+        }
+
+        .verify-icon {
+            font-size: 64px;
+        }
+
+        .fade-in {
+            animation: fade .5s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header / Footer 片段占位 -->
+    <div class="headerpage"></div>
+
+    <main>
+        <div class="container">
+            <div class="verify-wrapper" id="verifyBox">
+                <div class="text-center mb-4" id="loadingBox">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3 mb-0">驗證處理中，請稍候...</p>
+                </div>
+                <div id="resultBox" class="d-none"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="footerpage"></div>
+
+    <!-- jQuery (fragment-loader 依賴) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-3gJwYp4Z4gdK2BvN4ZB2jvYh6YkM4R9vYB4u2w7L8w8=" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- 載入片段與共用主程式 -->
+    <script src="/assets/js/fragment-loader.js"></script>
+    <!-- 驗證流程腳本 -->
+    <script type="module" src="/assets/js/verify.js"></script>
+</body>
+
+</html>
