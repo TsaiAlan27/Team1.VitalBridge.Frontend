@@ -255,6 +255,28 @@
             color: #6c757d;
         }
 
+        /* 防止 Vue 載入前的閃爍 */
+        [v-cloak] {
+            display: none !important;
+        }
+
+        /* 初始隱藏 Vue 應用，載入完成後顯示 */
+        #detailApp {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #detailApp.vue-loaded {
+            opacity: 1;
+        }
+
+        /* 防止模板字符串閃爍 */
+        .loading-container,
+        .detail-container,
+        .back-btn {
+            transition: all 0.3s ease;
+        }
+
         .info-badge {
             background: #007bff;
             color: white;
@@ -276,6 +298,59 @@
 
             .feature-grid {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        /* 浮動返回按鈕樣式 */
+        .floating-back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 100px;
+            /* 調整到綠色置頂按鈕左邊，保持間距 */
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+        }
+
+        .floating-back-btn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .floating-back-btn:hover {
+            background: linear-gradient(45deg, #495057, #343a40);
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        .floating-back-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 手機版調整 */
+        @media (max-width: 768px) {
+            .floating-back-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 80px;
+                /* 手機版也調整位置，避免與置頂按鈕重疊 */
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -300,7 +375,7 @@
         </section>
 
         <!-- Detail Section -->
-        <section id="detailApp" class="section">
+        <section id="detailApp" class="section" v-cloak>
             <div class="container">
                 <!-- Back Button -->
                 <button type="button" class="btn back-btn" @click="goBack" aria-label="返回搜尋頁面">
@@ -327,7 +402,7 @@
                 </div>
 
                 <!-- Organization Detail -->
-                <div v-else-if="organization" class="detail-container">
+                <div v-if="!loading && organization.name && !errorMessage" class="detail-container">
                     <!-- 1. 機構名稱 -->
                     <h1 class="org-title">{{ organization.name }}</h1>
 
@@ -349,21 +424,44 @@
 
                     <!-- 3. 機構照片 -->
                     <div v-if="organization.photoUrl">
-                        <img :src="organization.photoUrl" :alt="organization.name + '機構照片'" class="org-image"
-                            @error="handleImageError($event)">
+                        <img :src="getImageUrl(organization.photoUrl)" :alt="organization.name + '機構照片'"
+                            class="org-image" @error="handleImageError($event)">
                     </div>
 
                     <!-- 4. 服務對象 -->
-                    <div v-if="organization.serviceTarget">
+                    <div v-if="organization.serviceTargetNames && organization.serviceTargetNames.length > 0">
                         <h3 class="section-title">
                             <i class="bi bi-people me-2"></i>服務對象
                         </h3>
-                        <div class="service-targets">
-                            <div class="service-target-item">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-check-circle-fill text-success me-3"></i>
-                                    <div>
-                                        <h6 class="mb-1 fw-bold">{{ organization.serviceTarget }}</h6>
+                        <div class="row g-2">
+                            <div v-for="target in organization.serviceTargetNames" :key="target"
+                                class="col-md-3 col-sm-6">
+                                <div class="service-target-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">{{ target }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4.1 補助資訊 -->
+                    <div v-if="organization.subsidyInfoDescriptions && organization.subsidyInfoDescriptions.length > 0">
+                        <h3 class="section-title">
+                            <i class="bi bi-cash-coin me-2"></i>補助資訊
+                        </h3>
+                        <div class="row g-2">
+                            <div v-for="subsidy in organization.subsidyInfoDescriptions" :key="subsidy"
+                                class="col-md-6 col-sm-12">
+                                <div class="service-target-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">{{ subsidy }}</h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -379,32 +477,35 @@
                             <table class="table price-table">
                                 <thead>
                                     <tr>
-                                        <th>房型</th>
+                                        <th>房型名稱</th>
                                         <th>月費 (NT$)</th>
-                                        <th>設備與服務</th>
-                                        <th>備註</th>
+                                        <th>房間數量</th>
+                                        <th>押金資訊</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="room in organization.rooms" :key="room.id">
                                         <td>
-                                            <strong>{{ room.roomType }}</strong>
-                                            <div v-if="room.size" class="text-muted small">
-                                                {{ room.size }}
-                                            </div>
+                                            <strong>{{ room.roomTypeName }}</strong>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-success fs-5">
-                                                {{ formatPrice(room.monthlyFee) }}
+                                                {{ formatPrice(room.monthlyPrice) }}
                                             </span>
                                         </td>
                                         <td>
-                                            <div v-if="room.facilities">
-                                                <small class="text-muted">{{ room.facilities }}</small>
-                                            </div>
+                                            <span class="badge bg-info">{{ room.roomQuantity }} 間</span>
                                         </td>
                                         <td>
-                                            <small class="text-muted" v-if="room.notes">{{ room.notes }}</small>
+                                            <div v-if="room.hasDeposit">
+                                                <small class="text-muted">
+                                                    押金：{{ formatPrice(room.depositAmount) }}<br>
+                                                    <span v-if="room.depositMonths">{{ room.depositMonths }} 個月</span>
+                                                </small>
+                                            </div>
+                                            <div v-else>
+                                                <small class="text-success">無需押金</small>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -452,35 +553,39 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <h6>完整地址</h6>
-                                    <a :href="getGoogleMapsUrl(organization.fullAddress)" target="_blank"
-                                        class="address-link" rel="noopener noreferrer"
-                                        :aria-label="'在 Google 地圖中查看' + organization.fullAddress">
+                                    <a :href="getGoogleMapsUrl(organization.cityName + organization.districtName + organization.address)"
+                                        target="_blank" class="address-link" rel="noopener noreferrer"
+                                        :aria-label="'在 Google 地圖中查看' + organization.cityName + organization.districtName + organization.address">
                                         <i class="bi bi-geo-alt-fill"></i>
-                                        {{ organization.fullAddress }}
+                                        {{ organization.cityName }}{{ organization.districtName }}{{
+                                        organization.address }}
                                         <i class="bi bi-box-arrow-up-right"></i>
                                     </a>
                                 </div>
-                                <div class="col-md-4" v-if="organization.phone">
-                                    <h6>聯絡電話</h6>
-                                    <a :href="'tel:' + organization.phone" class="address-link">
-                                        <i class="bi bi-telephone-fill"></i>
-                                        {{ organization.phone }}
-                                    </a>
+                                <div class="col-md-4">
+                                    <h6>年齡限制</h6>
+                                    <p class="mb-0">{{ organization.ageLimits || '無特別限制' }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 9. Google 地圖 -->
-                    <div v-if="organization.fullAddress">
+                    <!-- 9. 位置地圖 -->
+                    <div>
                         <h3 class="section-title">
                             <i class="bi bi-map me-2"></i>位置地圖
                         </h3>
                         <div class="map-container">
-                            <iframe :src="getGoogleMapEmbedUrl(organization.fullAddress)" allowfullscreen=""
-                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                                :title="organization.name + '位置地圖'">
+                            <iframe id="orgMap" width="100%" height="450" :src="getGoogleMapEmbedUrl()"
+                                style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade" :title="organization.name + '位置地圖'">
                             </iframe>
+                        </div>
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                {{ organization.cityName }}{{ organization.districtName }}{{ organization.address }}
+                            </small>
                         </div>
                     </div>
 
@@ -497,6 +602,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 浮動返回按鈕 -->
+            <button type="button" class="floating-back-btn" :class="{ 'show': showFloatingBtn }" @click="goBack"
+                aria-label="返回搜尋頁面" title="返回搜尋">
+                <i class="bi bi-arrow-left"></i>
+            </button>
         </section>
     </main>
 
@@ -547,9 +658,13 @@
 
                 const { createApp } = Vue;
 
+                // API 配置常數
+                const API_BASE_URL = 'https://localhost:7104';
+                const BACKEND_BASE_URL = 'https://localhost:7184'; // 後台 API 基礎 URL
+
                 // Axios 配置
                 const apiClient = axios.create({
-                    baseURL: 'https://localhost:7104',
+                    baseURL: API_BASE_URL,
                     timeout: 30000,
                     headers: {
                         'Content-Type': 'application/json'
@@ -580,23 +695,35 @@
                 createApp({
                     data() {
                         return {
-                            organization: null,
+                            organization: {},
                             loading: true,
                             errorMessage: '',
-                            organizationId: null
+                            organizationId: null,
+                            showFloatingBtn: false
                         };
                     },
 
                     async mounted() {
+                        console.log('Vue mounted - 開始載入機構詳細資料');
                         this.organizationId = this.getOrganizationIdFromUrl();
+                        console.log('Organization ID from URL:', this.organizationId);
 
                         if (!this.organizationId) {
                             this.errorMessage = '缺少機構 ID 參數，請從搜尋頁面進入';
                             this.loading = false;
+                            console.log('❌ 缺少機構 ID');
                             return;
                         }
 
                         await this.loadOrganizationDetail();
+
+                        // 添加滾動監聽器
+                        this.setupScrollListener();
+                    },
+
+                    beforeUnmount() {
+                        // 移除滾動監聽器
+                        window.removeEventListener('scroll', this.handleScroll);
                     },
 
                     methods: {
@@ -615,9 +742,11 @@
                         async loadOrganizationDetail() {
                             this.loading = true;
                             this.errorMessage = '';
+                            console.log(`🔄 開始載入機構 ID: ${this.organizationId}`);
 
                             try {
                                 const response = await apiClient.get(`/api/Organizations/${this.organizationId}`);
+                                console.log('✅ API 回應成功:', response.data);
                                 this.organization = response.data;
 
                                 // 更新頁面標題
@@ -626,21 +755,34 @@
                                 }
 
                             } catch (error) {
-                                console.error('載入機構詳細資料失敗:', error);
+                                console.error('❌ 載入機構詳細資料失敗:', error);
+                                console.error('❌ 錯誤詳情:', error.response?.data);
                                 this.errorMessage = error.message;
                             } finally {
                                 this.loading = false;
+                                console.log(`✅ 載入完成 - Loading: ${this.loading}, Organization: ${!!this.organization}, Error: ${this.errorMessage}`);
                             }
                         },
 
                         // 返回搜尋頁面
                         goBack() {
-                            // 檢查是否有 history
-                            if (window.history.length > 1) {
+                            // 優先使用瀏覽器的返回功能，這樣可以保持搜尋狀態
+                            if (window.history.length > 1 && document.referrer.includes('orgSearch.html')) {
                                 window.history.back();
                             } else {
+                                // 直接跳轉到搜尋頁面（會觸發搜尋條件恢復邏輯）
                                 window.location.href = '/orgs/orgSearch.html';
                             }
+                        },
+
+                        // 設置滾動監聽器
+                        setupScrollListener() {
+                            this.handleScroll = () => {
+                                // 當頁面滾動超過 300px 時顯示浮動按鈕
+                                this.showFloatingBtn = window.pageYOffset > 300;
+                            };
+
+                            window.addEventListener('scroll', this.handleScroll);
                         },
 
                         // 格式化價格
@@ -650,7 +792,33 @@
 
                         // 圖片載入錯誤處理
                         handleImageError(event) {
-                            event.target.src = '/assets/img/placeholder.jpg';
+                            const img = event.target;
+                            // 避免無限循環載入錯誤
+                            img.onerror = null;
+                            // 隱藏圖片並顯示預設樣式
+                            img.style.display = 'none';
+
+                            // 在父容器中顯示預設圖片樣式
+                            const parent = img.parentElement;
+                            if (parent && !parent.querySelector('.no-image-placeholder')) {
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'no-image-placeholder';
+                                placeholder.style.cssText = `
+                                    width: 100%;
+                                    height: 400px;
+                                    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                                    border: 2px dashed #dee2e6;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 15px;
+                                    color: #6c757d;
+                                    font-size: 1.2rem;
+                                    margin-bottom: 2rem;
+                                `;
+                                placeholder.innerHTML = '📷<br>暫無機構照片';
+                                parent.appendChild(placeholder);
+                            }
                         },
 
                         // 取得服務圖示
@@ -682,13 +850,36 @@
                             return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
                         },
 
-                        // 取得 Google Maps 嵌入 URL
-                        getGoogleMapEmbedUrl(address) {
-                            const encodedAddress = encodeURIComponent(address);
-                            return `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodedAddress}`;
+                        // 取得 Google Maps 嵌入 URL (使用機構地址)
+                        getGoogleMapEmbedUrl() {
+                            if (!this.organization || !this.organization.address) {
+                                // 預設顯示台灣地圖
+                                return `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1840000!2d120.9!3d23.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1716785621357!5m2!1szh-TW!2stw`;
+                            }
+
+                            // 組合完整地址
+                            const fullAddress = `${this.organization.cityName}${this.organization.districtName}${this.organization.address}`;
+                            const encodedAddress = encodeURIComponent(fullAddress);
+
+                            // 使用 Google Maps 搜尋嵌入方式（無需 API Key）
+                            return `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+                        },
+
+                        // 取得圖片 URL - 使用後台 API
+                        getImageUrl(fileName) {
+                            if (!fileName) return null;
+                            return `${BACKEND_BASE_URL}/api/UploadFile/GetFile?fileName=${encodeURIComponent(fileName)}`;
                         }
                     }
                 }).mount('#detailApp');
+
+                // 掛載完成後稍微延遲顯示應用，確保樣式載入完成
+                setTimeout(() => {
+                    const app = document.getElementById('detailApp');
+                    if (app) {
+                        app.classList.add('vue-loaded');
+                    }
+                }, 100);
 
                 console.log("✅ 機構詳細 Vue mount 成功！");
             }
