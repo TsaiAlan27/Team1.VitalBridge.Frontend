@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>樂齡商城</title>
+  <meta name="description" content="專為銀髮族設計的健康商城">
+  <meta name="keywords" content="銀髮食品,保健食品,健康飲品,保健照護">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- 自己想改的樣式放這邊 -->
+  <style>
+    /* 廣告區塊 */
+    .ad-section {
+      margin-bottom: 40px;
+    }
+
+    .ad-block {
+      height: 200px;
+      background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px dashed #dee2e6;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    .ad-block:hover {
+      background: linear-gradient(45deg, #e9ecef 0%, #dee2e6 100%);
+    }
+
+    /* 商品分類區塊 */
+    .product-category-section {
+      margin-bottom: 50px;
+    }
+
+    .category-title {
+      color: #198754;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 25px;
+      border-bottom: 3px solid #198754;
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+
+    /* 商品卡片 */
+    .product-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      height: 100%;
+      overflow: hidden;
+      background: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      border-color: #198754;
+    }
+
+    /* 圖片容器 - 確保正方形 */
+    .product-image-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%;
+      /* 1:1 比例 */
+      overflow: hidden;
+      background: #f8f9fa;
+    }
+
+    .product-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      cursor: pointer;
+      /* 名稱超過50字時顯示省略號 */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+      min-height: 2.8em;
+    }
+
+    .product-name:hover {
+      color: #198754;
+    }
+
+    .product-keypoint {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.3;
+      min-height: 2.6em;
+      flex: 1;
+    }
+
+    .product-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: #dc3545;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .product-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .btn-cart {
+      background-color: #198754;
+      border-color: #198754;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .btn-cart:hover {
+      background-color: #157347;
+      border-color: #146c43;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-favorite {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #ccc;
+      transition: all 0.3s ease;
+      padding: 10px;
+      border-radius: 8px;
+      min-width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-favorite:hover {
+      color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.1);
+      transform: scale(1.1);
+    }
+
+    .btn-favorite.active {
+      color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    /* 載入動畫 移除 */
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .category-title {
+        font-size: 24px;
+      }
+
+      .product-image {
+        height: 150px;
+      }
+
+      .hero-placeholder {
+        font-size: 18px;
+      }
+    }
+  </style>
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div> <!-- 主導覽 -->
+  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+
+
+  <main class="main">
+    <!-- 你們的主要頁面內容放這邊下面 -->
+    <div id="shop-app">
+      <!-- 所有購物相關內容都放在這裡 -->
+
+
+      <!-- 廣告區塊 -->
+      <div class="container">
+        <section class="ad-section">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="ad-block" id="ad-1">
+                <div>
+                  <i class="bi bi-megaphone"></i><br>
+                  廣告區塊 1<br>
+                  <small>(後台管理)</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ad-block" id="ad-2">
+                <div>
+                  <i class="bi bi-megaphone"></i><br>
+                  廣告區塊 2<br>
+                  <small>(後台管理)</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 銀髮食品區塊 -->
+      <div class="container">
+        <section class="product-category-section">
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(5, '銀髮食品')">銀髮食品</h2>
+          <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-6" v-for="product in silverFood" :key="product.id">
+              <div class="card product-card">
+                <div class="product-image-container">
+                  <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                    @click="goToProduct(product.id)" @error="handleImageError">
+                </div>
+                <div class="product-info">
+                  <h5 class="product-name" @click="goToProduct(product.id)">
+                    {{ truncateName(product.name) }}
+                  </h5>
+                  <p class="product-keypoint">{{ product.keypoint }}</p>
+                  <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                  <div class="product-actions">
+                    <button class="btn btn-cart" @click="addToCart(product)">
+                      <i class="bi bi-cart-plus"></i> 加入購物車
+                    </button>
+                    <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                      @click="toggleFavorite(product.id)">
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 保健食品區塊 -->
+      <div class="container">
+        <section class="product-category-section">
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(6, '保健食品')">保健食品</h2>
+          <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-6" v-for="product in healthFood" :key="product.id">
+              <div class="card product-card">
+                <div class="product-image-container">
+                  <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                    @click="goToProduct(product.id)" @error="handleImageError">
+                </div>
+                <div class="product-info">
+                  <h5 class="product-name" @click="goToProduct(product.id)">
+                    {{ truncateName(product.name) }}
+                  </h5>
+                  <p class="product-keypoint">{{ product.keypoint }}</p>
+                  <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                  <div class="product-actions">
+                    <button class="btn btn-cart" @click="addToCart(product)">
+                      <i class="bi bi-cart-plus"></i> 加入購物車
+                    </button>
+                    <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                      @click="toggleFavorite(product.id)">
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 健康飲品區塊 -->
+      <div class="container">
+        <section class="product-category-section">
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(15, '健康飲品')">健康飲品</h2>
+          <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-6" v-for="product in healthDrink" :key="product.id">
+              <div class="card product-card">
+                <div class="product-image-container">
+                  <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                    @click="goToProduct(product.id)" @error="handleImageError">
+                </div>
+                <div class="product-info">
+                  <h5 class="product-name" @click="goToProduct(product.id)">
+                    {{ truncateName(product.name) }}
+                  </h5>
+                  <p class="product-keypoint">{{ product.keypoint }}</p>
+                  <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                  <div class="product-actions">
+                    <button class="btn btn-cart" @click="addToCart(product)">
+                      <i class="bi bi-cart-plus"></i> 加入購物車
+                    </button>
+                    <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                      @click="toggleFavorite(product.id)">
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- 保健照護區塊 -->
+        <div class="container">
+          <section class="product-category-section">
+            <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(10, '保健照護')">保健照護</h2>
+            <div class="row g-4">
+              <div class="col-lg-3 col-md-6 col-6" v-for="product in healthCare" :key="product.id">
+                <div class="card product-card">
+                  <div class="product-image-container">
+                    <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                      @click="goToProduct(product.id)" @error="handleImageError">
+                  </div>
+                  <div class="product-info">
+                    <h5 class="product-name" @click="goToProduct(product.id)">
+                      {{ truncateName(product.name) }}
+                    </h5>
+                    <p class="product-keypoint">{{ product.keypoint }}</p>
+                    <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                    <div class="product-actions">
+                      <button class="btn btn-cart" @click="addToCart(product)">
+                        <i class="bi bi-cart-plus"></i> 加入購物車
+                      </button>
+                      <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                        @click="toggleFavorite(product.id)">
+                        <i class="bi bi-heart-fill"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+
+
+      <!-- 你們的主要頁面內容放這邊上面 -->
+    </div>
+  </main>
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { // data 就是Model
+            return {
+              // 商品資料
+              silverFood: [],
+              healthFood: [],
+              healthDrink: [],
+              healthCare: [],
+
+              // 狀態管理
+              loading: false, // 移除載入狀態
+
+              // 我的最愛清單 (localStorage)
+              favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
+
+            };
+          },
+          mounted() { // mounted 就是View
+            console.log("Vue EC mount 開始");
+            this.loadProducts();
+          },
+
+          methods: { // methods 就是Controller
+            // 載入商品資料
+            async loadProducts() {
+              try {
+                const response = await fetch('https://localhost:7104/api/ProductsApi/Homepage');
+
+                if (!response.ok) {
+                  throw new Error('API 呼叫失敗');
+                }
+
+                const data = await response.json();
+
+                // 綁定資料到 Vue 實例
+                this.silverFood = data.silverFood || [];
+                this.healthFood = data.healthFood || [];
+                this.healthDrink = data.healthDrink || [];
+                this.healthCare = data.healthCare || [];
+
+                console.log('商品載入成功:', data);
+
+              } catch (error) {
+                console.error('載入商品失敗:', error);
+                alert('載入商品資料時發生錯誤，請稍後再試');
+              }
+            },
+
+            // 取得圖片 URL
+            getImageUrl(fileName) {
+              if (!fileName) return '/assets/img/default-product.jpg';
+              return `https://localhost:7104/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+            },
+            // 圖片載入錯誤處理
+            handleImageError(event) {
+              event.target.src = '/assets/img/default-product.jpg';
+            },
+
+            // 價格格式化 (千分位逗號)
+            formatPrice(price) {
+              if (!price) return '0';
+              return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            },
+
+            // 商品名稱截斷 (50字 + 省略號)
+            truncateName(name) {
+              if (!name) return '';
+              if (name.length <= 50) return name;
+              return name.substring(0, 50) + '...';
+            },
+
+            // 前往商品詳情頁
+            goToProduct(productId) {
+              window.location.href = `/VitalBridge/ECshop/product-detail.html?id=${productId}`;
+            },
+            // 加入購物車
+            async addToCart(product) {
+              // TODO: 檢查登入狀態
+              if (!this.checkLoginStatus()) {
+                alert('請先登入會員才能加入購物車');
+                // 導向登入頁面
+                window.location.href = '/login.html';
+                return;
+              }
+
+              try {
+                // TODO: 呼叫加入購物車 API
+                console.log('加入購物車:', product);
+                alert(`${product.name} 已加入購物車！`);
+
+              } catch (error) {
+                console.error('加入購物車失敗:', error);
+                alert('加入購物車時發生錯誤，請稍後再試');
+              }
+            },
+            // 切換我的最愛
+            toggleFavorite(productId) {
+              const index = this.favorites.indexOf(productId);
+
+              if (index > -1) {
+                // 移除最愛
+                this.favorites.splice(index, 1);
+              } else {
+                // 加入最愛
+                this.favorites.push(productId);
+              }
+
+              // 儲存到 localStorage
+              localStorage.setItem('vitalbridge_favorites', JSON.stringify(this.favorites));
+            },
+
+            // 檢查是否為我的最愛
+            isFavorite(productId) {
+              return this.favorites.includes(productId);
+            },
+
+
+            // 前往分類頁面 (移到methods內)
+            goToCategory(categoryId, categoryName) {
+              window.location.href = `/VitalBridge/ECshop/category.html?categoryId=${categoryId}&name=${encodeURIComponent(categoryName)}`;
+            },
+
+            // 檢查登入狀態 (暫時模擬)
+            checkLoginStatus() {
+              return false;
+            }
+
+
+          },
+          // methods: { ... }, mounted() { ... } 等可在此加入
+
+
+        }).mount('#shop-app');
+        console.log(" Vue EC mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>

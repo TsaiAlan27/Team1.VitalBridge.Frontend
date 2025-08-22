@@ -2,37 +2,93 @@
 <nav class="shop-navbar bg-light border-bottom">
     <div class="container-fluid">
         <div class="row align-items-center py-2">
-            <!-- 商品分類導覽 -->
-            <div class="col-md-8">
+            <!-- 手機版選單按鈕 -->
+            <div class="col-auto d-md-none">
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#mobileMenu" aria-controls="mobileMenu">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+            </div>
+
+            <!-- 商品分類導覽 (桌面版) -->
+            <div class="col-md-8 d-none d-md-block">
                 <ul class="nav nav-pills shop-categories">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/shop-index.html" data-category="all">
+                        <a class="nav-link active" href="/VitalBridge/ECshop/index.html" data-category="all">
                             <i class="bi bi-house-door me-1"></i>商城首頁
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/category.html?type=health-food" data-category="health-food">
-                            <i class="bi bi-heart-pulse me-1"></i>保健食品
+
+                    <!-- 銀髮食品 - 有子分類 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                            href="/VitalBridge/ECshop/category.html?categoryId=5&name=銀髮食品" data-category="silver-food"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-egg-fried me-1"></i>銀髮食品
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/ECshop/category.html?categoryId=7&name=軟質餐">軟質餐</a></li>
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=8&name=容易咀嚼">容易咀嚼</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=9&name=流質餐">流質餐</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/category.html?type=senior-food" data-category="senior-food">
-                            <i class="bi bi-cup-hot me-1"></i>銀髮食品
+
+                    <!-- 保健食品 - 有子分類 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                            href="/VitalBridge/ECshop/category.html?categoryId=6&name=保健食品" data-category="health-food"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bag-heart me-1"></i>保健食品
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=11&name=晶亮有神">晶亮有神</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=12&name=關鍵靈活">關鍵靈活</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=14&name=維他命">維他命</a>
+                            </li>
+                        </ul>
                     </li>
+
+                    <!-- 健康飲品 - 有子分類 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                            href="/VitalBridge/ECshop/category.html?categoryId=15&name=健康飲品"
+                            data-category="health-drink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-cup-hot me-3"></i>健康飲品
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=16&name=沖泡飲品">沖泡飲品</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="/VitalBridge/ECshop/category.html?categoryId=20&name=養身飲品">養身飲品</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- 保健照護 - 無子分類 -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/category.html?type=healthcare" data-category="healthcare">
-                            <i class="bi bi-shield-plus me-1"></i>保健照護
+                        <a class="nav-link" href="/VitalBridge/ECshop/category.html?categoryId=10&name=保健照護"
+                            data-category="healthcare">
+                            <i class="bi bi-shield-plus me-1"></i>
+                            保健照護
                         </a>
                     </li>
                 </ul>
             </div>
 
             <!-- 購物車和搜尋 -->
-            <div class="col-md-4 text-end">
+            <div class="col text-end">
                 <div class="d-flex align-items-center justify-content-end gap-3">
                     <!-- 搜尋框 -->
-                    <div class="search-box">
+                    <div class="search-box d-none d-sm-block">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" placeholder="搜尋商品..." id="shop-search">
                             <button class="btn btn-outline-secondary" type="button">
@@ -41,8 +97,14 @@
                         </div>
                     </div>
 
+                    <!-- 手機版搜尋按鈕 -->
+                    <button class="btn btn-outline-success d-sm-none" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearch">
+                        <i class="bi bi-search"></i>
+                    </button>
+
                     <!-- 購物車 -->
-                    <a href="/cart.html" class="btn btn-outline-primary position-relative">
+                    <a href="/VitalBridge/ECshop/cart.html" class="btn btn-outline-success position-relative">
                         <i class="bi bi-cart3"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                             id="cart-count">
@@ -52,29 +114,580 @@
                 </div>
             </div>
         </div>
+
+        <!-- 手機版搜尋框 -->
+        <div class="row">
+            <div class="col">
+                <div class="collapse" id="mobileSearch">
+                    <div class="py-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="搜尋商品..." id="mobile-shop-search">
+                            <button class="btn btn-success" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
+
+<!-- 手機版 Offcanvas 側邊選單 -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title text-success fw-bold" id="mobileMenuLabel">
+            <i class="bi bi-grid-3x3-gap me-2"></i>商品分類
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <!-- 首頁連結 -->
+        <div class="mobile-menu-item">
+            <a href="/VitalBridge/ECshop/index.html" class="mobile-menu-link active">
+                <i class="bi bi-house-door me-3"></i>商城首頁
+            </a>
+        </div>
+
+        <!-- 手風琴式分類選單 -->
+        <div class="accordion accordion-flush" id="mobileAccordion">
+            <!-- 銀髮食品 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed mobile-accordion-btn" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#silverFood" aria-expanded="false">
+                        <i class="bi bi-egg-fried  me-3"></i>銀髮食品
+                    </button>
+                </h2>
+                <div id="silverFood" class="accordion-collapse collapse" data-bs-parent="#mobileAccordion">
+                    <div class="accordion-body p-0">
+
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=7&name=軟質餐" class="mobile-submenu-link">
+                            軟質餐
+                        </a>
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=8&name=容易咀嚼" class="mobile-submenu-link">
+                            容易咀嚼
+                        </a>
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=9&name=流質餐" class="mobile-submenu-link">
+                            流質餐
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 保健食品 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed mobile-accordion-btn" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#healthFood" aria-expanded="false">
+                        <i class="bi bi-bag-heart me-3"></i>保健食品
+                    </button>
+                </h2>
+                <div id="healthFood" class="accordion-collapse collapse" data-bs-parent="#mobileAccordion">
+                    <div class="accordion-body p-0">
+
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=11&name=晶亮有神" class="mobile-submenu-link">
+                            晶亮有神
+                        </a>
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=12&name=關鍵靈活" class="mobile-submenu-link">
+                            關鍵靈活
+                        </a>
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=14&name=維他命" class="mobile-submenu-link">
+                            維他命
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 健康飲品 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed mobile-accordion-btn" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#healthDrink" aria-expanded="false">
+                        <i class="bi bi-cup-hot me-3"></i>健康飲品
+                    </button>
+                </h2>
+                <div id="healthDrink" class="accordion-collapse collapse" data-bs-parent="#mobileAccordion">
+                    <div class="accordion-body p-0">
+
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=16&name=沖泡飲品" class="mobile-submenu-link">
+                            沖泡飲品
+                        </a>
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=20&name=養身飲品" class="mobile-submenu-link">
+                            養身飲品
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 保健照護 - 無子分類 -->
+            <div class="mobile-menu-item">
+                <a href="/VitalBridge/ECshop/category.html?categoryId=10&name=保健照護" class="mobile-menu-link">
+                    <i class="bi bi-shield-plus me-3"></i> 保健照護
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 購物導覽列專用樣式 -->
 <style>
     .shop-navbar {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa !important;
+    }
+
+    .shop-categories {
+        margin: 0;
     }
 
     .shop-categories .nav-link {
-        color: #6c757d;
+        color: #495057;
         border-radius: 25px;
         transition: all 0.3s ease;
-        margin-right: 10px;
+        margin-right: 8px;
+        font-weight: 500;
+        padding: 10px 16px;
+        position: relative;
     }
 
     .shop-categories .nav-link:hover,
     .shop-categories .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #198754;
         color: white;
     }
 
+    /* Dropdown 樣式調整 */
+    .shop-categories .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+
+    .shop-categories .dropdown-menu {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        min-width: 180px;
+        background-color: white;
+        display: none;
+    }
+
+    .shop-categories .dropdown-item {
+        padding: 10px 20px;
+        color: #495057;
+        font-weight: 400;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+    }
+
+    .shop-categories .dropdown-item:hover,
+    .shop-categories .dropdown-item:focus {
+        background-color: #f8f9fa;
+        color: #198754;
+        transform: translateX(5px);
+    }
+
+    /* 移除Bootstrap預設的dropdown-toggle箭頭，使用自定義樣式 */
+    .shop-categories .dropdown-toggle::after {
+        border: none;
+        content: "\f282";
+        font-family: "bootstrap-icons";
+        font-size: 0.8em;
+        margin-left: 6px;
+        transition: transform 0.3s ease;
+    }
+
+    .shop-categories .dropdown:hover .dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+
+    /* 搜尋框樣式 */
     .search-box {
         min-width: 200px;
     }
+
+    .search-box .form-control {
+        border-color: #ced4da;
+    }
+
+    .search-box .form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+    .search-box .btn-outline-secondary {
+        border-color: #ced4da;
+        color: #6c757d;
+    }
+
+    .search-box .btn-outline-secondary:hover {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    /* 購物車按鈕樣式調整 */
+    .btn-outline-success {
+        border-color: #198754;
+        color: #198754;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    /* === 手機版 Offcanvas 樣式 === */
+    .offcanvas {
+        width: 280px;
+    }
+
+    .offcanvas-header {
+        border-bottom: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+
+    .offcanvas-title {
+        font-size: 1.1rem;
+    }
+
+    /* 手機版選單項目 */
+    .mobile-menu-item {
+        border-bottom: 1px solid #f1f3f4;
+    }
+
+    .mobile-menu-link {
+        display: block;
+        padding: 16px 20px;
+        color: #495057;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-menu-link:hover,
+    .mobile-menu-link.active {
+        background-color: #e8f5e8;
+        color: #198754;
+        text-decoration: none;
+    }
+
+    /* 手風琴樣式 */
+    .accordion-item {
+        border: none;
+        border-bottom: 1px solid #f1f3f4;
+    }
+
+    .mobile-accordion-btn {
+        background-color: white;
+        border: none;
+        color: #495057;
+        font-weight: 500;
+        padding: 16px 20px;
+        box-shadow: none;
+    }
+
+    .mobile-accordion-btn:hover,
+    .mobile-accordion-btn:focus {
+        background-color: #e8f5e8;
+        color: #198754;
+        box-shadow: none;
+    }
+
+    .mobile-accordion-btn:not(.collapsed) {
+        background-color: #e8f5e8;
+        color: #198754;
+        box-shadow: none;
+    }
+
+    .mobile-accordion-btn::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23198754'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+
+    /* 子選單項目 */
+    .mobile-submenu-link {
+        display: block;
+        padding: 12px 20px 12px 40px;
+        color: #6c757d;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .mobile-submenu-link:hover {
+        background-color: #f8f9fa;
+        color: #198754;
+        text-decoration: none;
+        padding-left: 45px;
+    }
+
+    .mobile-submenu-link:first-child {
+        font-weight: 600;
+        color: #198754;
+    }
+
+    /* Hover延遲效果，避免誤觸 */
+    .shop-categories .dropdown {
+        position: relative;
+    }
+
+    .shop-categories .dropdown::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: transparent;
+        z-index: 1000;
+    }
+
+    /* 響應式調整 */
+    @media (max-width: 576px) {
+        .search-box {
+            min-width: 150px;
+        }
+
+        .offcanvas {
+            width: 260px;
+        }
+    }
 </style>
+
+<!-- 購物導覽列專用樣式 -->
+<style>
+    .shop-navbar {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa !important;
+    }
+
+    .shop-categories {
+        margin: 0;
+    }
+
+    .shop-categories .nav-link {
+        color: #495057;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin-right: 8px;
+        font-weight: 500;
+        padding: 10px 16px;
+        position: relative;
+    }
+
+    .shop-categories .nav-link:hover,
+    .shop-categories .nav-link.active {
+        background-color: #198754;
+        color: white;
+    }
+
+    /* Dropdown 樣式調整 */
+    .shop-categories .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+
+    .shop-categories .dropdown-menu {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        min-width: 180px;
+        background-color: white;
+        display: none;
+    }
+
+    .shop-categories .dropdown-item {
+        padding: 10px 20px;
+        color: #495057;
+        font-weight: 400;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+    }
+
+    .shop-categories .dropdown-item:hover,
+    .shop-categories .dropdown-item:focus {
+        background-color: #f8f9fa;
+        color: #198754;
+        transform: translateX(5px);
+    }
+
+    /* 移除Bootstrap預設的dropdown-toggle箭頭，使用自定義樣式 */
+    .shop-categories .dropdown-toggle::after {
+        border: none;
+        content: "\f282";
+        font-family: "bootstrap-icons";
+        font-size: 0.8em;
+        margin-left: 6px;
+        transition: transform 0.3s ease;
+    }
+
+    .shop-categories .dropdown:hover .dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+
+    /* 搜尋框樣式 */
+    .search-box {
+        min-width: 200px;
+    }
+
+    .search-box .form-control {
+        border-color: #ced4da;
+    }
+
+    .search-box .form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+    .search-box .btn-outline-secondary {
+        border-color: #ced4da;
+        color: #6c757d;
+    }
+
+    .search-box .btn-outline-secondary:hover {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    /* 購物車按鈕樣式調整 */
+    .btn-outline-success {
+        border-color: #198754;
+        color: #198754;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+        .shop-categories {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shop-categories .nav-link {
+            margin-right: 0;
+            text-align: center;
+        }
+
+        .search-box {
+            min-width: 150px;
+        }
+
+        /* 手機版改為點擊展開 */
+        .shop-categories .dropdown:hover .dropdown-menu {
+            display: none;
+        }
+
+        .shop-categories .dropdown.show .dropdown-menu {
+            display: block;
+        }
+    }
+
+    /* Hover延遲效果，避免誤觸 */
+    .shop-categories .dropdown {
+        position: relative;
+    }
+
+    .shop-categories .dropdown::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: transparent;
+        z-index: 1000;
+    }
+</style>
+
+<!-- JavaScript for mobile dropdown toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // 處理搜尋表單提交
+        function handleSearch(searchInputId) {
+            const searchInput = document.getElementById(searchInputId);
+            const query = searchInput?.value?.trim();
+
+            if (!query) {
+                alert('請輸入搜尋關鍵字');
+                return;
+            }
+
+            // 跳轉到分類頁面進行搜尋
+            const searchUrl = `/VitalBridge/ECshop/category.html?searchQuery=${encodeURIComponent(query)}`;
+            window.location.href = searchUrl;
+
+
+        }
+        // 綁定搜尋事件
+        // 桌面版搜尋
+        const desktopSearchBtn = document.querySelector('.search-box .btn');
+        const desktopSearchInput = document.getElementById('shop-search');
+
+        if (desktopSearchBtn && desktopSearchInput) {
+            desktopSearchBtn.addEventListener('click', () => handleSearch('shop-search'));
+            desktopSearchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch('shop-search');
+                }
+            });
+        }
+        // 手機版搜尋
+        const mobileSearchBtn = document.querySelector('#mobileSearch .btn');
+        const mobileSearchInput = document.getElementById('mobile-shop-search');
+
+        if (mobileSearchBtn && mobileSearchInput) {
+            mobileSearchBtn.addEventListener('click', () => handleSearch('mobile-shop-search'));
+            mobileSearchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch('mobile-shop-search');
+                }
+            });
+        }
+        // 手機版點擊切換下拉選單
+        if (window.innerWidth <= 768) {
+            const dropdownToggles = document.querySelectorAll('.shop-categories .dropdown-toggle');
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const dropdown = this.closest('.dropdown');
+                    dropdown.classList.toggle('show');
+
+                    // 關閉其他下拉選單
+                    dropdownToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            otherToggle.closest('.dropdown').classList.remove('show');
+                        }
+                    });
+                });
+            });
+
+            // 點擊其他地方關閉下拉選單
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.shop-categories .dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
+            });
+        }
+
+
+
+    });
+</script>
