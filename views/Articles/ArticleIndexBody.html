@@ -12,20 +12,8 @@
 <body>
     <div class="pageBody" id="app">
 
-
-        <div class="pageHeader">
-            <div class="pageHeader-left">
-                <div class="hamburger-icon" id="hamburgerIcon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <!-- <div class="pageHeader-home-link">All</div> -->
-            </div>
-            <div class="pageHeader-right">
-                <input type="search" class="search-input" placeholder="Search...">
-            </div>
-        </div>
+        <!-- Hamburger Menu Component -->
+        <hamburger-menu></hamburger-menu>
 
         <!-- Sliding Navigation Menu -->
         <!-- The Navigation Menu Component -->
@@ -120,8 +108,14 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
 
-    <!-- <script src="/views/Johnny/js/ArticleIndex0.js"></script> -->
-    <script type="module" src="/views/Johnny/js/ArticleIndex.js"></script>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Initialize Vue app
+            await import("/views/Articles/js/ArticleIndex.js");
+        });
+    </script>
+
 </body>
 
 </html>

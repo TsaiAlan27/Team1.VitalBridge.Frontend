@@ -11,220 +11,110 @@
 </head>
 
 <body>
+    <div class="pageBody" id="app">
+        <!-- Hamburger Menu Component -->
+        <hamburger-menu></hamburger-menu>
 
-    <header class="pageHeader">
-        <div class="pageHeader-left">
-            <div class="hamburger-icon" id="hamburgerIcon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <!-- Link back to the main index page -->
-            <a href="ArticleIndex.html" class="pageHeader-home-link">All</a>
-        </div>
-        <div class="pageHeader-right">
-            <input type="search" class="search-input" placeholder="Search...">
-        </div>
-    </header>
+        <!-- Sliding Navigation Menu -->
+        <!-- The Navigation Menu Component -->
+        <navigation-menu></navigation-menu>
 
-    <!-- Sliding Navigation Menu -->
-    <nav class="nav-menu" id="navMenu">
-        <!-- Navigation links will be dynamically loaded here by JavaScript -->
-        <ul></ul>
-    </nav>
+        <div class="pageContainer">
+            <main class="main-content">
+                <section class="articles-column">
+                    <!-- Container for paginated articles, now styled like featured articles -->
+                    <div class="paginated-articles-container" id="paginatedArticlesContainer">
+                        <!-- Paginated articles will be dynamically loaded here, each in the featured-article style -->
+                        <!-- Featured Article for the Technology Category -->
+                        <article class="featured-article">
+                            <div class="featured-image-placeholder"
+                                style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
+                                <span style="font-size: 0.8em; color: rgba(255,255,255,0.8);">Next-Gen Gadget</span>
+                            </div>
+                            <div class="featured-content">
+                                <div class="category-breadcrumb">
+                                    <a href="#" class="category-pill">Technology</a>
+                                    <a href="#" class="subcategory-pill">Gadgets</a>
+                                </div>
+                                <h1 class="featured-headline">The Rise of Foldable Phones: A Glimpse into the Future
+                                </h1>
+                                <p class="featured-excerpt">Unpack the latest innovations in foldable screen technology
+                                    and
+                                    how
+                                    these devices are set to redefine the smartphone market in the coming years,
+                                    offering
+                                    new
+                                    ways
+                                    to interact with your digital world.</p>
+                                <p class="article-meta">By Tech Innovations Daily • August 16, 2025</p>
+                            </div>
+                        </article>
 
-    <div class="container">
-        <main class="main-content">
-            <section class="articles-column">
-                <!-- Featured Article for the Technology Category -->
-                <article class="featured-article">
-                    <div class="featured-image-placeholder"
-                        style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
-                        <span style="font-size: 0.8em; color: rgba(255,255,255,0.8);">Next-Gen Gadget</span>
+
                     </div>
-                    <div class="featured-content">
-                        <div class="category-breadcrumb">
-                            <a href="#" class="category-pill">Technology</a>
-                            <a href="#" class="subcategory-pill">Gadgets</a>
-                        </div>
-                        <h1 class="featured-headline">The Rise of Foldable Phones: A Glimpse into the Future</h1>
-                        <p class="featured-excerpt">Unpack the latest innovations in foldable screen technology and how
-                            these devices are set to redefine the smartphone market in the coming years, offering new
-                            ways
-                            to interact with your digital world.</p>
-                        <p class="article-meta">By Tech Innovations Daily • August 16, 2025</p>
+
+                    <!-- Pagination Controls -->
+                    <div class="pagination-controls" id="paginationControls">
+                        <!-- Pagination buttons will be dynamically generated here -->
                     </div>
-                </article>
+                </section>
 
-                <!-- Container for paginated articles, now styled like featured articles -->
-                <div class="paginated-articles-container" id="paginatedArticlesContainer">
-                    <!-- Paginated articles will be dynamically loaded here, each in the featured-article style -->
-                </div>
+                <aside class="sidebar-column">
+                    <!-- Popular Subcategories Widget (adapted for Technology) -->
+                    <div class="widget-box" id="popularCategoriesWidget">
+                        <h3 class="widget-title">熱門子分類 (Popular Subcategories)</h3>
+                        <ul class="widget-list">
+                            <li><a href="#">AI & Machine Learning</a> <span
+                                    class="badge first-trending-badge">最新趨勢</span>
+                            </li>
+                            <li><a href="#">Smart Home Devices</a> <span class="badge count-badge">18</span></li>
+                            <li><a href="#">Cybersecurity Threats</a> <span class="badge count-badge">12</span></li>
+                            <li><a href="#">Gaming Tech</a> <span class="badge count-badge">25</span></li>
+                            <li><a href="#">Software Development</a> <span class="badge count-badge">30</span></li>
+                        </ul>
+                    </div>
 
-                <!-- Pagination Controls -->
-                <div class="pagination-controls" id="paginationControls">
-                    <!-- Pagination buttons will be dynamically generated here -->
-                </div>
-            </section>
+                    <!-- Trending Now Widget (adapted for Technology) -->
+                    <div class="widget-box">
+                        <h3 class="widget-title">最近熱門 (Trending Now)</h3>
+                        <ul class="widget-list">
+                            <li><span class="badge">1</span> <a href="#">Comparing 5G and Satellite Internet for Home
+                                    Use</a></li>
+                            <li><span class="badge">2</span> <a href="#">The Ethical Implications of Advanced AI in
+                                    Daily
+                                    Life</a></li>
+                            <li><span class="badge">3</span> <a href="#">Choosing the Best Noise-Cancelling Headphones
+                                    for
+                                    Travel</a></li>
+                            <li><span class="badge">4</span> <a href="#">Beginner's Guide to Quantum Computing</a></li>
+                        </ul>
+                    </div>
 
-            <aside class="sidebar-column">
-                <!-- Popular Subcategories Widget (adapted for Technology) -->
-                <div class="widget-box" id="popularCategoriesWidget">
-                    <h3 class="widget-title">熱門子分類 (Popular Subcategories)</h3>
-                    <ul class="widget-list">
-                        <li><a href="#">AI & Machine Learning</a> <span class="badge first-trending-badge">最新趨勢</span>
-                        </li>
-                        <li><a href="#">Smart Home Devices</a> <span class="badge count-badge">18</span></li>
-                        <li><a href="#">Cybersecurity Threats</a> <span class="badge count-badge">12</span></li>
-                        <li><a href="#">Gaming Tech</a> <span class="badge count-badge">25</span></li>
-                        <li><a href="#">Software Development</a> <span class="badge count-badge">30</span></li>
-                    </ul>
-                </div>
-
-                <!-- Trending Now Widget (adapted for Technology) -->
-                <div class="widget-box">
-                    <h3 class="widget-title">最近熱門 (Trending Now)</h3>
-                    <ul class="widget-list">
-                        <li><span class="badge">1</span> <a href="#">Comparing 5G and Satellite Internet for Home
-                                Use</a></li>
-                        <li><span class="badge">2</span> <a href="#">The Ethical Implications of Advanced AI in Daily
-                                Life</a></li>
-                        <li><span class="badge">3</span> <a href="#">Choosing the Best Noise-Cancelling Headphones for
-                                Travel</a></li>
-                        <li><span class="badge">4</span> <a href="#">Beginner's Guide to Quantum Computing</a></li>
-                    </ul>
-                </div>
-
-                <!-- Call-to-Action (CTA) Banner -->
-                <div class="cta-banner">
-                    <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
-                    <p class="cta-subtitle">Experience the change!</p>
-                    <button class="purchase-btn">PURCHASE NOW</button>
-                </div>
-            </aside>
-        </main>
+                    <!-- Call-to-Action (CTA) Banner -->
+                    <div class="cta-banner">
+                        <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
+                        <p class="cta-subtitle">Experience the change!</p>
+                        <button class="purchase-btn">PURCHASE NOW</button>
+                    </div>
+                </aside>
+            </main>
+        </div>
     </div>
 
-    <!-- Return to Top Button -->
-    <a href="#top" class="return-to-top" id="returnToTopBtn">
-        &#x2191;
-    </a>
+    <!-- script start -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
 
     <script>
-        // Hamburger Menu Toggle functionality
-        document.getElementById('hamburgerIcon').addEventListener('click', function () {
-            document.getElementById('navMenu').classList.toggle('open');
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Initialize Vue app
+            await import("/views/Articles/js/ArticleIndex.js");
         });
+    </script>
+    <script>
 
-        // Close nav menu when clicking outside for better UX
-        document.addEventListener('click', function (event) {
-            const navMenu = document.getElementById('navMenu');
-            const hamburgerIcon = document.getElementById('hamburgerIcon');
-            // If the click is outside the nav menu and not on the hamburger icon
-            if (!navMenu.contains(event.target) && !hamburgerIcon.contains(event.target)) {
-                navMenu.classList.remove('open');
-            }
-        });
-
-        // Menu Data Structure with nested subcategories
-        const menuData = [
-            {
-                name: 'International',
-                link: '#international',
-                subcategories: [
-                    { name: 'Asia', link: '#international-asia' },
-                    { name: 'Europe', link: '#international-europe' },
-                    { name: 'Americas', link: '#international-americas' }
-                ]
-            },
-            {
-                name: 'Sports',
-                link: '#sports',
-                subcategories: [
-                    {
-                        name: 'Football',
-                        link: '#sports-football',
-                        subcategories: [
-                            { name: 'NFL', link: '#sports-football-nfl' },
-                            { name: 'Premier League', link: '#sports-football-premierleague' },
-                            { name: 'College Football', link: '#sports-football-college' }
-                        ]
-                    },
-                    { name: 'Basketball', link: '#sports-basketball' },
-                    { name: 'Cricket', link: '#sports-cricket' }
-                ]
-            },
-            {
-                name: 'Opinion',
-                link: '#opinion',
-                subcategories: []
-            },
-            {
-                name: 'Business',
-                link: '#business',
-                subcategories: [
-                    { name: 'Finance', link: '#business-finance' },
-                    { name: 'Startups', link: '#business-startups' },
-                    { name: 'Marketing', link: '#business-marketing' }
-                ]
-            },
-            {
-                name: 'Youth',
-                link: '#youth',
-                subcategories: []
-            },
-            {
-                name: 'Entertainment',
-                link: '#entertainment',
-                subcategories: [
-                    { name: 'Movies', link: '#entertainment-movies' },
-                    { name: 'Music', link: '#entertainment-music' },
-                    { name: 'Gaming', link: '#entertainment-gaming' }
-                ]
-            },
-            {
-                name: 'Lifestyle',
-                link: '#lifestyle',
-                subcategories: [
-                    { name: 'Health & Wellness', link: '#lifestyle-health' },
-                    { name: 'Travel Guides', link: '#lifestyle-travel' }
-                ]
-            }
-        ];
-
-        // Function to dynamically load the navigation menu
-        function loadNavigationMenu() {
-            const navMenuUl = document.querySelector('#navMenu ul');
-            navMenuUl.innerHTML = ''; // Clear existing content
-
-            function createMenuItem(item, parentUl) {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = item.link;
-                a.textContent = item.name;
-
-                li.appendChild(a);
-
-                if (item.subcategories && item.subcategories.length > 0) {
-                    li.classList.add('has-submenu');
-                    const subUl = document.createElement('ul');
-                    item.subcategories.forEach(subItem => createMenuItem(subItem, subUl));
-                    li.appendChild(subUl);
-
-                    a.addEventListener('click', function (e) {
-                        e.preventDefault(); // Prevent default link behavior
-                        li.classList.toggle('active'); // Toggle 'active' class to show/hide submenu
-                    });
-                }
-                parentUl.appendChild(li);
-            }
-
-            menuData.forEach(item => createMenuItem(item, navMenuUl));
-        }
-
-
-        // Call the function to load the navigation menu when the page loads
-        document.addEventListener('DOMContentLoaded', loadNavigationMenu);
 
 
 
