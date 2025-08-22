@@ -2,7 +2,7 @@
 import HamburgerMenu from "./components/HamburgerMenu.js"
 import NavigationMenu from "./components/NavigationMenu.js"
 import MenuItem from './components/MenuItem.js' // Also import MenuItem as NavigationMenu depends on it
-import ArticleCard from "./components/ArticleCard.js";
+import PaginatedArticle from "./components/PaginatedArticle.js";
 
 // Clean Vue script template
 const vueApp = {
@@ -10,7 +10,7 @@ const vueApp = {
         'hamburger-menu': HamburgerMenu,
         'navigation-menu': NavigationMenu,
         'menu-item': MenuItem,
-        'article-card': ArticleCard
+        'paginated-article': PaginatedArticle
 
     },
     data() {

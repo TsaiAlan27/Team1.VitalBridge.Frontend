@@ -19,45 +19,11 @@
         <!-- The Navigation Menu Component -->
         <navigation-menu></navigation-menu>
 
+        <!-- Main Content Area -->
         <div class="pageContainer">
             <main class="main-content">
-                <section class="articles-column">
-                    <!-- Container for paginated articles, now styled like featured articles -->
-                    <div class="paginated-articles-container" id="paginatedArticlesContainer">
-                        <!-- Paginated articles will be dynamically loaded here, each in the featured-article style -->
-                        <!-- Featured Article for the Technology Category -->
-                        <article class="featured-article">
-                            <div class="featured-image-placeholder"
-                                style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
-                                <span style="font-size: 0.8em; color: rgba(255,255,255,0.8);">Next-Gen Gadget</span>
-                            </div>
-                            <div class="featured-content">
-                                <div class="category-breadcrumb">
-                                    <a href="#" class="category-pill">Technology</a>
-                                    <a href="#" class="subcategory-pill">Gadgets</a>
-                                </div>
-                                <h1 class="featured-headline">The Rise of Foldable Phones: A Glimpse into the Future
-                                </h1>
-                                <p class="featured-excerpt">Unpack the latest innovations in foldable screen technology
-                                    and
-                                    how
-                                    these devices are set to redefine the smartphone market in the coming years,
-                                    offering
-                                    new
-                                    ways
-                                    to interact with your digital world.</p>
-                                <p class="article-meta">By Tech Innovations Daily • August 16, 2025</p>
-                            </div>
-                        </article>
-
-
-                    </div>
-
-                    <!-- Pagination Controls -->
-                    <div class="pagination-controls" id="paginationControls">
-                        <!-- Pagination buttons will be dynamically generated here -->
-                    </div>
-                </section>
+                <!-- Replace the entire articles-column section with: -->
+                <paginated-article :category-id="" :articles-per-page="5"></paginated-article>
 
                 <aside class="sidebar-column">
                     <!-- Popular Subcategories Widget (adapted for Technology) -->
@@ -99,21 +65,21 @@
                 </aside>
             </main>
         </div>
-    </div>
 
-    <!-- script start -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
 
-    <script>
-        // Wait for the DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Initialize Vue app
-            await import("/views/Articles/js/ArticleIndex.js");
-        });
-    </script>
-    <script>
+        <!-- script start -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
+
+        <script>
+            // Wait for the DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', async function () {
+                // Initialize Vue app
+                await import("/views/Articles/js/ArticleCategory.js");
+            });
+        </script>
+        <!-- <script>
 
 
 
@@ -309,7 +275,7 @@
         // Initial load of articles and pagination controls
         displayArticles(1);
 
-    </script>
+    </script> -->
 </body>
 
 </html>

@@ -37,50 +37,7 @@ export default {
             // Load only top-level menu items initially
             // Note: hasSubcategories indicates whether a category has subcategories
             // but we don't load the actual subcategories until needed
-            // this.menuItems = [
-            //     {
-            //         name: 'International',
-            //         link: '#international',
-            //         hasSubcategories: true,
-            //         categoryId: 'International'
-            //     },
-            //     {
-            //         name: 'Sports',
-            //         link: '#sports',
-            //         hasSubcategories: true,
-            //         categoryId: 'Sports'
-            //     },
-            //     {
-            //         name: 'Opinion',
-            //         link: '#opinion',
-            //         hasSubcategories: false
-            //     },
-            //     {
-            //         name: 'Business',
-            //         link: '#business',
-            //         hasSubcategories: true,
-            //         categoryId: 'Business'
-            //     },
-            //     {
-            //         name: 'Youth',
-            //         link: '#youth',
-            //         hasSubcategories: false
-            //     },
-            //     {
-            //         name: 'Entertainment',
-            //         link: '#entertainment',
-            //         hasSubcategories: true,
-            //         categoryId: 'Entertainment'
-            //     },
-            //     {
-            //         name: 'Lifestyle',
-            //         link: '#lifestyle',
-            //         hasSubcategories: true,
-            //         categoryId: 'Lifestyle'
-            //     }
-            // ];
-
-            // In a real implementation, you might want to fetch this from your API:
+            // Load navigation menu data from API
             this.menuItems = await this.fetchNavigationMenu();
             console.log("Navigation menu loaded:", this.menuItems);
         }

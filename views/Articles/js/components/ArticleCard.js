@@ -14,6 +14,8 @@ export default {
                     v-for="article in displayedArticles" 
                     :key="article.id || article.title"
                     class="article-card"
+                    @click="navigateToArticle(article)"
+                    style="cursor: pointer;"
                 >
                     <div class="article-image-container">
                         <img 
@@ -32,7 +34,7 @@ export default {
                     </div>
                     <div class="article-card-content">
                         <div class="category-breadcrumb">
-                            <a href="#" class="category-pill">{{ article.category }}</a>
+                            <a :href="'/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
                             <a href="#" class="subcategory-pill" v-if="article.subcategory">{{ article.subcategory }}</a>
                         </div>
                         <h3 class="article-card-title">{{ article.title }}</h3>
@@ -83,6 +85,16 @@ export default {
         }
     },
     methods: {
+        // Navigate to article content page
+        navigateToArticle(article) {
+            // Use article.id or article.link as the identifier
+            const articleId = article.id || article.link;
+            if (articleId) {
+                window.location.href = `/views/Articles/ArticleContent.html?id=${articleId}`;
+            } else {
+                console.warn('Article ID/link not found:', article);
+            }
+        },
         // POST Request with Pagination Body and CategoryId
         async fetchContentArticleWithPost(page, pageSize, categoryId = '') {
             try {

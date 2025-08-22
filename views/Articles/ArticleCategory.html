@@ -1,425 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technology: Top Gadgets & Trends</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - Kelly Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
-    <link rel="stylesheet" href="css/ArticleIndex.css">
-    <link rel="stylesheet" href="css/ArticleSubIndex.css">
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- Johnny CSS -->
+  <link rel="stylesheet" href="css/ArticleIndex.css">
+  <link rel="stylesheet" href="css/ArticleCategory.css">
 </head>
 
+<!-- <body class="index-page"> -->
+
 <body>
+  <div class="headerpage"></div>
+  <main class="main">
+    <!-- 你們的主要頁面內容放這邊下面 -->
+    <div id="content"></div>
 
-    <header class="pageHeader">
-        <div class="pageHeader-left">
-            <div class="hamburger-icon" id="hamburgerIcon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <!-- Link back to the main index page -->
-            <a href="ArticleIndex.html" class="pageHeader-home-link">All</a>
-        </div>
-        <div class="pageHeader-right">
-            <input type="search" class="search-input" placeholder="Search...">
-        </div>
-    </header>
+    <!-- 你們的主要頁面內容放這邊上面 -->
+  </main>
 
-    <!-- Sliding Navigation Menu -->
-    <nav class="nav-menu" id="navMenu">
-        <!-- Navigation links will be dynamically loaded here by JavaScript -->
-        <ul></ul>
-    </nav>
+  <div class="footerpage"></div>
 
-    <div class="container">
-        <main class="main-content">
-            <section class="articles-column">
-                <!-- Featured Article for the Technology Category -->
-                <article class="featured-article">
-                    <div class="featured-image-placeholder"
-                        style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
-                        <span style="font-size: 0.8em; color: rgba(255,255,255,0.8);">Next-Gen Gadget</span>
-                    </div>
-                    <div class="featured-content">
-                        <div class="category-breadcrumb">
-                            <a href="#" class="category-pill">Technology</a>
-                            <a href="#" class="subcategory-pill">Gadgets</a>
-                        </div>
-                        <h1 class="featured-headline">The Rise of Foldable Phones: A Glimpse into the Future</h1>
-                        <p class="featured-excerpt">Unpack the latest innovations in foldable screen technology and how
-                            these devices are set to redefine the smartphone market in the coming years, offering new
-                            ways
-                            to interact with your digital world.</p>
-                        <p class="article-meta">By Tech Innovations Daily • August 16, 2025</p>
-                    </div>
-                </article>
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
 
-                <!-- Container for paginated articles, now styled like featured articles -->
-                <div class="paginated-articles-container" id="paginatedArticlesContainer">
-                    <!-- Paginated articles will be dynamically loaded here, each in the featured-article style -->
-                </div>
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
 
-                <!-- Pagination Controls -->
-                <div class="pagination-controls" id="paginationControls">
-                    <!-- Pagination buttons will be dynamically generated here -->
-                </div>
-            </section>
 
-            <aside class="sidebar-column">
-                <!-- Popular Subcategories Widget (adapted for Technology) -->
-                <div class="widget-box" id="popularCategoriesWidget">
-                    <h3 class="widget-title">熱門子分類 (Popular Subcategories)</h3>
-                    <ul class="widget-list">
-                        <li><a href="#">AI & Machine Learning</a> <span class="badge first-trending-badge">最新趨勢</span>
-                        </li>
-                        <li><a href="#">Smart Home Devices</a> <span class="badge count-badge">18</span></li>
-                        <li><a href="#">Cybersecurity Threats</a> <span class="badge count-badge">12</span></li>
-                        <li><a href="#">Gaming Tech</a> <span class="badge count-badge">25</span></li>
-                        <li><a href="#">Software Development</a> <span class="badge count-badge">30</span></li>
-                    </ul>
-                </div>
 
-                <!-- Trending Now Widget (adapted for Technology) -->
-                <div class="widget-box">
-                    <h3 class="widget-title">最近熱門 (Trending Now)</h3>
-                    <ul class="widget-list">
-                        <li><span class="badge">1</span> <a href="#">Comparing 5G and Satellite Internet for Home
-                                Use</a></li>
-                        <li><span class="badge">2</span> <a href="#">The Ethical Implications of Advanced AI in Daily
-                                Life</a></li>
-                        <li><span class="badge">3</span> <a href="#">Choosing the Best Noise-Cancelling Headphones for
-                                Travel</a></li>
-                        <li><span class="badge">4</span> <a href="#">Beginner's Guide to Quantum Computing</a></li>
-                    </ul>
-                </div>
 
-                <!-- Call-to-Action (CTA) Banner -->
-                <div class="cta-banner">
-                    <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
-                    <p class="cta-subtitle">Experience the change!</p>
-                    <button class="purchase-btn">PURCHASE NOW</button>
-                </div>
-            </aside>
-        </main>
-    </div>
 
-    <!-- Return to Top Button -->
-    <a href="#top" class="return-to-top" id="returnToTopBtn">
-        &#x2191;
-    </a>
 
-    <script>
-        // Hamburger Menu Toggle functionality
-        document.getElementById('hamburgerIcon').addEventListener('click', function () {
-            document.getElementById('navMenu').classList.toggle('open');
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+  <!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+  <script type="module">
+    (function (onFullyReady) {
+      function once(ev) {
+        return new Promise(function (resolve) {
+          function handler(e) {
+            window.removeEventListener(ev, handler);
+            resolve(e);
+          }
+          window.addEventListener(ev, handler);
+        });
+      }
+
+      function waitAppReady() {
+        if (window.appReadyAt !== undefined) {
+          return Promise.resolve();
+        }
+        return once('app:ready');
+      }
+
+      function waitWindowLoad() {
+        if (document.readyState === 'complete') {
+          return Promise.resolve();
+        }
+        return once('load');
+      }
+
+      Promise.all([waitAppReady(), waitWindowLoad()])
+        .then(onFullyReady)
+        .catch(function (e) {
+          console.error('post-load hook error', e);
         });
 
-        // Close nav menu when clicking outside for better UX
-        document.addEventListener('click', function (event) {
-            const navMenu = document.getElementById('navMenu');
-            const hamburgerIcon = document.getElementById('hamburgerIcon');
-            // If the click is outside the nav menu and not on the hamburger icon
-            if (!navMenu.contains(event.target) && !hamburgerIcon.contains(event.target)) {
-                navMenu.classList.remove('open');
-            }
-        });
+    })(async function () {
+      // 1. Fetch and inject HTML
+      const html = await fetch("/views/Articles/ArticleCategoryBody.html").then(r => r.text());
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      document.getElementById("content").innerHTML = doc.body.innerHTML;
 
-        // Menu Data Structure with nested subcategories
-        const menuData = [
-            {
-                name: 'International',
-                link: '#international',
-                subcategories: [
-                    { name: 'Asia', link: '#international-asia' },
-                    { name: 'Europe', link: '#international-europe' },
-                    { name: 'Americas', link: '#international-americas' }
-                ]
-            },
-            {
-                name: 'Sports',
-                link: '#sports',
-                subcategories: [
-                    {
-                        name: 'Football',
-                        link: '#sports-football',
-                        subcategories: [
-                            { name: 'NFL', link: '#sports-football-nfl' },
-                            { name: 'Premier League', link: '#sports-football-premierleague' },
-                            { name: 'College Football', link: '#sports-football-college' }
-                        ]
-                    },
-                    { name: 'Basketball', link: '#sports-basketball' },
-                    { name: 'Cricket', link: '#sports-cricket' }
-                ]
-            },
-            {
-                name: 'Opinion',
-                link: '#opinion',
-                subcategories: []
-            },
-            {
-                name: 'Business',
-                link: '#business',
-                subcategories: [
-                    { name: 'Finance', link: '#business-finance' },
-                    { name: 'Startups', link: '#business-startups' },
-                    { name: 'Marketing', link: '#business-marketing' }
-                ]
-            },
-            {
-                name: 'Youth',
-                link: '#youth',
-                subcategories: []
-            },
-            {
-                name: 'Entertainment',
-                link: '#entertainment',
-                subcategories: [
-                    { name: 'Movies', link: '#entertainment-movies' },
-                    { name: 'Music', link: '#entertainment-music' },
-                    { name: 'Gaming', link: '#entertainment-gaming' }
-                ]
-            },
-            {
-                name: 'Lifestyle',
-                link: '#lifestyle',
-                subcategories: [
-                    { name: 'Health & Wellness', link: '#lifestyle-health' },
-                    { name: 'Travel Guides', link: '#lifestyle-travel' }
-                ]
-            }
-        ];
+      // 2. Import JS that depends on the fetched DOM
+      await import("/views/Articles/js/ArticleCategory.js");
+    });
+  </script>
 
-        // Function to dynamically load the navigation menu
-        function loadNavigationMenu() {
-            const navMenuUl = document.querySelector('#navMenu ul');
-            navMenuUl.innerHTML = ''; // Clear existing content
-
-            function createMenuItem(item, parentUl) {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = item.link;
-                a.textContent = item.name;
-
-                li.appendChild(a);
-
-                if (item.subcategories && item.subcategories.length > 0) {
-                    li.classList.add('has-submenu');
-                    const subUl = document.createElement('ul');
-                    item.subcategories.forEach(subItem => createMenuItem(subItem, subUl));
-                    li.appendChild(subUl);
-
-                    a.addEventListener('click', function (e) {
-                        e.preventDefault(); // Prevent default link behavior
-                        li.classList.toggle('active'); // Toggle 'active' class to show/hide submenu
-                    });
-                }
-                parentUl.appendChild(li);
-            }
-
-            menuData.forEach(item => createMenuItem(item, navMenuUl));
-        }
-
-
-        // Call the function to load the navigation menu when the page loads
-        document.addEventListener('DOMContentLoaded', loadNavigationMenu);
-
-
-
-        // Define a list of articles for the Technology category.
-        const allTechnologyArticles = [
-            {
-                image: 'New Laptop',
-                imageGradient: 'linear-gradient(45deg, #FF6F61, #DE4B4B)',
-                category: 'Technology',
-                subcategory: 'Laptops',
-                title: 'Review: The Ultra-Thin Laptop Redefining Portability',
-                excerpt: 'A deep dive into the features and performance of the new XYZ-Book, setting a new standard for portable computing, perfect for professionals on the go.',
-                author: 'Gadget Expert',
-                date: 'August 14, 2025'
-            },
-            {
-                image: 'Smartwatch',
-                imageGradient: 'linear-gradient(45deg, #1A2980, #26D0CE)',
-                category: 'Technology',
-                subcategory: 'Wearables',
-                title: 'Wearable Tech: Beyond Fitness Tracking and Notifications',
-                excerpt: 'Explore how smartwatches and other wearables are evolving to offer advanced health monitoring, smart payments, and integrated communication tools.',
-                author: 'Health Tech Analyst',
-                date: 'August 13, 2025'
-            },
-            {
-                image: 'VR Headset',
-                imageGradient: 'linear-gradient(45deg, #AA076B, #61045F)',
-                category: 'Technology',
-                subcategory: 'VR/AR',
-                title: 'The Immersive World of Virtual Reality: What\'s Next for Entertainment and Education?',
-                excerpt: 'From gaming to remote work and educational simulations, virtual reality is set to revolutionize various industries. Discover the innovations leading the way.',
-                author: 'Metaverse Guru',
-                date: 'August 12, 2025'
-            },
-            {
-                image: 'Drone',
-                imageGradient: 'linear-gradient(45deg, #2BC0E4, #EAECC6)',
-                category: 'Technology',
-                subcategory: 'Drones',
-                title: 'Drones in Daily Life: Beyond Photography and Surveillance',
-                excerpt: 'How drones are being used in package delivery, precision agriculture, environmental monitoring, and emergency services, transforming everyday operations.',
-                author: 'Aerial Tech Reviewer',
-                date: 'August 11, 2025'
-            },
-            {
-                image: 'Gaming Console',
-                imageGradient: 'linear-gradient(45deg, #7F00FF, #E100FF)',
-                category: 'Technology',
-                subcategory: 'Gaming',
-                title: 'Next-Gen Gaming Consoles: Unmatched Power and Innovation in Console Gaming',
-                excerpt: 'A comprehensive look at the new features, stunning graphics capabilities, and exclusive titles coming to the latest gaming platforms, promising immersive experiences.',
-                author: 'Gamer Pro',
-                date: 'August 10, 2025'
-            },
-            {
-                image: 'Smart Speaker',
-                imageGradient: 'linear-gradient(45deg, #DCE35B, #45B649)',
-                category: 'Technology',
-                subcategory: 'Smart Home',
-                title: 'Building Your Smart Home: Essential Devices and Automation Tips',
-                excerpt: 'A guide to setting up an intelligent home environment with smart speakers, automated lighting, advanced security systems, and climate control for ultimate convenience.',
-                author: 'Home Automation Expert',
-                date: 'August 9, 2025'
-            },
-            {
-                image: 'Electric Car',
-                imageGradient: 'linear-gradient(45deg, #00B4DB, #0083B0)',
-                category: 'Technology',
-                subcategory: 'Automotive',
-                title: 'The Future of Electric Vehicles: Beyond the Battery and Charging Stations',
-                excerpt: 'Innovations in EV technology, from faster charging solutions and extended range to cutting-edge autonomous driving features, and their profound impact on the automotive industry.',
-                author: 'Auto Tech Review',
-                date: 'August 8, 2025'
-            },
-            {
-                image: 'AI Software',
-                imageGradient: 'linear-gradient(45deg, #3CA55C, #B5AC49)',
-                category: 'Technology',
-                subcategory: 'AI',
-                title: 'Artificial Intelligence: A Guide to Its Everyday Applications and Future Potential',
-                excerpt: 'How AI is silently powering our devices, from personalized content recommendations and advanced facial recognition to intelligent voice assistants, making our lives more efficient and integrated.',
-                author: 'AI Ethicist',
-                date: 'August 7, 2025'
-            },
-            {
-                image: 'Cybersecurity',
-                imageGradient: 'linear-gradient(45deg, #2F80ED, #56CCF2)',
-                category: 'Technology',
-                subcategory: 'Cybersecurity',
-                title: 'Staying Safe Online: Essential Cybersecurity Tips for 2025',
-                excerpt: 'Learn about the latest cyber threats and how to protect your digital life with strong passwords, two-factor authentication, and secure browsing habits.',
-                author: 'Security Analyst',
-                date: 'August 6, 2025'
-            },
-            {
-                image: 'Robotics',
-                imageGradient: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                category: 'Technology',
-                subcategory: 'Robotics',
-                title: 'The Evolution of Robotics: From Industrial Arms to Humanoid Assistants',
-                excerpt: 'Explore the advancements in robotics, their applications in manufacturing, healthcare, and exploration, and what the future holds for human-robot interaction.',
-                author: 'Robotics Engineer',
-                date: 'August 5, 2025'
-            }
-        ];
-
-        const paginatedArticlesContainer = document.getElementById('paginatedArticlesContainer');
-        const paginationControls = document.getElementById('paginationControls');
-
-        const articlesPerPage = 5;
-        let currentPage = 1;
-        const totalPages = Math.ceil(allTechnologyArticles.length / articlesPerPage);
-
-        /**
-         * Creates an HTML <article> element styled like the featured article.
-         * @param {Object} article - An object containing article data.
-         * @returns {HTMLElement} The created article element.
-         */
-        function createArticleElement(article) {
-            const articleElement = document.createElement('article');
-            articleElement.className = 'featured-article'; // Use featured-article style
-            articleElement.innerHTML = `
-                <div class="featured-image-placeholder" style="background: ${article.imageGradient};">
-                    <span style="font-size: 0.8em; color: rgba(255,255,255,0.8);">${article.image}</span>
-                </div>
-                <div class="featured-content">
-                    <div class="category-breadcrumb">
-                        <a href="#" class="category-pill">${article.category}</a>
-                        <a href="#" class="subcategory-pill">${article.subcategory}</a>
-                    </div>
-                    <h1 class="featured-headline">${article.title}</h1>
-                    <p class="featured-excerpt">${article.excerpt}</p>
-                    <p class="article-meta">By ${article.author} • ${article.date}</p>
-                </div>
-            `;
-            return articleElement;
-        }
-
-        /**
-         * Displays articles for the given page number and updates pagination controls.
-         * @param {number} page - The page number to display.
-         */
-        function displayArticles(page) {
-            currentPage = page;
-            paginatedArticlesContainer.innerHTML = ''; // Clear previous articles
-
-            const startIndex = (currentPage - 1) * articlesPerPage;
-            const endIndex = startIndex + articlesPerPage;
-            const articlesToDisplay = allTechnologyArticles.slice(startIndex, endIndex);
-
-            articlesToDisplay.forEach(article => {
-                paginatedArticlesContainer.appendChild(createArticleElement(article));
-            });
-
-            renderPaginationControls(); // Re-render pagination controls after updating articles
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
-        }
-
-        /**
-         * Renders the pagination buttons and updates their active/disabled states.
-         */
-        function renderPaginationControls() {
-            paginationControls.innerHTML = ''; // Clear existing controls
-
-            // Previous button
-            const prevButton = document.createElement('button');
-            prevButton.className = 'pagination-button';
-            prevButton.textContent = 'Previous';
-            prevButton.disabled = currentPage === 1;
-            prevButton.addEventListener('click', () => displayArticles(currentPage - 1));
-            paginationControls.appendChild(prevButton);
-
-            // Page number buttons
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
-                pageButton.textContent = i;
-                pageButton.addEventListener('click', () => displayArticles(i));
-                paginationControls.appendChild(pageButton);
-            }
-
-            // Next button
-            const nextButton = document.createElement('button');
-            nextButton.className = 'pagination-button';
-            nextButton.textContent = 'Next';
-            nextButton.disabled = currentPage === totalPages;
-            nextButton.addEventListener('click', () => displayArticles(currentPage + 1));
-            paginationControls.appendChild(nextButton);
-        }
-
-        // Initial load of articles and pagination controls
-        displayArticles(1);
-
-    </script>
 </body>
 
 </html>
