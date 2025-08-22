@@ -19,7 +19,7 @@ export default {
     template: `
         <li :class="{'has-submenu': item.hasSubcategories, 'active': isActive, 'loading': isLoading}">
             <div class="menu-item-wrapper">
-                <a :href="\`/views/Articles/ArticleCategory.html?id=\${item.link}\`" class="menu-link">
+                <a :href="\`/VitalBridge/views/Articles/ArticleCategory.html?id=\${item.link}\`" class="menu-link">
                     {{ item.name }}
                 </a>
                 <button 

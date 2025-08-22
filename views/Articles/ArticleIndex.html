@@ -113,12 +113,12 @@
 
     })(async function () {
       // 1. Fetch and inject HTML
-      const html = await fetch("/views/Articles/ArticleIndexBody.html").then(r => r.text());
+      const html = await fetch("/VitalBridge/views/Articles/ArticleIndexBody.html").then(r => r.text());
       const doc = new DOMParser().parseFromString(html, "text/html");
       document.getElementById("content").innerHTML = doc.body.innerHTML;
 
       // 2. Import JS that depends on the fetched DOM
-      await import("/views/Articles/js/ArticleIndex.js");
+      await import("/VitalBridge/views/Articles/js/ArticleIndex.js");
     });
   </script>
 
