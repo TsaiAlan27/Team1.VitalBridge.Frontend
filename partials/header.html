@@ -101,12 +101,23 @@
                         <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
                     </div>
                     <div id="loginAlert" class="alert d-none" role="alert"></div>
+
+
+
+
+
+
+
+
                     <div class="mb-2 d-none" id="loginResendBox">
                         <button type="button" id="btnResendFromLogin" class="btn btn-sm btn-outline-secondary"
                             disabled>重寄驗證信</button>
                         <small class="text-muted ms-2" id="loginResendHint"></small>
                     </div>
-                    <button type="submit" class="btn btn-primary">登入</button>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">登入</button>
+                    <div class="text-center text-muted mb-2"><small>或使用社群帳號登入</small></div>
+                    <div id="googleSignInBtn" class="d-flex justify-content-center mb-2"></div>
+                    <div class="text-center"><small class="text-muted">首次使用 Google 會自動建立帳號</small></div>
                 </form>
             </div>
         </div>
@@ -173,6 +184,8 @@
 
 <!-- 引入 auth 模組 -->
 <script type="module" src="/assets/js/auth.js"></script>
+<!-- Google 登入模組（依賴 auth.js 與 GSI client） -->
+<script type="module" src="/assets/js/GoogleLogin.js"></script>
 <script>
     $("#notificationDropdown").on("shown.bs.dropdown", async function () {
         try {
@@ -277,3 +290,5 @@
     }
 
 </script>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>

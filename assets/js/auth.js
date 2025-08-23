@@ -184,6 +184,17 @@ function clearAuth() {
     deleteCookie('refreshToken');
 }
 
+// 供第三方登入（Google 等）在取得後端回傳 token 後套用
+export function applyTokenResponse(data, remember = true) {
+    if (!data) return;
+    if (data.accessToken) accessToken = data.accessToken;
+    if (data.refreshToken) {
+        setCookie('refreshToken', data.refreshToken, remember ? 30 : 1);
+    }
+    try { updateHeaderUI(); } catch { }
+    emitAuthChanged('login', { authenticated: true, via: 'social' });
+}
+
 export async function register(dto) {
     // Attach CSRF headers if present
     let headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
@@ -583,7 +594,7 @@ function setupDomHandlers() {
 
 // export default
 export default {
-    login, register, logout, me, apiFetch, resendVerificationEmail
+    login, register, logout, me, apiFetch, resendVerificationEmail, applyTokenResponse
 };
 
 // 暴露給開發者在 Console 使用，方便 debug
@@ -598,6 +609,7 @@ try {
         resendVerificationEmail,
         ensureRefreshed,
         updateHeaderUI,
+        applyTokenResponse,
         getAccessToken: () => accessToken
     });
 } catch (e) {
