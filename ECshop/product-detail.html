@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>商品詳情 - 樂齡商城</title>
+  <meta name="description" content="專為銀髮族設計的健康商城 - 商品詳情">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- 自己想改的樣式放這邊 -->
+  <style>
+    /* 縮圖相關樣式 */
+    .thumbnail-image {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      aspect-ratio: 1 / 1;
+      /* 1:1 比例 */
+      object-fit: cover;
+    }
+
+    .thumbnail-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* 主圖容器 */
+    .main-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      aspect-ratio: 1 / 1;
+      /* 1:1 比例 */
+    }
+
+    /* 銀髮族友善的按鈕樣式 */
+    .btn-lg {
+      font-size: 1.1rem;
+      padding: 12px 24px;
+    }
+
+    /* 數量選擇器樣式 */
+    .input-group input[type="number"] {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    /* 響應式調整 */
+    @media (max-width: 768px) {
+      .thumbnail-container .col-2 {
+        flex: 0 0 auto;
+        width: 16.666667%;
+      }
+    }
+  </style>
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div> <!-- 主導覽 -->
+  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+
+
+  <!-- 修正 main 區塊內的結構 -->
+
+  <main class="main">
+    <div id="product-detail-app">
+      <!-- 成功載入時顯示商品詳情 -->
+      <div class="container mt-4" v-if="!loading && !error && product && Object.keys(product).length > 0">
+        <!-- 麵包屑導航 -->
+        <nav aria-label="breadcrumb" class="mb-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/">首頁</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/VitalBridge/ECshop/category.html">全部商品</a>
+            </li>
+
+            <!-- 動態顯示類別路徑 -->
+            <li v-for="(category, index) in categoryPath" v-if="categoryPath && categoryPath.length > 0"
+              :key="category.id" class="breadcrumb-item">
+
+              <!-- 除了最後一個，其他都要有連結 -->
+              <a v-if="index < categoryPath.length - 1" :href="getCategoryUrl(category)">
+                {{ category.name }}
+              </a>
+              <!-- 最後一個類別有連結（因為還不是商品頁面） -->
+              <a v-else :href="getCategoryUrl(category)">
+                {{ category.name }}
+              </a>
+            </li>
+
+            <!-- 如果沒有類別路徑，顯示基本類別 -->
+            <li
+              v-if="(!categoryPath || categoryPath.length === 0) && product.categories && product.categories.length > 0"
+              class="breadcrumb-item">
+              <a :href="getCategoryUrl(product.categories[0])">
+                {{ product.categories[0].name }}
+              </a>
+            </li>
+
+            <!-- 商品名稱（最終項目，無連結） -->
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ product.name || '商品詳情' }}
+            </li>
+          </ol>
+        </nav>
+
+
+
+
+        <!-- 商品詳情主要區域 -->
+        <div class="row">
+          <!-- 左側：商品圖片區 -->
+          <div class="col-lg-6 col-md-6 mb-4">
+            <!-- 主圖 -->
+            <div class="main-image-container mb-3">
+              <img :src="mainImage" alt="商品主圖" class="img-fluid border rounded shadow-sm" @error="handleImageError">
+            </div>
+
+            <!-- 縮圖列表 -->
+            <div class="thumbnail-container" v-if="product.images && product.images.length > 0">
+              <div class="row">
+                <div v-for="(imageObj, index) in product.images" :key="index" class="col-2 mb-2">
+                  <img :src="getImageUrl(imageObj.fileName)" :alt="`商品圖片 ${index + 1}`"
+                    class="img-fluid border rounded cursor-pointer thumbnail-image"
+                    :class="{ 'border-primary border-3': mainImage === getImageUrl(imageObj.fileName) }"
+                    @click="changeMainImage(getImageUrl(imageObj.fileName))" @error="handleImageError"
+                    style="height: 60px; object-fit: cover;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側：商品資訊區 -->
+          <div class="col-lg-6 col-md-6">
+            <!-- 商品名稱 -->
+            <h1 class="h3 mb-3 fw-bold">{{ product.name }}</h1>
+
+            <!-- 商品重點特色 -->
+            <div v-if="product.keypoint" class="mb-3">
+              <p class="text-muted fs-6 mb-0">{{ product.keypoint }}</p>
+            </div>
+
+            <!-- 價格 -->
+            <div class="mb-4">
+              <span class="h2 text-danger fw-bold">NT$ {{ formatPrice(product.price) }}</span>
+              <span v-if="product.originalPrice && product.originalPrice > product.price"
+                class="text-muted text-decoration-line-through ms-2">
+                NT$ {{ formatPrice(product.originalPrice) }}
+              </span>
+            </div>
+
+            <!-- 數量選擇器 -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">數量：</label>
+              <div class="input-group" style="width: 150px;">
+                <button class="btn btn-outline-secondary" type="button" @click="decreaseQuantity">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input type="number" class="form-control text-center" v-model.number="quantity" min="1" max="99">
+                <button class="btn btn-outline-secondary" type="button" @click="increaseQuantity">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- 操作按鈕 -->
+            <div class="d-grid gap-2 d-md-flex">
+              <button class="btn btn-primary btn-lg flex-fill me-md-2" @click="addToCart" :disabled="loading">
+                <i class="bi bi-cart-plus me-2"></i>
+                加入購物車
+              </button>
+              <button class="btn btn-outline-secondary btn-lg" @click="toggleFavorite(product.id)">
+                <i class="bi bi-heart-fill" :class="{ 'text-danger': isFavorite(product.id) }"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 載入中畫面 -->
+      <div v-else-if="loading" class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">載入中...</span>
+            </div>
+            <p class="mt-3">載入商品資訊中...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 錯誤畫面 -->
+      <div v-else-if="error" class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-md-8 text-center">
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <strong>載入失敗</strong>
+              <p class="mb-0 mt-2">{{ error }}</p>
+            </div>
+            <button class="btn btn-primary mt-3" @click="loadProductDetail">
+              <i class="bi bi-arrow-clockwise me-2"></i>
+              重新載入
+            </button>
+            <a href="/ECshop/category.html" class="btn btn-outline-secondary mt-3 ms-2">
+              <i class="bi bi-grid-fill me-2"></i>
+              瀏覽商品
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { // data 就是Model
+            return {
+              productId: null,
+              product: {},
+              productNote: {},
+              categoryPath: [], // 新增：類別路徑
+              mainImage: '',
+              quantity: 1,
+              activeTab: 'content',
+              loading: true,
+              error: null,
+              baseApiUrl: 'https://localhost:7104',
+              favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
+            };
+          },
+          mounted() {
+            console.log('=== Product detail Vue mounted ===');
+            console.log('當前時間:', new Date().toLocaleString());
+
+            this.getProductIdFromUrl();
+
+            console.log('檢查 productId:', this.productId);
+            console.log('productId 類型:', typeof this.productId);
+            console.log('productId > 0:', this.productId > 0);
+
+            if (this.productId && this.productId > 0 && !isNaN(this.productId)) {
+              console.log('✅ 準備載入商品ID:', this.productId);
+              this.loadProductDetail();
+            } else {
+              console.error('❌ 商品ID無效:', this.productId);
+              this.error = `無法取得有效的商品ID。解析結果: ${this.productId}`;
+              this.loading = false;
+            }
+          },
+          methods: { // methods 就是Controller
+
+
+            // 從 URL 取得商品 ID
+            getProductIdFromUrl() {
+              console.log('=== URL 參數解析開始 ===');
+              console.log('完整 URL:', window.location.href);
+              console.log('pathname:', window.location.pathname);
+              console.log('search:', window.location.search);
+              console.log('hash:', window.location.hash);
+
+              const urlParams = new URLSearchParams(window.location.search);
+
+              // 列出所有參數
+              console.log('所有 URL 參數:');
+              for (const [key, value] of urlParams) {
+                console.log(`  ${key}: ${value}`);
+              }
+
+              const id = urlParams.get('id');
+              console.log('取得的 id 值:', id);
+              console.log('id 的類型:', typeof id);
+
+              if (id && id.trim() !== '') {
+                this.productId = parseInt(id, 10);
+                console.log('轉換後的商品ID:', this.productId);
+                console.log('轉換後是否為數字:', !isNaN(this.productId));
+              } else {
+                console.error('❌ 無法取得有效的 id 參數');
+                this.productId = null;
+              }
+
+              console.log('=== URL 參數解析結束 ===');
+            },
+            // 生成類別頁面的 URL（處理不同格式的 category 物件）
+            // 生成類別頁面的 URL（處理不同格式的 category 物件）
+            getCategoryUrl(category) {
+              if (!category) {
+                return '/VitalBridge/ECshop/category.html';
+              }
+
+              // 處理不同的 category 物件格式
+              const categoryId = category.id || category.Id;
+              const categoryName = category.name || category.Name;
+
+              if (!categoryId) {
+                return '/VitalBridge/ECshop/category.html';
+              }
+
+              // 使用實際的 URL 格式：categoryId + name（URL編碼）
+              const encodedName = encodeURIComponent(categoryName || '');
+              return `/VitalBridge/ECshop/category.html?categoryId=${categoryId}&name=${encodedName}`;
+            },
+            async loadCategoryPath(categoryId) {
+              try {
+                console.log(`正在載入類別路徑: ${categoryId}`);
+
+                const response = await fetch(`${this.baseApiUrl}/api/CategoryApi/Path/${categoryId}`);
+
+                if (response.ok) {
+                  const result = await response.json();
+                  console.log('類別路徑 API 回傳:', result);
+
+                  if (result.isSuccess && result.data && result.data.categoryPath) {
+                    this.categoryPath = result.data.categoryPath;
+                    console.log('✅ 類別路徑載入成功:', this.categoryPath);
+                  } else {
+                    console.warn('類別路徑 API 回傳格式異常:', result);
+                  }
+                } else {
+                  console.warn('類別路徑 API 呼叫失敗:', response.status);
+                }
+
+              } catch (error) {
+                console.warn('載入類別路徑失敗:', error);
+                // 不影響主要功能，只是沒有完整的麵包屑
+              }
+            },
+
+
+            // 載入商品詳情
+            async loadProductDetail() {
+              try {
+                this.loading = true;
+                this.error = null;
+
+                console.log(`正在載入商品 ID: ${this.productId}`);
+
+                const response = await fetch(`${this.baseApiUrl}/api/ProductsApi/Product/${this.productId}`);
+
+                if (!response.ok) {
+                  throw new Error(`API 呼叫失敗: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('=== API 回傳完整資料 ===');
+                console.log('完整回應:', data);
+
+                // 檢查 API 回傳格式
+                if (data.isSuccess !== undefined) {
+                  if (data.isSuccess) {
+                    this.product = data.data.product;
+                    this.productNote = data.data.productNote;
+                  } else {
+                    this.error = data.message || '載入商品資料失敗';
+                    return;
+                  }
+                } else if (data.product) {
+                  this.product = data.product;
+                  this.productNote = data.productNote;
+                } else {
+                  console.error('❌ 未知的 API 回傳格式:', data);
+                  this.error = '無法解析 API 回傳資料格式';
+                  return;
+                }
+
+                console.log('✅ 商品資料載入成功');
+                console.log('商品類別:', this.product.categories);
+
+                // 載入類別路徑
+                if (this.product.categories && this.product.categories.length > 0) {
+                  await this.loadCategoryPath(this.product.categories[0].id);
+                }
+
+                // 設定主圖
+                if (this.product.images && this.product.images.length > 0) {
+                  this.mainImage = this.getImageUrl(this.product.images[0].fileName);
+                  this.preloadImages();
+                } else {
+                  this.mainImage = this.getImageUrl(null);
+                }
+
+                console.log('✅ 商品資料載入完成');
+
+              } catch (error) {
+                console.error('❌ API 呼叫錯誤:', error);
+                if (error.message.includes('Failed to fetch')) {
+                  this.error = `無法連接到後端服務器 (${this.baseApiUrl})`;
+                } else {
+                  this.error = `載入失敗: ${error.message}`;
+                }
+              } finally {
+                this.loading = false;
+              }
+            },
+            // 取得圖片 URL
+            // 修正 getImageUrl 方法，加入除錯
+            getImageUrl(fileName) {
+              if (!fileName) {
+                return '/assets/img/default-product.jpg';
+              }
+              return `https://localhost:7184/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+            },
+            // 新增預載入圖片方法
+            preloadImages() {
+              console.log('開始預載入圖片...');
+              if (this.product.images && this.product.images.length > 0) {
+                this.product.images.forEach((imageObj, index) => {
+                  const img = new Image();
+                  img.onload = () => {
+                    console.log(`圖片 ${index + 1} 預載入完成:`, imageObj.fileName);
+                  };
+                  img.onerror = () => {
+                    console.error(`圖片 ${index + 1} 預載入失敗:`, imageObj.fileName);
+                  };
+                  img.src = this.getImageUrl(imageObj.fileName);
+                });
+              }
+            },
+
+            // 圖片載入錯誤處理
+            handleImageError(event) {
+              event.target.src = '/assets/img/default-product.jpg';
+            },
+
+            // 切換主圖
+            changeMainImage(imageUrl) {
+              console.log('=== 切換主圖 ===');
+              console.log('點擊的圖片 URL:', imageUrl);
+
+              // 直接切換，移除不必要的 console.log
+              this.mainImage = imageUrl;
+            },
+
+            // 增加數量
+            increaseQuantity() {
+              if (this.quantity < 99) {
+                this.quantity++;
+              }
+            },
+            // 減少數量
+            decreaseQuantity() {
+              if (this.quantity > 1) {
+                this.quantity--;
+              }
+            },
+
+            // 格式化價格
+            formatPrice(price) {
+              if (!price) return '0';
+              return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            },
+            // 加入購物車
+            async addToCart() {
+              if (this.loading) return;
+
+              try {
+                const cartItem = {
+                  productId: this.product.id,
+                  productName: this.product.name,
+                  price: this.product.price,
+                  quantity: this.quantity,
+                  image: this.product.images && this.product.images.length > 0
+                    ? this.product.images[0].fileName
+                    : null
+                };
+
+                console.log('加入購物車:', cartItem);
+                alert(`已將 ${this.quantity} 件「${this.product.name}」加入購物車！`);
+
+              } catch (error) {
+                console.error('加入購物車失敗:', error);
+                alert('加入購物車時發生錯誤，請稍後再試');
+              }
+            },
+            // 切換我的最愛
+            toggleFavorite(productId) {
+              const index = this.favorites.indexOf(productId);
+              if (index > -1) {
+                this.favorites.splice(index, 1);
+              } else {
+                this.favorites.push(productId);
+              }
+              localStorage.setItem('vitalbridge_favorites', JSON.stringify(this.favorites));
+            },
+            // 檢查是否為我的最愛
+            isFavorite(productId) {
+              return this.favorites.includes(productId);
+            },
+            // 檢查登入狀態
+            checkLoginStatus() {
+              return false; // 暫時回傳 false
+            }
+          },
+        }).mount('#product-detail-app');
+        // Vue 實例掛載成功
+        console.log(" Product detail Vue mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>
