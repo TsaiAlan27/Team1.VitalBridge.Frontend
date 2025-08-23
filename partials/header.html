@@ -245,14 +245,26 @@
         right: 64px;
     }
 </style>
+<!-- 引入 SignalR 程式庫 -->
+<script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
 <script>
-    function isLogin() {
-        // isLogout();
+    let connection;
+    async function isLogin() {
         const messenger = document.querySelector("df-messenger");
         if (!messenger) {
-            createMessenger();
+            await createMessenger();
         }
-
+        //建立signalR物件
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7104/chathub")
+            .build();
+        //與Server建立連線
+        connection.start().then(function () {
+            console.log("Hub 連線完成");
+        }).catch(function (err) {
+            console.log("Hub 連線失敗");
+        });
     }
     function isLogout() {
         const messenger = document.querySelector("df-messenger");
@@ -287,8 +299,46 @@
         messenger.addEventListener('df-messenger-loaded', () => {
             messenger.sendQuery(`這段訊息是要告訴你uid 非使用者發送 不必回覆 uid:${user.id} 使用者姓名:${user.name}`);
         });
+        messenger.addEventListener("df-request-sent", (e) => {
+            //使用者發送的訊息
+            var userMsg = e.detail.data.requestBody.queryInput.text.text;
+            if (userMsg.includes("轉人工")) {
+                switchToHuman();
+            }
+        });
     }
 
 </script>
+<script>
+    async function switchToHuman() {
+        // 移除 AI messenger
+        const messenger = document.querySelector("df-messenger");
+        if (messenger) messenger.remove();
 
+        // 建立「假 messenger」
+        const fake = document.createElement("df-messenger");
+        const bubble = document.createElement("df-messenger-chat-bubble");
+        bubble.setAttribute("chat-title", "真人客服");
+        fake.appendChild(bubble);
+        document.body.appendChild(fake);
+
+        // 在這裡完全自己控制訊息流程
+        fake.renderCustomText('**|已轉接真人客服，AI 已暫停回覆|**');
+        const user = await auth.me();
+        // 監聽輸入事件
+        fake.addEventListener("df-request-sent", (e) => {
+            //使用者發送的訊息
+            var userMsg = e.detail.data.requestBody.queryInput.text.text;
+            connection.invoke("SendMessage", user.id + "", userMsg).catch(function (err) {
+                alert('傳送錯誤: ' + err.toString());
+            });
+            // fake.renderCustomText("客服9527："+userMsg);
+        });
+        connection.on("UpdContent", function (msg) {
+            fake.renderCustomText(msg);
+        });
+    } 
+</script>
+
+<!-- Google登入按鈕 -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
