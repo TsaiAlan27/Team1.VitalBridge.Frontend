@@ -36,7 +36,7 @@
       transition: all 0.3s ease;
       aspect-ratio: 1 / 1;
       /* 1:1 比例 */
-      object-fit: cover;
+      object-fit: contain;
     }
 
     .thumbnail-image:hover {
@@ -51,6 +51,15 @@
       border-radius: 8px;
       aspect-ratio: 1 / 1;
       /* 1:1 比例 */
+      background-color: #f8f9fa;
+      /* 可選：加個淡灰色背景，讓留白區域更明顯 */
+    }
+
+    .main-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     /* 銀髮族友善的按鈕樣式 */
@@ -64,6 +73,62 @@
       font-size: 1.1rem;
       font-weight: 500;
     }
+
+    /* 🔥 新增：修正頁籤顯示問題 */
+    .tab-pane {
+      min-height: 200px;
+      display: block !important;
+      opacity: 1;
+    }
+
+    /* 確保頁籤內容文字可見 */
+    .card-body {
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* 確保描述內容正確顯示 */
+    .product-description,
+    .delivery-info,
+    .shopping-notice {
+      color: #333;
+      line-height: 1.8;
+    }
+
+    /* 格式化後的換行內容樣式 */
+    .product-description p,
+    .delivery-info p,
+    .shopping-notice p {
+      margin-bottom: 1rem;
+    }
+
+    /* 頁籤按鈕樣式優化 */
+    .nav-tabs .nav-link {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #0d6efd;
+      font-weight: 600;
+    }
+
+    /* 🔥 新增：商品貨號樣式 */
+    .product-item-number {
+      font-size: 0.9rem;
+      color: #aeb2b6;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .product-item-number .fw-semibold {
+      color: #aeb2b6;
+
+      letter-spacing: 0.5px;
+    }
+
+
+
 
     /* 響應式調整 */
     @media (max-width: 768px) {
@@ -138,18 +203,19 @@
           <div class="col-lg-6 col-md-6 mb-4">
             <!-- 主圖 -->
             <div class="main-image-container mb-3">
-              <img :src="mainImage" alt="商品主圖" class="img-fluid border rounded shadow-sm" @error="handleImageError">
+              <img v-bind:src="mainImage" alt="商品主圖" class="img-fluid border rounded shadow-sm"
+                v-on:error="handleImageError">
             </div>
 
             <!-- 縮圖列表 -->
             <div class="thumbnail-container" v-if="product.images && product.images.length > 0">
               <div class="row">
                 <div v-for="(imageObj, index) in product.images" :key="index" class="col-2 mb-2">
-                  <img :src="getImageUrl(imageObj.fileName)" :alt="`商品圖片 ${index + 1}`"
+                  <img v-bind:src="getImageUrl(imageObj.fileName)" v-bind:alt="`商品圖片 ${index + 1}`"
                     class="img-fluid border rounded cursor-pointer thumbnail-image"
-                    :class="{ 'border-primary border-3': mainImage === getImageUrl(imageObj.fileName) }"
-                    @click="changeMainImage(getImageUrl(imageObj.fileName))" @error="handleImageError"
-                    style="height: 60px; object-fit: cover;">
+                    v-bind:class="{ 'border-primary border-3': mainImage === getImageUrl(imageObj.fileName) }"
+                    v-on:click="changeMainImage(getImageUrl(imageObj.fileName))" v-on:error="handleImageError"
+                    style="height: 60px; object-fit:  contain;">
                 </div>
               </div>
             </div>
@@ -159,6 +225,15 @@
           <div class="col-lg-6 col-md-6">
             <!-- 商品名稱 -->
             <h1 class="h3 mb-3 fw-bold">{{ product.name }}</h1>
+
+            <!-- 🔥 新增：商品貨號 -->
+            <div v-if="product.itemNumber" class="mb-3">
+              <span class="product-item-number">
+                <i class="bi bi-tag-fill text-secondary me-1"></i>
+                <span class="text-secondary">貨號：</span>
+                <span class="fw-semibold">{{ product.itemNumber }}</span>
+              </span>
+            </div>
 
             <!-- 商品重點特色 -->
             <div v-if="product.keypoint" class="mb-3">
@@ -178,11 +253,11 @@
             <div class="mb-4">
               <label class="form-label fw-semibold">數量：</label>
               <div class="input-group" style="width: 150px;">
-                <button class="btn btn-outline-secondary" type="button" @click="decreaseQuantity">
+                <button class="btn btn-outline-secondary" type="button" v-on:click="decreaseQuantity">
                   <i class="bi bi-dash"></i>
                 </button>
                 <input type="number" class="form-control text-center" v-model.number="quantity" min="1" max="99">
-                <button class="btn btn-outline-secondary" type="button" @click="increaseQuantity">
+                <button class="btn btn-outline-secondary" type="button" v-on:click="increaseQuantity">
                   <i class="bi bi-plus"></i>
                 </button>
               </div>
@@ -190,17 +265,132 @@
 
             <!-- 操作按鈕 -->
             <div class="d-grid gap-2 d-md-flex">
-              <button class="btn btn-primary btn-lg flex-fill me-md-2" @click="addToCart" :disabled="loading">
+              <button class="btn btn-primary btn-lg flex-fill me-md-2" v-on:click="addToCart" :disabled="loading">
                 <i class="bi bi-cart-plus me-2"></i>
                 加入購物車
               </button>
-              <button class="btn btn-outline-secondary btn-lg" @click="toggleFavorite(product.id)">
+              <button class="btn btn-outline-secondary btn-lg" v-on:click="toggleFavorite(product.id)">
                 <i class="bi bi-heart-fill" :class="{ 'text-danger': isFavorite(product.id) }"></i>
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="container mt-5" v-if="!loading && !error && product && Object.keys(product).length > 0">
+        <div class="row">
+          <div class="col-12">
+            <!-- 頁籤導航 -->
+            <ul class="nav nav-tabs mb-4" id="productTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" v-bind:class="{ active: activeTab === 'content' }"
+                  v-on:click="switchTab('content')" type="button">
+                  <i class="bi bi-file-text me-2"></i>
+                  商品內容
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" v-bind:class="{ active: activeTab === 'delivery' }"
+                  v-on:click="switchTab('delivery')" type="button">
+                  <i class="bi bi-truck me-2"></i>
+                  送貨及付款方式
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" v-bind:class="{ active: activeTab === 'notice' }"
+                  v-on:click="switchTab('notice')" type="button">
+                  <i class="bi bi-info-circle me-2"></i>
+                  購物須知
+                </button>
+              </li>
+            </ul>
+
+            <!-- 頁籤內容 -->
+            <div class="tab-content">
+              <!-- 商品內容頁籤 -->
+              <div v-if="activeTab === 'content'" class="tab-pane">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body p-4">
+                    <!-- <h5 class="card-title mb-3">
+                      <i class="bi bi-file-text text-primary me-2"></i>
+                      商品詳細說明
+                    </h5> -->
+                    <div class="product-description">
+                      <!-- 使用 v-html 來顯示HTML格式的商品描述 -->
+                      <div v-if="product.productDescription" v-html="formatDescription(product.productDescription)">
+                      </div>
+                      <!-- <p v-else class="text-muted">暫無商品詳細說明</p> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 送貨及付款方式頁籤 -->
+              <div v-if="activeTab === 'delivery'" class="tab-pane">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body p-4">
+                    <!-- <h5 class="card-title mb-3">
+                      <i class="bi bi-truck text-success me-2"></i>
+                      送貨及付款方式
+                    </h5> -->
+                    <div class="delivery-info">
+                      <div v-if="productNote && productNote.deliveryAndPayMethod"
+                        v-html="formatDescription(productNote.deliveryAndPayMethod)"></div>
+                      <!-- <div v-else class="text-muted">
+                        <p>📦 <strong>送貨方式：</strong></p>
+                        <ul>
+                          <li>宅配到府（免運費滿1000元）</li>
+                          <li>超商取貨（7-11、全家、萊爾富）</li>
+                        </ul>
+                        <p>💳 <strong>付款方式：</strong></p>
+                        <ul>
+                          <li>線上刷卡</li>
+                          <li>ATM轉帳</li>
+                          <li>超商付款</li>
+                          <li>貨到付款</li>
+                        </ul>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 購物須知頁籤 -->
+              <div v-if="activeTab === 'notice'" class="tab-pane">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body p-4">
+                    <!-- <h5 class="card-title mb-3">
+                      <i class="bi bi-info-circle text-warning me-2"></i>
+                      購物須知
+                    </h5> -->
+                    <div class="shopping-notice">
+                      <div v-if="productNote && productNote.shoppNote"
+                        v-html="formatDescription(productNote.shoppNote)"></div>
+                      <!-- <div v-else class="text-muted">
+                        <h6>⚠️ 注意事項：</h6>
+                        <ul>
+                          <li>商品照片僅供參考，實際商品以出貨為準</li>
+                          <li>保存期限標示於商品包裝上</li>
+                          <li>請置於陰涼乾燥處保存，避免陽光直射</li>
+                          <li>開封後請儘速食用完畢</li>
+                        </ul>
+                        <h6>🔄 退換貨政策：</h6>
+                        <ul>
+                          <li>商品到貨享7天鑑賞期（非試用期）</li>
+                          <li>退貨商品必須是全新未使用狀態</li>
+                          <li>個人衛生用品恕不接受退換貨</li>
+                        </ul>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <!-- 載入中畫面 -->
       <div v-else-if="loading" class="container mt-5">
@@ -223,11 +413,11 @@
               <strong>載入失敗</strong>
               <p class="mb-0 mt-2">{{ error }}</p>
             </div>
-            <button class="btn btn-primary mt-3" @click="loadProductDetail">
+            <button class="btn btn-primary mt-3" v-on:click="loadProductDetail">
               <i class="bi bi-arrow-clockwise me-2"></i>
               重新載入
             </button>
-            <a href="/ECshop/category.html" class="btn btn-outline-secondary mt-3 ms-2">
+            <a href="/VitalBridge/ECshop/category.html" class="btn btn-outline-secondary mt-3 ms-2">
               <i class="bi bi-grid-fill me-2"></i>
               瀏覽商品
             </a>
@@ -382,32 +572,6 @@
               const encodedName = encodeURIComponent(categoryName || '');
               return `/VitalBridge/ECshop/category.html?categoryId=${categoryId}&name=${encodedName}`;
             },
-            async loadCategoryPath(categoryId) {
-              try {
-                console.log(`正在載入類別路徑: ${categoryId}`);
-
-                const response = await fetch(`${this.baseApiUrl}/api/CategoryApi/Path/${categoryId}`);
-
-                if (response.ok) {
-                  const result = await response.json();
-                  console.log('類別路徑 API 回傳:', result);
-
-                  if (result.isSuccess && result.data && result.data.categoryPath) {
-                    this.categoryPath = result.data.categoryPath;
-                    console.log('✅ 類別路徑載入成功:', this.categoryPath);
-                  } else {
-                    console.warn('類別路徑 API 回傳格式異常:', result);
-                  }
-                } else {
-                  console.warn('類別路徑 API 呼叫失敗:', response.status);
-                }
-
-              } catch (error) {
-                console.warn('載入類別路徑失敗:', error);
-                // 不影響主要功能，只是沒有完整的麵包屑
-              }
-            },
-
 
             // 載入商品詳情
             async loadProductDetail() {
@@ -424,34 +588,38 @@
                 }
 
                 const data = await response.json();
+                this.product = data.product;
+                this.productNote = data.productNote;
+                // 🔥 新增：直接從 API 資料建立類別路徑
+                this.buildCategoryPathFromProduct();
                 console.log('=== API 回傳完整資料 ===');
                 console.log('完整回應:', data);
 
-                // 檢查 API 回傳格式
-                if (data.isSuccess !== undefined) {
-                  if (data.isSuccess) {
-                    this.product = data.data.product;
-                    this.productNote = data.data.productNote;
-                  } else {
-                    this.error = data.message || '載入商品資料失敗';
-                    return;
-                  }
-                } else if (data.product) {
-                  this.product = data.product;
-                  this.productNote = data.productNote;
-                } else {
-                  console.error('❌ 未知的 API 回傳格式:', data);
-                  this.error = '無法解析 API 回傳資料格式';
-                  return;
-                }
+                // // 檢查 API 回傳格式
+                // if (data.isSuccess !== undefined) {
+                //   if (data.isSuccess) {
+                //     this.product = data.data.product;
+                //     this.productNote = data.data.productNote;
+                //   } else {
+                //     this.error = data.message || '載入商品資料失敗';
+                //     return;
+                //   }
+                // } else if (data.product) {
+                //   this.product = data.product;
+                //   this.productNote = data.productNote;
+                // } else {
+                //   console.error('❌ 未知的 API 回傳格式:', data);
+                //   this.error = '無法解析 API 回傳資料格式';
+                //   return;
+                // }
 
-                console.log('✅ 商品資料載入成功');
-                console.log('商品類別:', this.product.categories);
+                // console.log('✅ 商品資料載入成功');
+                // console.log('商品類別:', this.product.categories);
 
-                // 載入類別路徑
-                if (this.product.categories && this.product.categories.length > 0) {
-                  await this.loadCategoryPath(this.product.categories[0].id);
-                }
+                // // 載入類別路徑
+                // if (this.product.categories && this.product.categories.length > 0) {
+                //   await this.loadCategoryPath(this.product.categories[0].id);
+                // }
 
                 // 設定主圖
                 if (this.product.images && this.product.images.length > 0) {
@@ -464,7 +632,7 @@
                 console.log('✅ 商品資料載入完成');
 
               } catch (error) {
-                console.error('❌ API 呼叫錯誤:', error);
+                console.error(' API 呼叫錯誤:', error);
                 if (error.message.includes('Failed to fetch')) {
                   this.error = `無法連接到後端服務器 (${this.baseApiUrl})`;
                 } else {
@@ -474,6 +642,34 @@
                 this.loading = false;
               }
             },
+
+            // 🔥 新增：從商品資料建立類別路徑的方法
+            buildCategoryPathFromProduct() {
+              if (!this.product.categories || this.product.categories.length === 0) {
+                this.categoryPath = [];
+                return;// 如果沒有類別，則清空類別路徑
+              }
+              // 取第一個類別（已經按ID排序）
+              const mainCategory = this.product.categories[0];
+              // 建立類別路徑陣列
+              this.categoryPath = [];
+              // 如果有父類別，先加入父類別
+              if (mainCategory.fatherId && mainCategory.fatherName) {
+                this.categoryPath.push({
+                  id: mainCategory.fatherId,
+                  name: mainCategory.fatherName
+                });
+              }
+              // 再加入當前類別
+              this.categoryPath.push({
+                id: mainCategory.id,
+                name: mainCategory.name
+              });
+              console.log('✅ 類別路徑建立完成:', this.categoryPath);
+
+            },
+
+
             // 取得圖片 URL
             // 修正 getImageUrl 方法，加入除錯
             getImageUrl(fileName) {
@@ -571,7 +767,19 @@
             // 檢查登入狀態
             checkLoginStatus() {
               return false; // 暫時回傳 false
-            }
+            },
+            switchTab: function (tab) {
+              this.activeTab = tab;
+              console.log('切換到頁籤:', tab);
+            },
+            // 格式化描述文字
+            formatDescription: function (text) {
+              if (!text) return '';
+              // 先處理 \r\n，再處理單獨的 \n
+              return text.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+            },
+
+
           },
         }).mount('#product-detail-app');
         // Vue 實例掛載成功
