@@ -294,34 +294,206 @@
         createApp({
           data() { // data 就是Model
             return {
-              pageTitle: "樂齡商城",
-              pageDescription: "測試購物導覽列是否正常載入",
-              cartItemCount: 0,        // 購物車數量
-              loading: false,          // 載入狀態
-              searchKeyword: ''        // 搜尋關鍵字
+              // 購物車資料
+              cartItems: [],
+              loading: false,
+              error: null,
+
+              // 狀態管理
+              updating: false
+
             };
           },
-          methods: { // methods 就是Controller
-            test: function () {
-              alert("測試成功!\n測試按鈕被點擊了");
+          // computed 是Vue裡面的計算屬性
+          computed: {
+            // 計算總數量
+            totalQuantity() {
+              return this.cartItems.reduce((total, item) => total + item.quantity, 0);
             },
-            // 電商共用方法-價格格式化
+
+            // 計算總金額
+            totalAmount() {
+              return this.cartItems.reduce((total, item) => total + item.subtotal, 0);
+            }
+          },
+          mounted() {
+            console.log('Cart Vue mounted');
+            this.loadCart();
+          },
+
+          methods: { // methods 就是Controller
+            // 載入購物車
+            async loadCart() {
+              this.loading = true;
+              this.error = null;
+              try {
+                const response = await window.auth.apiFetch('/api/CartApi', {
+                  method: 'GET'
+                });
+                if (!response.ok) {
+                  throw new Error('無法載入購物車');
+                }
+                const data = await response.json();
+                this.cartItems = data.items || [];
+
+                console.log('購物車載入成功:', data);
+
+                // 更新導覽列數量
+                this.updateCartCount();
+              }
+              catch (error) {
+                console.error('載入購物車失敗', error);
+                this.error = '載入購物車失敗，請稍後再試。';
+                // 檢查是否為登入問題
+                if (error.message.includes('401') || error.message.includes('登入')) {
+                  alert('請先登入會員');
+                  window.location.href = '/VitalBridge/index.html';
+                }
+              } finally {
+                this.loading = false;
+              }
+
+            }
+            ,
+            // 更新商品數量
+            async updateQuantity(item, newQuantity) {
+              // 基本驗證
+              if (newQuantity < 1 || newQuantity > 20) {
+                alert('數量必須在 1-20 之間');
+                return;
+              }
+              if (newQuantity > item.stock) {
+                alert(`庫存不足，目前庫存：${item.stock}`);
+                return;
+              }
+              // 避免重複更新
+              if (this.updating) return;
+              this.updating = true;
+
+              try {
+                const response = await window.auth.apiFetch('/api/CartApi/UpdateQuantity', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' }, // 設定請求標頭
+                  body: JSON.stringify({
+                    productId: item.id, // 商品ID
+                    quantity: newQuantity // 新的數量
+                  })
+                });
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  throw new Error(errorText || '更新失敗');
+                }
+
+                // 更新本地資料
+                item.quantity = newQuantity;
+                item.subtotal = newQuantity * item.unitPrice;
+
+                console.log('數量更新成功');
+
+                // 更新導覽列數量
+                this.updateCartCount();
+
+
+              } catch (error) {
+
+                console.error('更新數量失敗:', error);
+                alert(error.message || '更新數量失敗');
+
+                // 重新載入購物車以確保資料一致性
+                this.loadCart();
+
+              }
+              finally {
+                this.updating = false;
+              }
+            },
+
+            // 移除商品
+            async removeItem(item) {
+              if (!confirm(`確定要移除「${item.productName}」嗎？`)) {
+                return;
+              }
+
+              try {
+                const response = await window.auth.apiFetch(`/api/CartApi/RemoveItem/${item.id}`, {
+                  method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                  throw new Error('移除失敗');
+                }
+
+                // 從本地陣列移除
+                const index = this.cartItems.findIndex(ci => ci.id === item.id);
+                if (index > -1) {
+                  this.cartItems.splice(index, 1);
+                }
+
+                console.log('商品移除成功');
+
+                // 更新導覽列數量
+                this.updateCartCount();
+
+
+              } catch (error) {
+                console.error('移除商品失敗:', error);
+                alert('移除商品失敗');
+              }
+
+            },
+            // 前往結帳
+            goToCheckout() {
+              if (this.cartItems.length === 0) {
+                alert('購物車是空的');
+                return;
+              }
+              // 檢查是否有庫存不足的商品
+              const outOfStock = this.cartItems.filter(item => item.quantity > item.stock);
+              if (outOfStock.length > 0) {
+                alert('部分商品庫存不足，請調整數量後再結帳');
+                return;
+              }
+              // 前往結帳頁面
+              window.location.href = '/VitalBridge/ECshop/checkout.html';
+            }
+            ,
+            // 更新導覽列購物車數量
+            async updateCartCount() {
+              try {
+                const response = await window.auth.apiFetch('/api/CartApi/Count', {
+                  method: 'GET'
+                });
+                if (response.ok) {
+                  const count = await response.json();
+                  const cartCountElement = document.getElementById('cart-count');
+                  if (cartCountElement) {
+                    cartCountElement.textContent = count || 0;
+                  }
+                }
+
+
+              } catch (error) {
+                console.error('更新購物車數量失敗:', error);
+              }
+            },
+
+            // 取得圖片 URL
+            getImageUrl(fileName) {
+              if (!fileName) return '/assets/img/default-product.jpg';
+              return `https://localhost:7184/api/UploadFile/GetFile/${encodeURIComponent(fileName)}`;
+            },
+            // 圖片載入錯誤處理
+            handleImageError(event) {
+              event.target.src = '/assets/img/default-product.jpg';
+            },
+            // 價格格式化
             formatPrice(price) {
               if (!price) return '0';
               return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            },
-            // 電商共用方法-加入購物車
-            addToCart(product) {
-              this.cartItemCount += 1;
-              console.log('加入購物車:', product);
             }
           }
-
-
         },
           // methods: { ... }, mounted() { ... } 等可在此加入
-
-          shop - a
         ).mount('#cart-app');
         console.log(" Vue EC mount 成功！");
       }
