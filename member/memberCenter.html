@@ -28,11 +28,16 @@
                 <!-- 側邊導覽（純功能，不含頭像空間） -->
                 <aside class="col-lg-3 col-xl-2 member-sidebar mb-3 mb-lg-0">
                     <nav class="nav flex-lg-column nav-pills gap-2 w-100" id="memberTab" role="tablist">
-                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pane-dashboard" type="button" role="tab">概覽</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-profile" type="button" role="tab">個人資料</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-orders" type="button" role="tab">訂單 / 紀錄</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-notify" type="button" role="tab">通知中心</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-faq" type="button" role="tab">常見問題</button>
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pane-dashboard"
+                            type="button" role="tab">概覽</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-profile" type="button"
+                            role="tab">個人資料</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-orders" type="button"
+                            role="tab">訂單 / 紀錄</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-notify" type="button"
+                            role="tab">通知中心</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-faq" type="button"
+                            role="tab">常見問題</button>
                     </nav>
                 </aside>
                 <!-- 主內容 -->
@@ -68,19 +73,22 @@
                         <div class="tab-pane fade show active" id="pane-dashboard" role="tabpanel">
                             <div class="dashboard-quick-actions mb-4">
                                 <div class="quick-actions-grid" id="quickActions">
-                                    <div class="quick-action-card qa-profile" data-bs-toggle="pill" data-bs-target="#pane-profile" role="button" tabindex="0" aria-label="前往個人資料">
+                                    <div class="quick-action-card qa-profile" data-bs-toggle="pill"
+                                        data-bs-target="#pane-profile" role="button" tabindex="0" aria-label="前往個人資料">
                                         <div class="qa-icon"><i class="bi bi-person-lines-fill"></i></div>
                                         <p class="qa-title">個人資料</p>
                                         <p class="qa-value" id="qaProfilePercent">--%</p>
                                         <div class="qa-meta">完整度</div>
                                     </div>
-                                    <div class="quick-action-card qa-orders" data-bs-toggle="pill" data-bs-target="#pane-orders" role="button" tabindex="0" aria-label="前往訂單紀錄">
+                                    <div class="quick-action-card qa-orders" data-bs-toggle="pill"
+                                        data-bs-target="#pane-orders" role="button" tabindex="0" aria-label="前往訂單紀錄">
                                         <div class="qa-icon"><i class="bi bi-bag-check"></i></div>
                                         <p class="qa-title">訂單</p>
                                         <p class="qa-value" id="qaOrdersCount">--</p>
                                         <div class="qa-meta">筆數</div>
                                     </div>
-                                    <div class="quick-action-card qa-notify" data-bs-toggle="pill" data-bs-target="#pane-notify" role="button" tabindex="0" aria-label="前往通知中心">
+                                    <div class="quick-action-card qa-notify" data-bs-toggle="pill"
+                                        data-bs-target="#pane-notify" role="button" tabindex="0" aria-label="前往通知中心">
                                         <div class="qa-icon"><i class="bi bi-bell"></i></div>
                                         <p class="qa-title">通知</p>
                                         <p class="qa-value" id="qaNotifyUnread">--</p>
@@ -260,37 +268,37 @@
             $('#orderFilter').on('change', function () { loadOrders(); });
         }
 
-        function extractRoles(user){
-            if(!user || typeof user!=='object') return [];
-            const roleKeys = Object.keys(user).filter(k=>/(roles|claims|identit|權限|角色)/i.test(k));
+        function extractRoles(user) {
+            if (!user || typeof user !== 'object') return [];
+            const roleKeys = Object.keys(user).filter(k => /(roles|claims|identit|權限|角色)/i.test(k));
             let collected = [];
-            for(const k of roleKeys){
+            for (const k of roleKeys) {
                 const v = user[k];
-                if(Array.isArray(v)) collected = collected.concat(v);
-                else if(typeof v==='string' && v.length && v.indexOf(',')>-1) collected = collected.concat(v.split(',').map(s=>s.trim()));
-                else if(typeof v==='string' && v.length) collected.push(v.trim());
+                if (Array.isArray(v)) collected = collected.concat(v);
+                else if (typeof v === 'string' && v.length && v.indexOf(',') > -1) collected = collected.concat(v.split(',').map(s => s.trim()));
+                else if (typeof v === 'string' && v.length) collected.push(v.trim());
             }
             // 常見單一屬性
-            if(user.role && !collected.length) collected.push(user.role);
-            if(collected.length===0 && user.isAdmin) collected.push('Admin');
+            if (user.role && !collected.length) collected.push(user.role);
+            if (collected.length === 0 && user.isAdmin) collected.push('Admin');
             return [...new Set(collected.filter(Boolean))];
         }
 
-        function roleBadgeClass(r){
-            const name = (r||'').toLowerCase();
-            if(/admin|管理/.test(name)) return 'role-admin';
-            if(/vip|premium|尊榮/.test(name)) return 'role-alt';
-            if(/pending|未驗證|unverified/.test(name)) return 'role-warn';
+        function roleBadgeClass(r) {
+            const name = (r || '').toLowerCase();
+            if (/admin|管理/.test(name)) return 'role-admin';
+            if (/vip|premium|尊榮/.test(name)) return 'role-alt';
+            if (/pending|未驗證|unverified/.test(name)) return 'role-warn';
             return '';
         }
 
-        function renderUserRoles(user){
+        function renderUserRoles(user) {
             const roles = extractRoles(user);
             const box = document.getElementById('memberRoles');
-            if(!box) return;
-            if(!roles.length){ box.hidden = true; box.innerHTML=''; return; }
+            if (!box) return;
+            if (!roles.length) { box.hidden = true; box.innerHTML = ''; return; }
             box.hidden = false;
-            box.innerHTML = roles.map(r=>`<span class="badge ${roleBadgeClass(r)}">${r}</span>`).join('');
+            box.innerHTML = roles.map(r => `<span class="badge ${roleBadgeClass(r)}">${r}</span>`).join('');
         }
 
         let allOrders = [];
@@ -298,25 +306,25 @@
             const status = $('#orderFilter').val();
             // mock 加入多種狀態示例
             allOrders = [
-                { id: 'O20250001', status: 'unpaid',  total: 1234, date: '2025-08-01' },
-                { id: 'O20250002', status: 'paid',    total: 560,  date: '2025-08-15' },
-                { id: 'O20250003', status: 'toShip',  total: 890,  date: '2025-08-18' },
-                { id: 'O20250004', status: 'shipped', total: 320,  date: '2025-08-20' }
+                { id: 'O20250001', status: 'unpaid', total: 1234, date: '2025-08-01' },
+                { id: 'O20250002', status: 'paid', total: 560, date: '2025-08-15' },
+                { id: 'O20250003', status: 'toShip', total: 890, date: '2025-08-18' },
+                { id: 'O20250004', status: 'shipped', total: 320, date: '2025-08-20' }
             ];
             const filtered = allOrders.filter(o => status === 'all' || o.status === status);
-            const statusLabel = { unpaid:'未付款', paid:'已付款', toShip:'待出貨', shipped:'已出貨' };
-            const list = filtered.map(o => `<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><span><strong>${o.id}</strong><br><span class=\"text-muted small\">${o.date}</span></span><span class=\"badge bg-secondary\">${statusLabel[o.status]||o.status}</span></a>`).join('');
+            const statusLabel = { unpaid: '未付款', paid: '已付款', toShip: '待出貨', shipped: '已出貨' };
+            const list = filtered.map(o => `<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><span><strong>${o.id}</strong><br><span class=\"text-muted small\">${o.date}</span></span><span class=\"badge bg-secondary\">${statusLabel[o.status] || o.status}</span></a>`).join('');
             $('#ordersList').html(list || '<div class="text-muted">無資料</div>');
             // 更新總數與快捷卡
             $('#statOrders').text(allOrders.length);
             $('#qaOrdersCount').text(allOrders.length);
-            if(!allOrders.length) $('#qaOrdersCount').closest('.quick-action-card').addClass('dimmed'); else $('#qaOrdersCount').closest('.quick-action-card').removeClass('dimmed');
+            if (!allOrders.length) $('#qaOrdersCount').closest('.quick-action-card').addClass('dimmed'); else $('#qaOrdersCount').closest('.quick-action-card').removeClass('dimmed');
             updateOrderStatusSummary();
         }
 
-        function updateOrderStatusSummary(){
-            const counts = { unpaid:0, paid:0, toShip:0, shipped:0 };
-            allOrders.forEach(o=>{ if(counts[o.status] !== undefined) counts[o.status]++; });
+        function updateOrderStatusSummary() {
+            const counts = { unpaid: 0, paid: 0, toShip: 0, shipped: 0 };
+            allOrders.forEach(o => { if (counts[o.status] !== undefined) counts[o.status]++; });
             $('#ossUnpaid').text(counts.unpaid);
             $('#ossPaid').text(counts.paid);
             $('#ossToShip').text(counts.toShip);
@@ -326,36 +334,36 @@
         async function loadNotifies() {
             try { const res = await auth.apiFetch('/getNotify', { method: 'GET' }); if (!res.ok) throw new Error('fetch failed'); const data = await res.json(); if (!Array.isArray(data) || !data.length) { $('#notifyList').html('<div class="text-muted">暫無通知</div>'); return; } const html = data.map(n => `<div class=\"list-group-item\"><div class=\"d-flex justify-content-between\"><strong>${n.name || '通知'}</strong><span class=\"small text-muted\">${n.sendDate || ''}</span></div><div class=\"small\">${n.title || ''}</div>${n.notifysUrl ? `<a href=\"${n.notifysUrl}\" class=\"small\">前往</a>` : ''}</div>`).join(''); $('#notifyList').html(html); $('#statUnread').text(data.length); } catch (e) { $('#notifyList').html('<div class="text-muted">無法取得通知或尚未登入</div>'); }
             // 更新快捷未讀
-            const unread = parseInt($('#statUnread').text(),10) || 0;
+            const unread = parseInt($('#statUnread').text(), 10) || 0;
             $('#qaNotifyUnread').text(unread);
-            if(!unread) $('#qaNotifyUnread').closest('.quick-action-card').classList.add('dimmed');
+            if (!unread) $('#qaNotifyUnread').closest('.quick-action-card').classList.add('dimmed');
         }
 
-        function updateQuickProfileCompleteness(){
+        function updateQuickProfileCompleteness() {
             // 基於目前填寫欄位簡單計算（姓名 / 暱稱 / 電話 / 地址 / Bio）
-            const fields = ['#profileName','#profileNickname','#profilePhone','#profileAddress','#profileBio'];
-            let filled=0;
-            fields.forEach(sel=>{ const v=$(sel).val?.() || ''; if(v && v.trim().length>0) filled++; });
-            const percent = Math.round((filled/fields.length)*100);
-            $('#qaProfilePercent').text(percent+'%');
+            const fields = ['#profileName', '#profileNickname', '#profilePhone', '#profileAddress', '#profileBio'];
+            let filled = 0;
+            fields.forEach(sel => { const v = $(sel).val?.() || ''; if (v && v.trim().length > 0) filled++; });
+            const percent = Math.round((filled / fields.length) * 100);
+            $('#qaProfilePercent').text(percent + '%');
             const card = $('#qaProfilePercent').closest('.quick-action-card');
-            if(percent<40) card.addClass('dimmed'); else card.removeClass('dimmed');
+            if (percent < 40) card.addClass('dimmed'); else card.removeClass('dimmed');
         }
 
         // 監聽個資欄位變更動態更新完整度
-        $(document).on('input change','#formProfile input, #formProfile textarea', function(){ updateQuickProfileCompleteness(); });
+        $(document).on('input change', '#formProfile input, #formProfile textarea', function () { updateQuickProfileCompleteness(); });
 
-        function formatDateTime(dt){
-            try{
-                const d = (dt instanceof Date)? dt : new Date(dt);
-                if(isNaN(d.getTime())) return '--';
-                const y=d.getFullYear();
-                const m=String(d.getMonth()+1).padStart(2,'0');
-                const day=String(d.getDate()).padStart(2,'0');
-                const hh=String(d.getHours()).padStart(2,'0');
-                const mm=String(d.getMinutes()).padStart(2,'0');
+        function formatDateTime(dt) {
+            try {
+                const d = (dt instanceof Date) ? dt : new Date(dt);
+                if (isNaN(d.getTime())) return '--';
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const hh = String(d.getHours()).padStart(2, '0');
+                const mm = String(d.getMinutes()).padStart(2, '0');
                 return `${y}-${m}-${day} ${hh}:${mm}`;
-            }catch{ return '--'; }
+            } catch { return '--'; }
         }
     </script>
 </body>
