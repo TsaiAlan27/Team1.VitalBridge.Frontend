@@ -12,7 +12,7 @@
                 <li><a href="/orgs/orgSearch.html">找機構</a></li>
                 <li><a href="/VitalBridge/ECshop/index.html">樂齡商城</a></li>
                 <li><a href="/views/Articles/ArticleIndex.html">專欄文章</a></li>
-                <li><a href="#">會員中心</a></li>
+                <li><a class="nav-member-center" href="/VitalBridge/member/memberCenter.html">會員中心</a></li>
                 <li><a href="#">關於我們</a></li>
 
                 <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
@@ -342,3 +342,45 @@
 
 <!-- Google登入按鈕 -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+    // 會員中心點擊攔截：未登入則阻止並開啟登入視窗
+    (function initMemberCenterGuard() {
+        function attach() {
+            const link = document.querySelector('a.nav-member-center');
+            if (!link) return;
+            const targetHref = link.getAttribute('href');
+            link.addEventListener('click', async function (e) {
+                e.preventDefault(); // 一律先攔截
+                // 尚未載入 auth：稍後重試
+                if (typeof auth === 'undefined') {
+                    return setTimeout(() => link.click(), 120);
+                }
+                try {
+                    await auth.me(); // 已登入 -> 手動導向
+                    window.location.href = targetHref;
+                } catch (err) {
+                    // 未登入 -> 顯示提示 alert 並開登入 modal
+                    if (!document.getElementById('login-required-inline-alert')) {
+                        const alert = document.createElement('div');
+                        alert.id = 'login-required-inline-alert';
+                        alert.className = 'login-required-alert fade show';
+                        // 上方置中低調樣式（避開固定 header，往下位移）
+                        alert.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:2000;max-width:240px;background:rgba(0,0,0,.72);color:#fff;font-size:.8rem;padding:.55rem .9rem;border-radius:10px;backdrop-filter:blur(4px);line-height:1.25;box-shadow:0 4px 12px -2px rgba(0,0,0,.28);';
+                        alert.innerHTML = '<i class="bi bi-lock-fill me-1" style="font-size:.9rem;opacity:.9;"></i> 請先登入';
+                        document.body.appendChild(alert);
+                        // 2 秒後淡出
+                        setTimeout(() => { try { const a = document.getElementById('login-required-inline-alert'); if (a) { a.style.transition = 'opacity .4s ease, transform .4s ease'; a.style.opacity = '0'; a.style.transform = 'translateX(-50%) translateY(-8px)'; a.addEventListener('transitionend', () => a.remove(), { once: true }); } } catch { } }, 2000);
+                    }
+                    (function openLogin() {
+                        const modalEl = document.getElementById('loginModal');
+                        if (modalEl && window.bootstrap && bootstrap.Modal) { new bootstrap.Modal(modalEl).show(); }
+                        else setTimeout(openLogin, 150);
+                    })();
+                }
+            });
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach); else attach();
+        // 監聽 auth 變化：若登入後保留提示可自動移除
+        // auth:changed 事件目前無需處理提示移除
+    })();
+</script>
