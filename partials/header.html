@@ -272,21 +272,24 @@
             messenger.remove();
         }
     }
-    async function createMessenger() {
+    async function createMessenger(notClear) {
         const user = await auth.me();
-        // localStorage
-        Object.keys(localStorage).forEach(k => {
-            if (k.startsWith("df-messenger-")) {
-                localStorage.removeItem(k);
-            }
-        });
-
-        // sessionStorage
-        Object.keys(sessionStorage).forEach(k => {
-            if (k.startsWith("df-messenger-")) {
-                sessionStorage.removeItem(k);
-            }
-        });
+        if(!notClear)
+        {
+            // localStorage
+            Object.keys(localStorage).forEach(k => {
+                if (k.startsWith("df-messenger-")) {
+                    localStorage.removeItem(k);
+                }
+            });
+    
+            // sessionStorage
+            Object.keys(sessionStorage).forEach(k => {
+                if (k.startsWith("df-messenger-")) {
+                    sessionStorage.removeItem(k);
+                }
+            });
+        }
         const messenger = document.createElement("df-messenger");
         messenger.setAttribute("project-id", "vitalbridge");
         messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
@@ -310,6 +313,10 @@
 
 </script>
 <script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function switchToHuman() {
         // 移除 AI messenger
         const messenger = document.querySelector("df-messenger");
@@ -323,19 +330,29 @@
         document.body.appendChild(fake);
 
         // 在這裡完全自己控制訊息流程
-        fake.renderCustomText('**|已轉接真人客服，AI 已暫停回覆|**');
+        fake.renderCustomText('**|正在轉接真人客服，AI 已暫停回覆|**');
+        await sleep(500);
+        fake.renderCustomText('**連線中**');
+        await sleep(500);
         const user = await auth.me();
         // 監聽輸入事件
         fake.addEventListener("df-request-sent", (e) => {
             //使用者發送的訊息
             var userMsg = e.detail.data.requestBody.queryInput.text.text;
             connection.invoke("SendMessage", user.id + "", userMsg).catch(function (err) {
-                alert('傳送錯誤: ' + err.toString());
+                // alert('傳送錯誤: ' + err.toString());
             });
             // fake.renderCustomText("客服9527："+userMsg);
         });
         connection.on("UpdContent", function (msg) {
             fake.renderCustomText(msg);
+        });
+        connection.on("openAgent", function (msg) {
+            fake.remove();
+            createMessenger(true);
+        });
+        connection.invoke("SendMessage", user.id + "", user.name+"").catch(function (err) {
+
         });
     } 
 </script>
