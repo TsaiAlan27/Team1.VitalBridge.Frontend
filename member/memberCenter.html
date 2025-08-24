@@ -140,23 +140,71 @@
                         </div>
                         <!-- 個人資料 -->
                         <div class="tab-pane fade" id="pane-profile" role="tabpanel">
-                            <h4 class="mb-3">個人資料</h4>
-                            <form id="formProfile" class="row g-3">
-                                <div class="col-md-6"><label class="form-label">姓名</label><input type="text"
-                                        class="form-control" id="profileName" required /></div>
-                                <div class="col-md-6"><label class="form-label">暱稱</label><input type="text"
-                                        class="form-control" id="profileNickname" /></div>
-                                <div class="col-md-6"><label class="form-label">Email</label><input type="email"
-                                        class="form-control" id="profileEmail" disabled /></div>
-                                <div class="col-md-6"><label class="form-label">電話</label><input type="tel"
-                                        class="form-control" id="profilePhone" /></div>
-                                <div class="col-12"><label class="form-label">地址</label><input type="text"
-                                        class="form-control" id="profileAddress" /></div>
-                                <div class="col-12"><label class="form-label">個人簡介</label><textarea class="form-control"
-                                        id="profileBio" rows="3"></textarea></div>
-                                <div class="col-12"><button class="btn btn-primary" type="submit">儲存變更</button><span
-                                        id="profileSaveStatus" class="ms-3 text-muted small"></span></div>
-                            </form>
+                            <div class="card border-0 shadow-sm profile-card mb-4">
+                                <div class="card-body p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                        <h4 class="mb-0">個人資料</h4>
+                                        <div class="small text-muted d-flex align-items-center gap-2">
+                                            <span
+                                                class="badge bg-light text-secondary fw-normal border profile-completeness-badge"
+                                                id="profileCompletenessBadge">完整度 <span
+                                                    id="qaProfilePercentInline">--%</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-id-line">會員編號：<span id="profileId">--</span></div>
+                                    <form id="formProfile" class="align-items-start">
+                                        <!-- 區塊：基本資料 -->
+                                        <div class="profile-section">
+                                            <div class="profile-section-title"><i class="bi bi-person-badge"></i> 基本資料
+                                            </div>
+                                            <div class="row g-3 g-md-4">
+                                                <div class="col-md-4 col-sm-6"><label
+                                                        class="form-label">姓名</label><input type="text"
+                                                        class="form-control" id="profileName" required></div>
+                                                <div class="col-md-4 col-sm-6"><label
+                                                        class="form-label">Email</label><input type="email"
+                                                        class="form-control" id="profileEmail" disabled></div>
+                                                <div class="col-md-4 col-sm-6"><label
+                                                        class="form-label">電話</label><input type="tel"
+                                                        class="form-control" id="profilePhone"></div>
+                                            </div>
+                                        </div>
+                                        <!-- 區塊：地址 -->
+                                        <div class="profile-section">
+                                            <div class="profile-section-title"><i class="bi bi-geo-alt"></i> 地址</div>
+                                            <div class="row g-3 g-md-4">
+                                                <div class="col-md-3 col-sm-6"><label class="form-label">縣市</label>
+                                                    <select id="profileCity" class="form-select">
+                                                        <option value="">請選擇</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3 col-sm-6"><label class="form-label">鄉鎮</label>
+                                                    <select id="profileDistrict" class="form-select" disabled>
+                                                        <option value="">請先選縣市</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 col-12"><label
+                                                        class="form-label">詳細地址</label><input type="text"
+                                                        class="form-control" id="profileAddressDetail"
+                                                        placeholder="例如: 建業路15號2樓1室"></div>
+                                            </div>
+                                        </div>
+                                        <!-- 區塊：時間資訊 (簡單三行) -->
+                                        <div class="profile-times small text-muted mb-3">
+                                            <div>建立時間：<span id="profileCreatedAt">--</span></div>
+                                            <div>最後修改：<span id="profileUpdatedAt">--</span></div>
+                                            <div>最後登入：<span id="profileLastLoginAt">--</span></div>
+                                        </div>
+                                        <!-- 區塊：操作 -->
+                                        <div class="profile-section mb-0 pb-0 border-0">
+                                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                                <button class="btn btn-primary" type="submit">儲存變更</button>
+                                                <span id="profileSaveStatus" class="text-muted small"></span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <!-- 訂單 / 紀錄 -->
                         <div class="tab-pane fade" id="pane-orders" role="tabpanel">
@@ -253,10 +301,12 @@
                 // mock stats
                 $('#statUnread').text('0');
                 $('#statOrders').text('0');
-                $('#statLastLogin').text(formatDateTime(new Date()));
+                const now = new Date();
+                $('#statLastLogin').text(formatDateTime(now));
                 updateQuickProfileCompleteness();
                 loadOrders();
                 loadNotifies();
+                populateProfileMeta(user);
             } catch (e) {
                 $('.member-content-area').html('<div class="alert alert-warning">請先登入後再查看會員中心。</div>');
             }
@@ -295,10 +345,10 @@
         function renderUserRoles(user) {
             const roles = extractRoles(user);
             const box = document.getElementById('memberRoles');
-            if (!box) return;
-            if (!roles.length) { box.hidden = true; box.innerHTML = ''; return; }
-            box.hidden = false;
-            box.innerHTML = roles.map(r => `<span class="badge ${roleBadgeClass(r)}">${r}</span>`).join('');
+            if (box) {
+                if (!roles.length) { box.hidden = true; box.innerHTML = ''; }
+                else { box.hidden = false; box.innerHTML = roles.map(r => `<span class="badge ${roleBadgeClass(r)}">${r}</span>`).join(''); }
+            }
         }
 
         let allOrders = [];
@@ -340,18 +390,58 @@
         }
 
         function updateQuickProfileCompleteness() {
-            // 基於目前填寫欄位簡單計算（姓名 / 暱稱 / 電話 / 地址 / Bio）
-            const fields = ['#profileName', '#profileNickname', '#profilePhone', '#profileAddress', '#profileBio'];
+            // 基於目前填寫欄位簡單計算（姓名 / 電話 / 縣市 / 鄉鎮 / 詳細地址）
+            const fields = ['#profileName', '#profilePhone', '#profileCity', '#profileDistrict', '#profileAddressDetail'];
             let filled = 0;
             fields.forEach(sel => { const v = $(sel).val?.() || ''; if (v && v.trim().length > 0) filled++; });
             const percent = Math.round((filled / fields.length) * 100);
             $('#qaProfilePercent').text(percent + '%');
+            $('#qaProfilePercentInline').text(percent + '%');
             const card = $('#qaProfilePercent').closest('.quick-action-card');
             if (percent < 40) card.addClass('dimmed'); else card.removeClass('dimmed');
+            // 百分比徽章色彩
+            const badge = $('#profileCompletenessBadge');
+            badge.removeClass('pc-low pc-mid pc-high');
+            if (percent < 40) badge.addClass('pc-low');
+            else if (percent < 80) badge.addClass('pc-mid');
+            else badge.addClass('pc-high');
+        }
+
+        function populateProfileMeta(user) {
+            if (!user) return;
+            const id = user.memberId || user.id || user.userId || '';
+            $('#profileId').text(id || '--');
+            // 填寫基本欄位（若後端已有資料）
+            if (user.name) $('#profileName').val(user.name);
+            if (user.phone) $('#profilePhone').val(user.phone);
+            if (user.email) $('#profileEmail').val(user.email);
+            // 移除 bio 欄位
+            // 地址拆解：嘗試以 縣/市 + 鄉/鎮/區
+            const fullAddr = user.address || user.addr || '';
+            if (fullAddr) {
+                const m = fullAddr.match(/^(.{2,3}[市縣])\s?(.{2,3}[鄉鎮市區])\s?(.*)$/);
+                if (m) {
+                    if (m[1]) $('#profileCity').val(m[1]);
+                    if (m[2]) $('#profileDistrict').val(m[2]);
+                    if (m[3]) $('#profileAddressDetail').val(m[3]);
+                } else {
+                    $('#profileAddressDetail').val(fullAddr);
+                }
+            }
+            // 時間欄位
+            const created = user.createdAt || user.created_at || user.createTime || user.createdDate;
+            const updated = user.updatedAt || user.updated_at || user.modifyTime || user.modifiedDate || user.lastModifiedAt;
+            const lastLogin = user.lastLoginAt || user.last_login_at || user.lastLogin || user.lastLoginTime;
+            if (created) $('#profileCreatedAt').text(formatDateTime(created));
+            if (updated) $('#profileUpdatedAt').text(formatDateTime(updated));
+            if (lastLogin) $('#profileLastLoginAt').text(formatDateTime(lastLogin)); else $('#profileLastLoginAt').text($('#statLastLogin').text());
+            updateQuickProfileCompleteness();
+            // 初始化完整度徽章同步
+            $('#qaProfilePercentInline').text($('#qaProfilePercent').text());
         }
 
         // 監聽個資欄位變更動態更新完整度
-        $(document).on('input change', '#formProfile input, #formProfile textarea', function () { updateQuickProfileCompleteness(); });
+        $(document).on('input change', '#formProfile input', function () { updateQuickProfileCompleteness(); });
 
         function formatDateTime(dt) {
             try {
