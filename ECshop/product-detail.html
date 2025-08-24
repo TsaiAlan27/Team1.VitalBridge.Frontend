@@ -127,6 +127,29 @@
       letter-spacing: 0.5px;
     }
 
+    /*加入購物車按鈕*/
+
+    .btn-cart {
+      background-color: #198754;
+      border-color: #198754;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .btn-cart:hover {
+      background-color: #157347;
+      border-color: #146c43;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+
 
 
 
@@ -158,7 +181,7 @@
         <nav aria-label="breadcrumb" class="mb-4">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="/">首頁</a>
+              <a href="/VitalBridge/ECshop/index.html">首頁</a>
             </li>
             <li class="breadcrumb-item">
               <a href="/VitalBridge/ECshop/category.html">全部商品</a>
@@ -250,8 +273,8 @@
             </div>
 
             <!-- 數量選擇器 -->
-            <div class="mb-4">
-              <label class="form-label fw-semibold">數量：</label>
+            <div class="mb-4 quantity-selector">
+              <!-- <label class="form-label fw-semibold">數量：</label>
               <div class="input-group" style="width: 150px;">
                 <button class="btn btn-outline-secondary" type="button" v-on:click="decreaseQuantity">
                   <i class="bi bi-dash"></i>
@@ -260,15 +283,53 @@
                 <button class="btn btn-outline-secondary" type="button" v-on:click="increaseQuantity">
                   <i class="bi bi-plus"></i>
                 </button>
+              </div> -->
+              <!--新的數量選擇器-->
+              <!-- <label class="form-label fw-semibold">數量：</label>
+              <div class="input-group" style="width: 120px;">
+                <button class="btn btn-outline-secondary" type="button"
+                  @click="selectedQuantity = Math.max(1, selectedQuantity - 1)">-</button>
+                <input type="number" class="form-control text-center" v-model.number="selectedQuantity" min="1" max="20"
+                  :max="product.quantity">
+                <button class="btn btn-outline-secondary" type="button"
+                  @click="selectedQuantity = Math.min(20, Math.min(product.quantity, selectedQuantity + 1))">+</button>
+              </div>-->
+              <!--新數量選擇器2-->
+
+              <label class="form-label fw-semibold">數量：</label>
+              <div class="input-group">
+                <button class="btn btn-outline-secondary" type="button"
+                  @click="selectedQuantity = Math.max(1, selectedQuantity - 1)" :disabled="selectedQuantity <= 1">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input type="number" class="form-control text-center" v-model.number="selectedQuantity" min="1" max="20"
+                  :max="product.quantity" @input="validateQuantity" @blur="validateQuantity">
+                <button class="btn btn-outline-secondary" type="button"
+                  @click="selectedQuantity = Math.min(20, Math.min(product.quantity, selectedQuantity + 1))"
+                  :disabled="selectedQuantity >= Math.min(20, product.quantity)">
+                  <i class="bi bi-plus"></i>
+                </button>
               </div>
             </div>
-
             <!-- 操作按鈕 -->
             <div class="d-grid gap-2 d-md-flex">
-              <button class="btn btn-primary btn-lg flex-fill me-md-2" v-on:click="addToCart" :disabled="loading">
-                <i class="bi bi-cart-plus me-2"></i>
-                加入購物車
+              <!-- <button class="btn btn-primary btn-lg flex-fill me-md-2" v-on:click="addToCart"
+                  v-bind:disabled="loading">
+                  <i class="bi bi-cart-plus me-2"></i>
+                  加入購物車
+                </button> -->
+              <!-- 加入購物車按鈕改版 -->
+              <button class="btn btn-cart btn-lg flex-fill me-md-2" v-on:click="addToCart"
+                :disabled="addingToCart || !product || product.quantity === 0">
+                <span v-if="addingToCart">
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  加入中...
+                </span>
+                <span v-else>
+                  <i class="bi bi-cart-plus me-2"></i>加入購物車
+                </span>
               </button>
+              <!--加入最愛-->
               <button class="btn btn-outline-secondary btn-lg" v-on:click="toggleFavorite(product.id)">
                 <i class="bi bi-heart-fill" :class="{ 'text-danger': isFavorite(product.id) }"></i>
               </button>
@@ -365,7 +426,8 @@
                     </h5> -->
                     <div class="shopping-notice">
                       <div v-if="productNote && productNote.shoppNote"
-                        v-html="formatDescription(productNote.shoppNote)"></div>
+                        v-html="formatDescription(productNote.shoppNote)">
+                      </div>
                       <!-- <div v-else class="text-muted">
                         <h6>⚠️ 注意事項：</h6>
                         <ul>
@@ -497,7 +559,10 @@
               loading: true,
               error: null,
               baseApiUrl: 'https://localhost:7104',
-              favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
+              favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]'),
+              product: null,
+              selectedQuantity: 1,
+              addingToCart: false, // 新增：是否正在加入購物車的狀態
             };
           },
           mounted() {
@@ -669,6 +734,22 @@
 
             },
 
+            // 新增：驗證數量輸入
+            validateQuantity() {
+              // 確保輸入的數值在有效範圍內
+              if (this.selectedQuantity < 1) {
+                this.selectedQuantity = 1;
+              } else if (this.selectedQuantity > 20) {
+                this.selectedQuantity = 20;
+              } else if (this.selectedQuantity > this.product.quantity) {
+                this.selectedQuantity = this.product.quantity;
+                alert(`超過庫存量，已調整為最大可購買數量：${this.product.quantity}`);
+              }
+
+              // 確保是整數
+              this.selectedQuantity = Math.floor(this.selectedQuantity);
+            },
+
 
             // 取得圖片 URL
             // 修正 getImageUrl 方法，加入除錯
@@ -729,27 +810,75 @@
             },
             // 加入購物車
             async addToCart() {
-              if (this.loading) return;
-
+              // 1. 檢查登入狀態
               try {
-                const cartItem = {
-                  productId: this.product.id,
-                  productName: this.product.name,
-                  price: this.product.price,
-                  quantity: this.quantity,
-                  image: this.product.images && this.product.images.length > 0
-                    ? this.product.images[0].fileName
-                    : null
-                };
-
-                console.log('加入購物車:', cartItem);
-                alert(`已將 ${this.quantity} 件「${this.product.name}」加入購物車！`);
-
+                await window.auth.me(); // 檢查是否登入
               } catch (error) {
+                alert('請先登入會員才能加入購物車');
+                // 可以跳出登入 modal 或跳轉登入頁
+                return;
+              }
+              // 2. 檢查數量
+              if (this.selectedQuantity < 1 || this.selectedQuantity > 20) {
+                alert('數量必須在 1-20 之間');
+                return;
+              }
+              // 3. 檢查庫存
+              if (this.selectedQuantity > this.product.quantity) {
+                alert(`庫存不足，目前庫存：${this.product.quantity}`);
+                return;
+              }
+              // 4. 呼叫加入購物車 API
+              try {
+                // 鎖定按鈕，防止重複點擊
+                this.addingToCart = true;
+                const response = await window.auth.apiFetch('/api/CartApi/AddItem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    productId: this.product.id,
+                    quantity: this.selectedQuantity
+                  })
+                });
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  throw new Error(errorText || '加入購物車失敗');
+                }
+                // 5. 成功處理
+                const result = await response.text();
+                alert(result || '成功加入購物車！');
+
+                // 6. 更新導覽列購物車數量
+                await this.updateCartCount();
+              }
+              catch (error) {
                 console.error('加入購物車失敗:', error);
-                alert('加入購物車時發生錯誤，請稍後再試');
+                alert(error.message || '加入購物車失敗，請稍後再試');
+              }
+              finally {
+                this.addingToCart = false;
               }
             },
+
+            // 新增：更新購物車數量的方法
+            async updateCartCount() {
+              try {
+                const response = await window.auth.apiFetch('/api/CartApi/Count', {
+                  method: 'GET'
+                });
+
+                if (response.ok) {
+                  const count = await response.json();
+                  const cartCountElement = document.getElementById('cart-count');
+                  if (cartCountElement) {
+                    cartCountElement.textContent = count || 0;
+                  }
+                }
+              } catch (error) {
+                console.error('更新購物車數量失敗:', error);
+              }
+            },
+
             // 切換我的最愛
             toggleFavorite(productId) {
               const index = this.favorites.indexOf(productId);
