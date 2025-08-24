@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>購物車 - 樂齡商城</title>
+  <meta name="description" content="專為銀髮族設計的健康商城 - 購物車">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- 自己想改的樣式放這邊 -->
+  <!-- 購物車專用樣式 -->
+  <style>
+    .cart-container {
+      min-height: 500px;
+    }
+
+    .cart-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: white;
+    }
+
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #198754;
+      background: white;
+      color: #198754;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quantity-btn:hover {
+      background: #198754;
+      color: white;
+    }
+
+    .quantity-input {
+      width: 60px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+    }
+
+    .cart-summary {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .btn-checkout {
+      background-color: #198754;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .btn-checkout:hover {
+      background-color: #157347;
+      color: white;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+  </style>
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="headerpage"></div> <!-- 主導覽 -->
+  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+
+
+  <main class="main">
+    <!-- 你們的主要頁面內容放這邊下面 -->
+    <div id="cart-app" class="container cart-container">
+      <!-- 所有購物相關內容都放在這裡 -->
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mb-4">
+            <i class="bi bi-cart3 me-2"></i>購物車
+            <span v-if="cartItems.length > 0" class="text-muted fs-6">({{ totalQuantity }} 件商品)</span>
+          </h2>
+        </div>
+      </div>
+      <!-- 載入中狀態 -->
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">載入中...</span>
+        </div>
+        <p class="mt-3 text-muted">載入購物車中...</p>
+      </div>
+      <!-- 購物車內容 -->
+      <div v-else class="row">
+        <!-- 空購物車 -->
+        <div v-if="cartItems.length === 0" class="col-12">
+          <div class="empty-cart">
+            <i class="bi bi-cart-x" style="font-size: 4rem; color: #6c757d;"></i>
+            <h4 class="mt-3">購物車是空的</h4>
+            <p class="text-muted">趕快去挑選您喜愛的商品吧！</p>
+            <a href="/VitalBridge/ECshop/index.html" class="btn btn-success mt-3">
+              <i class="bi bi-arrow-left me-2"></i>繼續購物
+            </a>
+          </div>
+        </div>
+        <!-- 有商品時 -->
+        <div v-else>
+          <!-- 購物車商品列表 -->
+          <div class="col-lg-8">
+            <div v-for="item in cartItems" v-bind:key="item.id" class="cart-item">
+              <div class="row align-items-center">
+                <!-- 商品圖片 -->
+                <div class="col-auto">
+                  <img v-bind:src="getImageUrl(item.imageFileName)" v-bind:alt="item.productName"
+                    class="cart-item-image" v-on:error="handleImageError">
+                </div>
+                <!-- 商品資訊 -->
+                <div class="col">
+                  <h6 class="mb-1">{{ item.productName }}</h6>
+                  <div class="text-success fw-bold">NT$ {{ formatPrice(item.unitPrice) }}</div>
+                  <small class="text-muted" v-if="item.stock < 10">
+                    <i class="bi bi-exclamation-triangle text-warning"></i>
+                    庫存剩餘 {{ item.stock }} 件
+                  </small>
+                </div>
+
+                <!-- 數量控制 -->
+                <div class="col-auto">
+                  <div class="quantity-controls">
+                    <button class="quantity-btn" v-onclick="updateQuantity(item, item.quantity - 1)"
+                      v-bind:disabled="item.quantity <= 1">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <input type="number" class="quantity-input" v-bind:value="item.quantity"
+                      v-onchange="updateQuantity(item, parseInt($event.target.value))" min="1" max="20">
+                    <button class="quantity-btn" v-on:click="updateQuantity(item, item.quantity + 1)"
+                      v-bind:disabled="item.quantity >= 20 || item.quantity >= item.stock">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- 小計 -->
+                <div class="col-auto">
+                  <div class="fw-bold">NT$ {{ formatPrice(item.subtotal) }}</div>
+                </div>
+                <!-- 移除按鈕 -->
+                <div class="col-auto">
+                  <button class="btn btn-outline-danger btn-sm" @click="removeItem(item)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 訂單摘要 -->
+          <div class="col-lg-4">
+            <div class="cart-summary">
+              <h5 class="mb-3">訂單摘要</h5>
+              <div class="d-flex justify-content-between mb-2">
+                <span>商品小計</span>
+                <span>NT$ {{ formatPrice(totalAmount) }}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>預估運費</span>
+                <span class="text-muted">結帳時計算</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between mb-3">
+                <strong>總計</strong>
+                <strong class="text-success">NT$ {{ formatPrice(totalAmount) }}</strong>
+              </div>
+              <button class="btn-checkout" @click="goToCheckout">
+                前往結帳
+              </button>
+              <a href="/VitalBridge/ECshop/index.html" class="btn btn-outline-secondary w-100 mt-2">
+                <i class="bi bi-arrow-left me-2"></i>繼續購物
+              </a>
+
+
+            </div>
+
+          </div>
+
+
+          <!-- 你們的主要頁面內容放這邊上面 -->
+        </div>
+  </main>
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { // data 就是Model
+            return {
+              pageTitle: "樂齡商城",
+              pageDescription: "測試購物導覽列是否正常載入",
+              cartItemCount: 0,        // 購物車數量
+              loading: false,          // 載入狀態
+              searchKeyword: ''        // 搜尋關鍵字
+            };
+          },
+          methods: { // methods 就是Controller
+            test: function () {
+              alert("測試成功!\n測試按鈕被點擊了");
+            },
+            // 電商共用方法-價格格式化
+            formatPrice(price) {
+              if (!price) return '0';
+              return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            },
+            // 電商共用方法-加入購物車
+            addToCart(product) {
+              this.cartItemCount += 1;
+              console.log('加入購物車:', product);
+            }
+          }
+
+
+        },
+          // methods: { ... }, mounted() { ... } 等可在此加入
+
+          shop - a
+        ).mount('#cart-app');
+        console.log(" Vue EC mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>

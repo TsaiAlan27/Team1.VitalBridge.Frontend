@@ -222,7 +222,7 @@
                 </section>
 
                 <!-- 測試區域 -->
-                <section class="test-section py-4">
+                <!-- <section class="test-section py-4">
                     <div class="alert alert-info rounded-3">
                         <h5>測試資訊：</h5>
                         <p><strong>當前分類ID：</strong>{{ currentCategoryId || '無' }}</p>
@@ -230,7 +230,7 @@
                         <p><strong>當前頁碼：</strong>{{ currentPage }}</p>
                         <p><strong>每頁數量：</strong>{{ pageSize }}</p>
                     </div>
-                </section>
+                </section> -->
                 <!-- 商品數量資訊和篩選控件 -->
                 <div class="products-info mb-4">
                     <div class="row align-items-center">
@@ -277,15 +277,15 @@
                     </div>
 
                     <!-- 錯誤狀態 -->
-                    <div v-else-if="error" class="alert alert-danger rounded-3" role="alert">
+                    <!-- <div v-else-if="error" class="alert alert-danger rounded-3" role="alert">
                         <h5 class="alert-heading">載入失敗</h5>
                         <p>{{ error }}</p>
                         <hr>
                         <button class="btn btn-outline-danger" @click="fetchProducts">重新載入</button>
-                    </div>
+                    </div> -->
 
                     <!-- 無商品結果 -->
-                    <div v-else-if="products.length === 0" class="text-center py-5">
+                    <!-- <div v-else-if="products.length === 0" class="text-center py-5">
                         <div class="mb-4">
                             <i class="bi bi-search" style="font-size: 4rem; color: #6c757d;"></i>
                         </div>
@@ -295,7 +295,7 @@
                             <span v-else-if="currentCategoryId">此分類目前沒有商品</span>
                             <span v-else>目前沒有可顯示的商品</span>
                         </p>
-                    </div>
+                    </div> -->
                     <!-- 商品網格 -->
                     <div v-else>
                         <!-- 商品數量資訊 -->
@@ -473,8 +473,17 @@
                             this.pageTitle = `搜尋結果`;
                             this.pageSubtitle = `關鍵字：${this.currentSearchQuery}`;
                         } else if (this.currentCategoryId) {
-                            this.pageTitle = `商品分類`;
-                            this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            // 如果有從 API 回傳的分類名稱，使用它
+                            // this.pageTitle = `商品分類`;
+                            // this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            if (this.searchInfo?.categoryName) {
+                                this.pageTitle = this.searchInfo.categoryName;
+                                this.pageSubtitle = '瀏覽此分類的商品';
+                            } else {
+                                this.pageTitle = '商品分類';
+                                this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            }
+
                         } else {
                             this.pageTitle = '所有商品';
                             this.pageSubtitle = '瀏覽全部商品';
@@ -523,9 +532,11 @@
                             this.searchInfo = data.searchInfo || null;
 
                             // 更新頁面標題 (使用 API 回傳的分類名稱)
-                            if (this.searchInfo?.categoryName) {
-                                this.pageSubtitle = this.searchInfo.categoryName;
-                            }
+                            // if (this.searchInfo?.categoryName) {
+                            //     this.pageSubtitle = this.searchInfo.categoryName;
+                            // }
+                            // 修改：在 API 資料載入後立即更新頁面標題
+                            this.updatePageTitle();
 
                         } catch (error) {
                             console.error('載入商品失敗:', error);
