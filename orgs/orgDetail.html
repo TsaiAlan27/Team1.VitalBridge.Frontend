@@ -162,6 +162,19 @@
             font-size: 2rem;
             color: #ffc107;
             margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 0.5rem;
+        }
+
+        .feature-service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
         .feature-name {
@@ -523,7 +536,12 @@
                                 <div v-for="service in organization.featureServices" :key="service.id"
                                     class="feature-item">
                                     <div class="feature-icon">
-                                        <i :class="getServiceIcon(service.name)"></i>
+                                        <!-- 使用後台圖片，fallback 到 Bootstrap 圖示 -->
+                                        <img v-if="getFeatureServiceImage(service.name)"
+                                            :src="getFeatureServiceImage(service.name)" :alt="service.name"
+                                            class="feature-service-img" loading="lazy"
+                                            @error="handleFeatureServiceImageError($event)">
+                                        <i v-else :class="getServiceIcon(service.name)"></i>
                                     </div>
                                     <div class="feature-name">{{ service.name }}</div>
                                     <div v-if="service.description" class="text-muted small mt-2">
@@ -699,7 +717,9 @@
                             loading: true,
                             errorMessage: '',
                             organizationId: null,
-                            showFloatingBtn: false
+                            showFloatingBtn: false,
+                            // 特色服務資料快取
+                            featureServicesCache: new Map()
                         };
                     },
 
@@ -714,6 +734,9 @@
                             console.log('❌ 缺少機構 ID');
                             return;
                         }
+
+                        // 載入特色服務資料
+                        await this.loadFeatureServices();
 
                         await this.loadOrganizationDetail();
 
@@ -863,6 +886,47 @@
 
                             // 使用 Google Maps 搜尋嵌入方式（無需 API Key）
                             return `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+                        },
+
+                        // 載入特色服務資料
+                        async loadFeatureServices() {
+                            try {
+                                const response = await axios.get(`${API_BASE_URL}/api/Organizations/feature-services`);
+                                response.data.forEach(service => {
+                                    this.featureServicesCache.set(service.name, service.imageUrl);
+                                });
+                            } catch (error) {
+                                // 特色服務載入失敗不影響主要功能
+                                console.log('特色服務載入失敗:', error);
+                            }
+                        },
+
+                        // 取得特色服務圖片
+                        getFeatureServiceImage(serviceName) {
+                            const imageUrl = this.featureServicesCache.get(serviceName);
+
+                            if (imageUrl) {
+                                return this.getImageUrl(imageUrl);
+                            }
+
+                            return null;
+                        },
+
+                        // 特色服務圖片載入錯誤處理
+                        handleFeatureServiceImageError(event) {
+                            const img = event.target;
+                            const parent = img.parentElement;
+
+                            // 移除圖片
+                            img.remove();
+
+                            // 添加 fallback 圖示
+                            if (parent && !parent.querySelector('i')) {
+                                const icon = document.createElement('i');
+                                const serviceName = img.alt;
+                                icon.className = this.getServiceIcon(serviceName);
+                                parent.appendChild(icon);
+                            }
                         },
 
                         // 取得圖片 URL - 使用後台 API
