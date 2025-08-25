@@ -5,8 +5,11 @@
 
 (function () {
     const PROFILE_API = 'https://localhost:7104/api/Member/profile'; // 強制 7104
+    const LOCATION_BASE = 'https://localhost:7104/api/location'; // 新增: 位置 API base
     let profileLoaded = false;
     let loadingPromise = null;
+    let citiesCache = null; // [{id,name}]
+    const townshipCache = new Map(); // cityId => [{id,name}]
 
     const log = (...a) => { try { console.debug('[member-center]', ...a); } catch { } };
 
@@ -37,7 +40,7 @@
         await waitForAuthReady();
         let token = getAccessToken();
         if (!token) { try { await ensureRefreshed(); token = getAccessToken(); } catch { } }
-        const headers = { 'Accept': 'application/json' };
+    const headers = { 'Accept': 'application/json' };
         const xsrf = getXsrf();
         if (xsrf) { headers['X-XSRF-TOKEN'] = xsrf; headers['RequestVerificationToken'] = xsrf; }
         if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -53,6 +56,104 @@
         }
         if (!res.ok) throw new Error('讀取失敗(' + res.status + ')');
         return await res.json();
+    }
+
+    // 共用 GET JSON（給城市/鄉鎮）
+    async function apiGetJson(url) {
+        await waitForAuthReady();
+        let token = getAccessToken();
+        if (!token) { try { await ensureRefreshed(); token = getAccessToken(); } catch { } }
+        const headers = { 'Accept': 'application/json' };
+        const xsrf = getXsrf();
+        if (xsrf) { headers['X-XSRF-TOKEN'] = xsrf; headers['RequestVerificationToken'] = xsrf; }
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { headers, credentials: 'include' });
+        if (res.status === 401) {
+            const ok = await ensureRefreshed();
+            if (ok) {
+                const nt = getAccessToken();
+                if (nt) headers['Authorization'] = 'Bearer ' + nt;
+                return apiGetJson(url); // retry 一次
+            }
+        }
+        if (!res.ok) throw new Error('API 失敗(' + res.status + ')');
+        try { return await res.json(); } catch { return null; }
+    }
+
+    // 載入所有縣市
+    async function loadCities(selectedId) {
+        const sel = document.getElementById('profileCity');
+        if (!sel) return;
+        if (citiesCache && citiesCache.length) {
+            renderCityOptions(sel, citiesCache, selectedId);
+            return;
+        }
+        sel.disabled = true;
+        try {
+            const data = await apiGetJson(LOCATION_BASE + '/cities');
+            // 彈性解析: 可能是陣列字串或物件
+            let list = [];
+            if (Array.isArray(data)) list = data;
+            else if (data && Array.isArray(data.items)) list = data.items;
+            citiesCache = list.map(c => ({
+                id: c.id ?? c.cityId ?? c.value ?? c.code ?? c.Id ?? c.CityId,
+                name: c.name ?? c.cityName ?? c.text ?? c.label ?? c.Name ?? c.CityName
+            })).filter(c => c.id && c.name);
+            renderCityOptions(sel, citiesCache, selectedId);
+        } catch (e) {
+            log('loadCities error', e);
+            if (!sel.querySelector('option[value=""]')) { const opt = document.createElement('option'); opt.value = ''; opt.textContent = '--'; sel.appendChild(opt); }
+        } finally { sel.disabled = false; }
+    }
+
+    function renderCityOptions(sel, list, selectedId) {
+        if (!sel) return;
+        const current = sel.value;
+        const keepSelected = selectedId ?? current;
+        sel.innerHTML = '<option value="">請選擇</option>' + list.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        if (keepSelected && sel.querySelector(`option[value="${keepSelected}"]`)) sel.value = keepSelected;
+    }
+
+    // 載入鄉鎮（需 cityId）
+    async function loadTownships(cityId, selectedId) {
+        const sel = document.getElementById('profileDistrict');
+        if (!sel) return;
+        if (!cityId) {
+            sel.innerHTML = '<option value="">請先選縣市</option>';
+            sel.disabled = true;
+            return;
+        }
+        const cacheKey = cityId;
+        if (townshipCache.has(cacheKey)) {
+            renderTownshipOptions(sel, townshipCache.get(cacheKey), selectedId);
+            return;
+        }
+        sel.disabled = true;
+        sel.innerHTML = '<option value="">載入中...</option>';
+        try {
+            const data = await apiGetJson(LOCATION_BASE + '/townships?cityId=' + encodeURIComponent(cityId));
+            let list = [];
+            if (Array.isArray(data)) list = data;
+            else if (data && Array.isArray(data.items)) list = data.items;
+            const mapped = list.map(t => ({
+                id: t.id ?? t.townshipId ?? t.value ?? t.code ?? t.Id ?? t.TownshipId,
+                name: t.name ?? t.townshipName ?? t.text ?? t.label ?? t.Name ?? t.TownshipName
+            })).filter(t => t.id && t.name);
+            townshipCache.set(cacheKey, mapped);
+            renderTownshipOptions(sel, mapped, selectedId);
+        } catch (e) {
+            log('loadTownships error', e);
+            sel.innerHTML = '<option value="">載入失敗</option>';
+        } finally { sel.disabled = false; }
+    }
+
+    function renderTownshipOptions(sel, list, selectedId) {
+        if (!sel) return;
+        const current = sel.value;
+        const keepSelected = selectedId ?? current;
+        sel.innerHTML = '<option value="">請選擇</option>' + list.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        if (keepSelected && sel.querySelector(`option[value="${keepSelected}"]`)) sel.value = keepSelected;
+        sel.disabled = false;
     }
 
     // ---- UI helpers ----
@@ -97,10 +198,16 @@
         val('profileName', p.Name || '');
         val('profileEmail', p.Email || '');
         val('profilePhone', p.Phone || '');
-        const citySel = document.getElementById('profileCity');
-        const distSel = document.getElementById('profileDistrict');
-        if (p.City) ensureOpt(citySel, p.CityId || p.City, p.City);
-        if (p.Township) { if (distSel && distSel.disabled) distSel.disabled = false; ensureOpt(distSel, p.TownshipId || p.Township, p.Township); }
+        // 載入城市與鄉鎮（若 profile 有既存資料）
+        (async () => {
+            try {
+                await loadCities(p.CityId || p.City);
+                if (p.CityId || p.City) {
+                    const cityValue = p.CityId || p.City; // cityId 優先
+                    await loadTownships(cityValue, p.TownshipId || p.Township);
+                }
+            } catch (e) { log('prefill location error', e); }
+        })();
         val('profileAddressDetail', p.Address || '');
         txt('profileCreatedAt', fmt(p.CreatedAt));
         txt('profileUpdatedAt', fmt(p.UpdatedAt));
@@ -129,9 +236,26 @@
     }
 
     function bindTab() { document.addEventListener('shown.bs.tab', e => { try { const t = e.target && e.target.getAttribute('data-bs-target'); if (t === '#pane-profile') loadProfile(); } catch { } }); if (location.hash === '#pane-profile') { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadProfile); else loadProfile(); } }
-    function bindFields() { const handler = e => { const id = e.target && e.target.id; if (id && /^profile(Name|Phone|City|District|AddressDetail)$/.test(id)) completeness(); }; document.addEventListener('input', handler); document.addEventListener('change', handler); }
+    function bindFields() {
+        const handler = e => { const id = e.target && e.target.id; if (id && /^profile(Name|Phone|City|District|AddressDetail)$/.test(id)) completeness(); };
+        document.addEventListener('input', handler);
+        document.addEventListener('change', handler);
+        // 城市改變 -> 重載鄉鎮並清空地址明細
+        const citySel = document.getElementById('profileCity');
+        if (citySel) {
+            citySel.addEventListener('change', async () => {
+                const cityId = citySel.value || '';
+                await loadTownships(cityId, null);
+                const distSel = document.getElementById('profileDistrict');
+                if (distSel) distSel.value = '';
+                const addr = document.getElementById('profileAddressDetail');
+                if (addr) addr.value = '';
+                completeness();
+            });
+        }
+    }
 
-    function init() { if (document.getElementById('formProfile')) { bindTab(); bindFields(); } }
+    function initCore() { if (document.getElementById('formProfile')) { bindTab(); bindFields(); /* 初次不立即載入城市，待使用者開啟或 profile 填入 */ } }
 
     // 初始先用 "--" 佔位，避免空白或閃爍
     function setInitialPlaceholders() {
@@ -147,7 +271,7 @@
         ['profileCompletenessBadge'].forEach(id => { const b = document.getElementById(id); if (b) { b.classList.remove('pc-low', 'pc-mid', 'pc-high'); } });
     }
 
-    function init() { if (document.getElementById('formProfile')) { setInitialPlaceholders(); bindTab(); bindFields(); } }
+    function init() { if (document.getElementById('formProfile')) { setInitialPlaceholders(); initCore(); } }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
     try { window.memberCenter = window.memberCenter || {}; window.memberCenter.loadProfile = loadProfile; } catch { }
 })();
