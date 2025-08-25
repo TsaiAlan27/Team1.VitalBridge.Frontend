@@ -1,9 +1,14 @@
 
 import ArticleContent from './components/ArticleContent.js';
+import NestedComments from './components/NestedComment.js';
+import CommentSection from './components/CommentSection.js';
+
 // Clean Vue script template
 const vueApp = {
     components: {
         'article-content': ArticleContent,
+        'nested-comments': NestedComments,
+        'comment-section': CommentSection
     },
     data() {
         return {
