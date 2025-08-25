@@ -47,6 +47,7 @@
 
         .org-title {
             color: #2c3e50;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 1rem;
             border-bottom: 3px solid #007bff;
@@ -55,7 +56,7 @@
 
         .org-location {
             color: #6c757d;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
         }
 
@@ -66,6 +67,7 @@
             border-radius: 25px;
             display: inline-block;
             font-weight: 600;
+            font-size: 1.2rem;
             margin-bottom: 1.5rem;
         }
 
@@ -84,6 +86,7 @@
             border-left: 4px solid #007bff;
             padding-left: 1rem;
             margin: 2rem 0 1rem 0;
+            font-size: 1.6rem;
         }
 
         .service-targets {
@@ -102,30 +105,89 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .price-table {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+        .age-limit-section .alert {
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d1ecf1 0%, #b8daff 100%);
+            border-left: 5px solid #17a2b8;
+            font-size: 1.4rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
         }
 
-        .price-table th {
-            background: linear-gradient(45deg, #007bff, #0056b3);
-            color: white;
-            font-weight: 600;
-            padding: 1rem;
+        .age-limit-section .alert strong {
+            color: #0c5460;
+        }
+
+        .price-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
             border: none;
         }
 
+        .price-table th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            padding: 1.2rem 1rem;
+            border: none;
+            text-align: center;
+        }
+
         .price-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #dee2e6;
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #e9ecef;
             vertical-align: middle;
+            font-size: 1.2rem;
         }
 
         .price-table tr:hover {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .price-table .room-name {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #2c3e50;
+        }
+
+        .price-table .monthly-price {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #28a745;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-table .room-quantity {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .price-table .deposit-info {
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .price-table .deposit-amount {
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 1.3rem;
+        }
+
+        .price-table .deposit-months {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-top: 0.2rem;
+        }
+
+        .price-table .no-deposit {
+            font-weight: 600;
+            color: #28a745;
+            font-size: 1.3rem;
         }
 
         .feature-services {
@@ -188,8 +250,10 @@
             border-radius: 10px;
             margin-bottom: 2rem;
             line-height: 1.8;
+            font-size: 1.1rem;
         }
 
+        /* 聯絡資訊相關樣式 - 暫時註解
         .address-section {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             padding: 1.5rem;
@@ -211,18 +275,69 @@
             color: #0d47a1;
             text-decoration: underline;
         }
+        */
 
+        /* 地圖相關樣式 */
         .map-container {
-            border-radius: 10px;
+            position: relative;
+            width: 100%;
+            height: 550px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+            margin: 2rem 0;
         }
 
-        .map-container iframe {
-            width: 100%;
-            height: 400px;
-            border: none;
+        .map-info-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 12;
+            max-width: 320px;
+            min-width: 280px;
+        }
+
+        .map-info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .map-address {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+
+        .address-line1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .address-line2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .map-detail-link {
+            font-size: 20px;
+            color: #1976d2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .map-detail-link:hover {
+            color: #0d47a1;
+            text-decoration: underline;
         }
 
         .back-btn {
@@ -295,9 +410,46 @@
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
-            font-size: 0.875rem;
+            font-size: 1.0rem;
             font-weight: 600;
             margin-right: 0.5rem;
+        }
+
+        /* 機構介紹文字樣式 */
+        .description-section p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #2c3e50;
+        }
+
+        /* 服務對象項目文字 */
+        .service-target-item h6 {
+            font-size: 1.2rem;
+        }
+
+        /* 其他資訊文字 */
+        .col-md-6,
+        .col-md-12 {
+            font-size: 1.2rem;
+        }
+
+        /* 麵包屑導航 */
+        .breadcrumb {
+            font-size: 1.1rem;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            font-size: 1.1rem;
+        }
+
+        /* 載入和錯誤訊息 */
+        .loading-container h3 {
+            font-size: 1.4rem;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
         }
 
         @media (max-width: 768px) {
@@ -459,6 +611,15 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 年齡限制資訊 -->
+                        <div class="age-limit-section mt-3">
+                            <div class="alert alert-info d-flex align-items-center" role="alert">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <div>
+                                    <strong>年齡限制：</strong>{{ organization.ageLimits || '無特別限制' }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 4.1 補助資訊 -->
@@ -490,34 +651,37 @@
                             <table class="table price-table">
                                 <thead>
                                     <tr>
-                                        <th>房型名稱</th>
-                                        <th>月費 (NT$)</th>
-                                        <th>房間數量</th>
-                                        <th>押金資訊</th>
+                                        <th>🏠 房型名稱</th>
+                                        <th>💰 月費 (NT$)</th>
+                                        <th>🔢 房間數量</th>
+                                        <th>📋 押金資訊</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="room in organization.rooms" :key="room.id">
-                                        <td>
-                                            <strong>{{ room.roomTypeName }}</strong>
+                                        <td class="text-center">
+                                            <div class="room-name">{{ room.roomTypeName }}</div>
                                         </td>
-                                        <td>
-                                            <span class="fw-bold text-success fs-5">
+                                        <td class="text-center">
+                                            <div class="monthly-price">
                                                 {{ formatPrice(room.monthlyPrice) }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info">{{ room.roomQuantity }} 間</span>
-                                        </td>
-                                        <td>
-                                            <div v-if="room.hasDeposit">
-                                                <small class="text-muted">
-                                                    押金：{{ formatPrice(room.depositAmount) }}<br>
-                                                    <span v-if="room.depositMonths">{{ room.depositMonths }} 個月</span>
-                                                </small>
                                             </div>
-                                            <div v-else>
-                                                <small class="text-success">無需押金</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-primary room-quantity">{{ room.roomQuantity }}
+                                                間</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div v-if="room.hasDeposit" class="deposit-info">
+                                                <div class="deposit-amount">
+                                                    押金：{{ formatPrice(room.depositAmount) }}
+                                                </div>
+                                                <div v-if="room.depositMonths" class="deposit-months">
+                                                    約 {{ room.depositMonths }} 個月
+                                                </div>
+                                            </div>
+                                            <div v-else class="no-deposit">
+                                                ✓ 無需押金
                                             </div>
                                         </td>
                                     </tr>
@@ -562,17 +726,17 @@
                         </div>
                     </div>
 
-                    <!-- 8. 聯絡資訊 -->
+                    <!-- 8. 聯絡資訊 - 暫時註解，改用地圖顯示地址資訊
                     <div>
                         <h3 class="section-title">
                             <i class="bi bi-telephone me-2"></i>聯絡資訊
                         </h3>
                         <div class="address-section">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <h6>完整地址</h6>
-                                    <a :href="getGoogleMapsUrl(organization.cityName + organization.districtName + organization.address)"
-                                        target="_blank" class="address-link" rel="noopener noreferrer"
+                                    <a :href="getOrganizationMapUrl()" target="_blank" class="address-link"
+                                        rel="noopener noreferrer"
                                         :aria-label="'在 Google 地圖中查看' + organization.cityName + organization.districtName + organization.address">
                                         <i class="bi bi-geo-alt-fill"></i>
                                         {{ organization.cityName }}{{ organization.districtName }}{{
@@ -580,13 +744,10 @@
                                         <i class="bi bi-box-arrow-up-right"></i>
                                     </a>
                                 </div>
-                                <div class="col-md-4">
-                                    <h6>年齡限制</h6>
-                                    <p class="mb-0">{{ organization.ageLimits || '無特別限制' }}</p>
-                                </div>
                             </div>
                         </div>
                     </div>
+                    -->
 
                     <!-- 9. 位置地圖 -->
                     <div>
@@ -594,16 +755,26 @@
                             <i class="bi bi-map me-2"></i>位置地圖
                         </h3>
                         <div class="map-container">
-                            <iframe id="orgMap" width="100%" height="450" :src="getGoogleMapEmbedUrl()"
-                                style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade" :title="organization.name + '位置地圖'">
+                            <!-- 地圖左上角資訊框 -->
+                            <div class="map-info-overlay">
+                                <div class="map-info-content">
+                                    <div class="map-address">
+                                        <div class="address-line1">{{ organization.cityName }}{{
+                                            organization.districtName }}</div>
+                                        <div class="address-line2">{{ organization.address }}</div>
+                                    </div>
+                                    <a :href="getOrganizationMapUrl()" target="_blank" class="map-detail-link"
+                                        rel="noopener noreferrer">
+                                        <i class="bi bi-geo-alt-fill me-1"></i>顯示詳細地圖
+                                        <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- 地圖iframe -->
+                            <iframe id="orgMap" width="100%" height="550" :src="getEmbedMapUrl()" style="border:0;"
+                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                                :title="organization.name + '位置地圖'">
                             </iframe>
-                        </div>
-                        <div class="text-center mt-2">
-                            <small class="text-muted">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                {{ organization.cityName }}{{ organization.districtName }}{{ organization.address }}
-                            </small>
                         </div>
                     </div>
 
@@ -718,6 +889,7 @@
                             errorMessage: '',
                             organizationId: null,
                             showFloatingBtn: false,
+                            mapSrc: '',
                             // 特色服務資料快取
                             featureServicesCache: new Map()
                         };
@@ -770,6 +942,13 @@
                             try {
                                 const response = await apiClient.get(`/api/Organizations/${this.organizationId}`);
                                 console.log('✅ API 回應成功:', response.data);
+                                console.log('🗺️ 檢查地圖相關欄位:', {
+                                    mapUrl: response.data.mapUrl,
+                                    googleMapUrl: response.data.googleMapUrl,
+                                    googleMapsUrl: response.data.googleMapsUrl,
+                                    map_url: response.data.map_url,
+                                    locationUrl: response.data.locationUrl
+                                });
                                 this.organization = response.data;
 
                                 // 更新頁面標題
@@ -867,25 +1046,47 @@
                             return iconMap[serviceName] || 'bi-star-fill';
                         },
 
+                        // 取得機構地圖 URL (優先使用後台提供的連結)
+                        getOrganizationMapUrl() {
+                            // 優先使用後台提供的地圖連結 (可能的欄位名稱)
+                            if (this.organization && (
+                                this.organization.mapUrl ||
+                                this.organization.googleMapUrl ||
+                                this.organization.googleMapsUrl ||
+                                this.organization.map_url ||
+                                this.organization.locationUrl
+                            )) {
+                                return this.organization.mapUrl ||
+                                    this.organization.googleMapUrl ||
+                                    this.organization.googleMapsUrl ||
+                                    this.organization.map_url ||
+                                    this.organization.locationUrl;
+                            }
+
+                            // fallback 到自動生成的 Google Maps 連結
+                            if (this.organization) {
+                                const fullAddress = `${this.organization.cityName}${this.organization.districtName}${this.organization.address}`;
+                                return this.getGoogleMapsUrl(fullAddress);
+                            }
+
+                            return '#';
+                        },
+
+                        // 取得嵌入地圖的 URL
+                        getEmbedMapUrl() {
+                            if (!this.organization) return '';
+
+                            const fullAddress = `${this.organization.cityName}${this.organization.districtName}${this.organization.address}`;
+                            const encodedAddress = encodeURIComponent(fullAddress);
+
+                            // 使用免費的 Google Maps iframe (不需要 API key)
+                            return `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+                        },
+
                         // 取得 Google Maps URL
                         getGoogleMapsUrl(address) {
                             const encodedAddress = encodeURIComponent(address);
                             return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-                        },
-
-                        // 取得 Google Maps 嵌入 URL (使用機構地址)
-                        getGoogleMapEmbedUrl() {
-                            if (!this.organization || !this.organization.address) {
-                                // 預設顯示台灣地圖
-                                return `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1840000!2d120.9!3d23.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1716785621357!5m2!1szh-TW!2stw`;
-                            }
-
-                            // 組合完整地址
-                            const fullAddress = `${this.organization.cityName}${this.organization.districtName}${this.organization.address}`;
-                            const encodedAddress = encodeURIComponent(fullAddress);
-
-                            // 使用 Google Maps 搜尋嵌入方式（無需 API Key）
-                            return `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
                         },
 
                         // 載入特色服務資料

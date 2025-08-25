@@ -111,6 +111,21 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
+        .clickable-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            background-color: #f8f9fa;
+        }
+
+        .clickable-card:active {
+            transform: translateY(-1px);
+        }
+
         .org-image {
             width: calc(100% - 30px);
             height: calc(100% - 30px);
@@ -379,6 +394,60 @@
             .page-select {
                 width: 100%;
             }
+
+            /* 手機模式下的機構卡片調整 */
+            .org-card .col-md-8 {
+                margin-bottom: 1rem;
+            }
+
+            .org-card .col-md-4,
+            .text-center-mobile {
+                text-align: center !important;
+                margin-top: 1rem;
+            }
+
+            .detail-btn {
+                width: 100%;
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+                margin-top: 1rem;
+            }
+
+            /* 確保價格和床位數在手機模式下居中顯示 */
+            .org-card .col-md-4>div {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            /* 手機模式下的機構圖片調整 */
+            .card-img-container {
+                margin-bottom: 1rem;
+            }
+
+            /* 手機模式下的可點擊卡片樣式 */
+            .clickable-card {
+                border: 2px solid transparent;
+                position: relative;
+            }
+
+            .clickable-card::after {
+                content: '點擊查看詳情';
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(40, 167, 69, 0.9);
+                color: white;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                z-index: 5;
+            }
+
+            .clickable-card:hover {
+                border-color: #28a745;
+                background-color: #f8fff9;
+            }
         }
     </style>
 
@@ -606,7 +675,8 @@
 
                     <div class="row">
                         <div v-for="org in searchResults" :key="org.id" class="col-12">
-                            <div class="card org-card h-100">
+                            <div class="card org-card h-100" @click="handleCardClick(org.id, $event)"
+                                :class="{ 'clickable-card': isMobileOrTablet() }">
                                 <div class="row g-0 h-100">
                                     <div class="col-md-3 d-flex align-items-center">
                                         <div v-if="getImageUrl(org.photoUrl)"
@@ -654,7 +724,7 @@
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="col-md-4 d-flex flex-column justify-content-between text-end h-100">
+                                                    class="col-md-4 col-12 d-flex flex-column justify-content-between text-end text-center-mobile h-100">
                                                     <div>
                                                         <div class="mb-2">
                                                             <small class="text-muted">床位數: {{ org.bedCount }}</small>
@@ -666,8 +736,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="mt-auto">
-                                                        <button type="button" class="btn btn-success detail-btn"
-                                                            @click="viewDetail(org.id)"
+                                                        <button type="button" class="btn btn-success detail-btn w-100"
+                                                            @click.stop="viewDetail(org.id)"
+                                                            :class="{ 'd-none d-lg-block': isMobileOrTablet() }"
                                                             :aria-label="'查看' + org.name + '詳細資料'">
                                                             詳細資料
                                                         </button>
@@ -882,6 +953,18 @@
 
                     async mounted() {
                         await this.loadInitialData();
+
+                        // 監聽螢幕大小變化
+                        this.handleResize = () => {
+                            this.$forceUpdate(); // 強制更新以重新計算 isMobileOrTablet()
+                        };
+                        window.addEventListener('resize', this.handleResize);
+                    },
+
+                    beforeUnmount() {
+                        if (this.handleResize) {
+                            window.removeEventListener('resize', this.handleResize);
+                        }
                     },
 
                     methods: {
@@ -1097,7 +1180,19 @@
                             this.searchResults = sortedResults.slice(startIndex, endIndex);
                         },
 
-                        // 價格排序 - 觸發重新排序和分頁
+                        // 處理卡片點擊事件
+                        handleCardClick(organizationId, event) {
+                            // 只在手機/平板模式下處理整張卡片的點擊
+                            if (this.isMobileOrTablet()) {
+                                this.viewDetail(organizationId);
+                            }
+                        },
+
+                        // 檢測是否為手機或平板模式
+                        isMobileOrTablet() {
+                            return window.innerWidth < 992; // Bootstrap lg breakpoint
+                        },
+
                         // 查看詳細資料
                         viewDetail(organizationId) {
                             // 保存當前搜尋條件到 localStorage
