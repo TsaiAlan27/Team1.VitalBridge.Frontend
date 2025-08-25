@@ -810,13 +810,18 @@
             },
             // 加入購物車
             async addToCart() {
+              console.log('=== 開始加入購物車流程 ===');
+              console.log('當前商品資料:', this.product);
+              console.log('商品ID:', this.product?.id);
+              console.log('選擇數量:', this.selectedQuantity);
               // 1. 檢查登入狀態
               try {
-                await window.auth.me(); // 檢查是否登入
+                const userInfo = await auth.me(); // 🔥 改用 auth，不是 window.auth
+                console.log('✅ 登入檢查成功:', userInfo);
               } catch (error) {
+                console.error('❌ 登入檢查失敗:', error);
                 alert('請先登入會員才能加入購物車');
-                // 可以跳出登入 modal 或跳轉登入頁
-                return;
+                return;  // 🔥 這裡會停止執行
               }
               // 2. 檢查數量
               if (this.selectedQuantity < 1 || this.selectedQuantity > 20) {
@@ -832,20 +837,73 @@
               try {
                 // 鎖定按鈕，防止重複點擊
                 this.addingToCart = true;
-                const response = await window.auth.apiFetch('/api/CartApi/AddItem', {
+
+                // 新增測試用的 requestData 物件
+                const requestData = {
+                  productId: this.product.id,
+                  quantity: this.selectedQuantity
+                };
+
+                console.log('API 請求資料:', requestData);
+
+                // 🔥 參考通知中心的寫法，移除 /api/ 前綴
+                // 🔥 修正：使用 auth 而非 window.auth
+                // 🔥 修正：使用 fetch 直接呼叫完整的 API URL
+                const response = await fetch(`${this.baseApiUrl}/api/CartApi/AddItem`, {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    productId: this.product.id,
-                    quantity: this.selectedQuantity
-                  })
+                  headers: {
+                    'Content-Type': 'application/json',
+                    // 🔥 使用正確的 getAccessToken 方法
+                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                  },
+                  credentials: 'include', // 包含 cookies 以處理身份驗證
+                  body: JSON.stringify(requestData)
                 });
+                console.log('回應狀態:', response.status, response.statusText);
+
                 if (!response.ok) {
                   const errorText = await response.text();
+                  console.error('API 錯誤回應:', errorText);
+                  if (response.status === 401) {
+                    // 🔥 嘗試 refresh token
+                    try {
+                      console.log('嘗試刷新 token...');
+                      const refreshed = await auth.ensureRefreshed();
+                      if (refreshed) {
+                        console.log('✅ Token 刷新成功，重試...');
+                        // 重試一次
+                        const retryResponse = await fetch(`${this.baseApiUrl}/api/CartApi/AddItem`, {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${auth.getAccessToken()}`
+                          },
+                          credentials: 'include',
+                          body: JSON.stringify(requestData)
+                        });
+
+                        if (retryResponse.ok) {
+                          const retryResult = await retryResponse.text();
+                          alert(retryResult || '成功加入購物車！');
+                          await this.updateCartCount();
+                          return;
+                        } else {
+                          throw new Error(await retryResponse.text() || '重試失敗');
+                        }
+                      } else {
+                        throw new Error('Token 刷新失敗');
+                      }
+                    } catch (refreshError) {
+                      console.error('❌ Token 刷新失敗:', refreshError);
+                      alert('登入已過期，請重新登入');
+                      return;
+                    }
+                  }
                   throw new Error(errorText || '加入購物車失敗');
                 }
                 // 5. 成功處理
                 const result = await response.text();
+                console.log('✅ 成功回應:', result);
                 alert(result || '成功加入購物車！');
 
                 // 6. 更新導覽列購物車數量
@@ -861,10 +919,17 @@
             },
 
             // 新增：更新購物車數量的方法
+            // 修改 updateCartCount
             async updateCartCount() {
               try {
-                const response = await window.auth.apiFetch('/api/CartApi/Count', {
-                  method: 'GET'
+                // 把/api/ 前綴移除
+                // 🔥 修正：使用 auth 而非 window.auth
+                const response = await fetch(`${this.baseApiUrl}/api/CartApi/Count`, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                  },
+                  credentials: 'include' // 包含 cookies
                 });
 
                 if (response.ok) {
@@ -873,6 +938,15 @@
                   if (cartCountElement) {
                     cartCountElement.textContent = count || 0;
                   }
+                  console.log('購物車數量更新成功:', count);
+                } else if (response.status === 401) {
+                  console.warn('⚠️ 未登入，購物車數量設為 0');
+                  const cartCountElement = document.getElementById('cart-count');
+                  if (cartCountElement) {
+                    cartCountElement.textContent = '0';
+                  }
+                } else {
+                  console.warn('無法取得購物車數量，狀態:', response.status);
                 }
               } catch (error) {
                 console.error('更新購物車數量失敗:', error);

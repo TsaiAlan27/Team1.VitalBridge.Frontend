@@ -739,4 +739,66 @@
         console.log('🔄 DOM 已載入，直接初始化搜尋');
         setTimeout(initSearchFunction, 500);
     }
+    // 全域購物車數量更新功能
+    (function () {
+        // 頁面載入時檢查購物車數量
+        function loadCartCount() {
+            // 檢查是否有登入
+            if (typeof window.auth === 'undefined' || !window.auth.me) {
+                return;
+            }
+
+            window.auth.me().then(function () {
+                // 已登入，載入購物車數量
+                // 🔥 修正：使用直接 fetch 而不是 auth.apiFetch
+                return fetch('https://localhost:7104/api/CartApi/Count', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + (window.auth.getAccessToken() || '')
+                    },
+                    credentials: 'include'
+                });
+            }).then(function (response) {
+                if (response && response.ok) {
+                    return response.json();
+                }
+                return 0;
+            }).then(function (count) {
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = count || 0;
+                    // 如果數量為0，隱藏badge
+                    cartCountElement.style.display = (count && count > 0) ? 'inline' : 'none';
+                }
+                console.log('✅ 購物車數量更新成功:', count);
+            }).catch(function (error) {
+                console.warn('⚠️ 購物車數量更新失敗:', error);
+                // 未登入或其他錯誤，隱藏數量
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.style.display = 'none';
+                }
+            });
+        }
+        // 🔥 新增：提供全域方法供其他頁面呼叫
+        window.updateCartCount = function () {
+            loadCartCount();
+        };
+        // 等待認證系統載入完成後執行
+        function waitForAuth() {
+            if (typeof window.auth !== 'undefined') {
+                loadCartCount();
+            } else {
+                setTimeout(waitForAuth, 100);
+            }
+        }
+        // 頁面載入完成後執行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForAuth);
+        } else {
+            waitForAuth();
+        }
+
+
+    })();
 </script>
