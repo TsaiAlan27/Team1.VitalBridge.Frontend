@@ -29,8 +29,8 @@ export default {
                 >
                     <div class="featured-image-container">
                         <img
-                        v-if="article.coverPic"
-                        :src="'data:image/jpeg;base64,' + article.coverPic"
+                        v-if="article.coverPicFileName"
+                        :src="'/api/UploadFile/GetFile?fileName=' + article.coverPicFileName"
                         :alt="article.title"
                         class="featured-image"
                         @error="handleImageError"

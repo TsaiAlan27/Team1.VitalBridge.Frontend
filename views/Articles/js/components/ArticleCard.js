@@ -19,8 +19,8 @@ export default {
                 >
                     <div class="article-image-container">
                         <img 
-                            v-if="article.coverPic" 
-                            :src="'data:image/jpeg;base64,' + article.coverPic" 
+                            v-if="article.coverPicFileName" 
+                            :src="'/api/UploadFile/GetFile?fileName=' + article.coverPicFileName" 
                             :alt="article.title"
                             class="article-image"
                             @error="handleImageError"
