@@ -1,21 +1,36 @@
-<header id="header" class="header d-flex align-items-center light-background sticky-top">
-    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
-        <a href="/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="assets/img/logo.png" alt=""> -->
-            <h1 class="sitename">樂齡橋 VitalBridge</h1>
-        </a>
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                <li><a href="/VitalBridge/index.html">首頁</a></li>
-                <li><a href="/VitalBridge/page/longterm-care-guide.html">長照導覽</a></li>
-                <li><a href="/orgs/orgSearch.html">找機構</a></li>
-                <li><a href="/VitalBridge/ECshop/index.html">樂齡商城</a></li>
-                <li><a href="/views/Articles/ArticleIndex.html">專欄文章</a></li>
-                <li><a class="nav-member-center" href="/VitalBridge/member/memberCenter.html">會員中心</a></li>
-                <li><a href="#">關於我們</a></li>
+<style>
+  #notificationDropdown::after {
+    display: none !important;
+  }
+</style>
+<header
+  id="header"
+  class="header d-flex align-items-center light-background sticky-top"
+>
+  <div
+    class="container-fluid position-relative d-flex align-items-center justify-content-between"
+  >
+    <a
+      href="/VitalBridge/index.html"
+      class="logo d-flex align-items-center me-auto me-xl-0"
+    >
+      <!-- Uncomment the line below if you also wish to use an image logo -->
+      <!-- <img src="assets/img/logo.png" alt=""> -->
+      <h1 class="sitename">樂齡橋 VitalBridge</h1>
+    </a>
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="/VitalBridge/index.html">首頁</a></li>
+        <li>
+          <a href="/VitalBridge/page/longterm-care-guide.html">長照導覽</a>
+        </li>
+        <li><a href="/orgs/orgSearch.html">找機構</a></li>
+        <li><a href="/VitalBridge/ECshop/index.html">樂齡商城</a></li>
+        <li><a href="/views/Articles/ArticleIndex.html">專欄文章</a></li>
+        <li><a class="nav-member-center" href="/VitalBridge/member/memberCenter.html">會員中心</a></li>
+        <li><a href="#">關於我們</a></li>
 
-                <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
+        <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
                         <li><a href="#">Dropdown 1</a></li>
@@ -34,149 +49,231 @@
                         <li><a href="#">Dropdown 4</a></li>
                     </ul>
                 </li> -->
-            </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
 
-        <div class="header-social-links d-flex align-items-center flex-nowrap gap-2">
-            <div id="authArea" class="header-auth d-flex align-items-center me-3"></div>
+    <div
+      class="header-social-links d-flex align-items-center flex-nowrap gap-2"
+    >
+      <div
+        id="authArea"
+        class="header-auth d-flex align-items-center me-3"
+      ></div>
 
-            <!-- 通知鈴鐺 -->
-            <a class="btn position-relative dropdown-toggle" href="#" role="button" id="notificationDropdown"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-bell fs-4"></i>
-                <!-- <span
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+      <!-- 通知鈴鐺 -->
+      <a
+        class="btn position-relative dropdown-toggle"
+        href="#"
+        role="button"
+        id="notificationDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="bi bi-bell fs-4"></i>
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-danger notifyRedPoing"
         >
-          3 -->
-                <span class="visually-hidden">unread notifications</span>
-                </span>
-            </a>
+          1
+          <span class="visually-hidden">unread notifications</span>
+        </span>
+      </a>
 
-            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notificationDropdown"
-                style="width: 300px">
-                <li>
-                    <h6 class="dropdown-header">通知中心</h6>
-                </li>
-                <div id="messageContext">
+      <ul
+        class="dropdown-menu dropdown-menu-end shadow"
+        aria-labelledby="notificationDropdown"
+        style="width: 300px"
+      >
+        <li>
+          <h6 class="dropdown-header">通知中心</h6>
+        </li>
+        <div id="messageContext"></div>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a
+            class="dropdown-item text-center text-muted"
+            href="/VitalBridge/notifyCenter.html"
+            >查看全部通知</a
+          >
+        </li>
+      </ul>
 
-                </div>
-                <li>
-                    <hr class="dropdown-divider" />
-                </li>
-                <li>
-                    <a class="dropdown-item text-center text-muted" href="/VitalBridge/notifyCenter.html">查看全部通知</a>
-                </li>
-            </ul>
-
-            <!-- <a href="#" class="line"><i class="bi bi-line"></i></a> -->
-            <!-- <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a> -->
-            <!-- <a href="#" class="facebook"><i class="bi bi-facebook"></i></a> -->
-        </div>
+      <!-- <a href="#" class="line"><i class="bi bi-line"></i></a> -->
+      <!-- <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a> -->
+      <!-- <a href="#" class="facebook"><i class="bi bi-facebook"></i></a> -->
     </div>
+  </div>
 </header>
 
 <!-- Login / Register Modals -->
 <!-- 登入按鈕觸發 modal -->
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">會員登入</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="loginForm">
-                    <div class="mb-3">
-                        <label for="loginEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="loginEmail" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="loginPassword" class="form-label">密碼</label>
-                        <input type="password" class="form-control" id="loginPassword" required />
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="rememberMe" />
-                        <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
-                    </div>
-                    <div id="loginAlert" class="alert d-none" role="alert"></div>
+<div
+  class="modal fade"
+  id="loginModal"
+  tabindex="-1"
+  aria-labelledby="loginModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">會員登入</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required />
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">密碼</label>
+            <input
+              type="password"
+              class="form-control"
+              id="loginPassword"
+              required
+            />
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="rememberMe" />
+            <label class="form-check-label" for="rememberMe"
+              >保持登入 (記住我)</label
+            >
+          </div>
+          <div id="loginAlert" class="alert d-none" role="alert"></div>
 
-
-
-
-
-
-
-
-                    <div class="mb-2 d-none" id="loginResendBox">
-                        <button type="button" id="btnResendFromLogin" class="btn btn-sm btn-outline-secondary"
-                            disabled>重寄驗證信</button>
-                        <small class="text-muted ms-2" id="loginResendHint"></small>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 mb-3">登入</button>
-                    <div class="text-center text-muted mb-2"><small>或使用社群帳號登入</small></div>
-                    <div id="googleSignInBtn" class="d-flex justify-content-center mb-2"></div>
-                    <div class="text-center"><small class="text-muted">首次使用 Google 會自動建立帳號</small></div>
-                </form>
-            </div>
-        </div>
+          <div class="mb-2 d-none" id="loginResendBox">
+            <button
+              type="button"
+              id="btnResendFromLogin"
+              class="btn btn-sm btn-outline-secondary"
+              disabled
+            >
+              重寄驗證信
+            </button>
+            <small class="text-muted ms-2" id="loginResendHint"></small>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mb-3">登入</button>
+          <div class="text-center text-muted mb-2">
+            <small>或使用社群帳號登入</small>
+          </div>
+          <div
+            id="googleSignInBtn"
+            class="d-flex justify-content-center mb-2"
+          ></div>
+          <div class="text-center">
+            <small class="text-muted">首次使用 Google 會自動建立帳號</small>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Register Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registerModalLabel">註冊會員</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="registerForm">
-                    <div class="mb-3">
-                        <label for="regName" class="form-label">姓名</label>
-                        <input type="text" class="form-control" id="regName" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="regEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="regEmail" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="regPassword" class="form-label">密碼</label>
-                        <input type="password" class="form-control" id="regPassword" required />
-                    </div>
-                    <div id="regAlert" class="alert d-none" role="alert"></div>
-                    <button type="submit" class="btn btn-primary">註冊</button>
-                </form>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="registerModal"
+  tabindex="-1"
+  aria-labelledby="registerModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel">註冊會員</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="registerForm">
+          <div class="mb-3">
+            <label for="regName" class="form-label">姓名</label>
+            <input type="text" class="form-control" id="regName" required />
+          </div>
+          <div class="mb-3">
+            <label for="regEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="regEmail" required />
+          </div>
+          <div class="mb-3">
+            <label for="regPassword" class="form-label">密碼</label>
+            <input
+              type="password"
+              class="form-control"
+              id="regPassword"
+              required
+            />
+          </div>
+          <div id="regAlert" class="alert d-none" role="alert"></div>
+          <button type="submit" class="btn btn-primary">註冊</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- auth area will be rendered by assets/js/auth.js -->
 
-
 <!-- Register Success Modal -->
-<div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-labelledby="registerSuccessModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registerSuccessModalLabel">註冊成功</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-2">我們已寄出驗證信至 <span id="regSuccessEmail" class="fw-bold"></span>。</p>
-                <p class="text-muted mb-0">請前往信箱點擊驗證連結後再登入。</p>
-            </div>
-            <div class="modal-footer">
-                <a href="/VitalBridge/index.html" class="btn btn-outline-secondary">回首頁</a>
-                <button type="button" id="btnResendFromSuccess" class="btn btn-outline-secondary">重寄驗證信</button>
-                <button type="button" id="btnOpenLoginFromSuccess" class="btn btn-primary">前往登入</button>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="registerSuccessModal"
+  tabindex="-1"
+  aria-labelledby="registerSuccessModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerSuccessModalLabel">註冊成功</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">
+          我們已寄出驗證信至
+          <span id="regSuccessEmail" class="fw-bold"></span>。
+        </p>
+        <p class="text-muted mb-0">請前往信箱點擊驗證連結後再登入。</p>
+      </div>
+      <div class="modal-footer">
+        <a href="/VitalBridge/index.html" class="btn btn-outline-secondary"
+          >回首頁</a
+        >
+        <button
+          type="button"
+          id="btnResendFromSuccess"
+          class="btn btn-outline-secondary"
+        >
+          重寄驗證信
+        </button>
+        <button
+          type="button"
+          id="btnOpenLoginFromSuccess"
+          class="btn btn-primary"
+        >
+          前往登入
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- 引入 auth 樣式（獨立於 main.css） -->
@@ -187,157 +284,187 @@
 <!-- Google 登入模組（依賴 auth.js 與 GSI client） -->
 <script type="module" src="/assets/js/GoogleLogin.js"></script>
 <script>
-    $("#notificationDropdown").on("shown.bs.dropdown", async function () {
-        try {
-            // const user = await auth.me();
-            const res = await auth.apiFetch('/getNotify', { method: 'GET' });
-            if (!res.ok) {
-                $("#messageContext").empty();
-                $("#messageContext").append(
-                    '<li><a class="dropdown-item">暫無通知</a></li>'
-                );
-            }
-            else {
-                res.json().then(result => {
-                    const html = result.map(item => {
-                        return `
+  $("#notificationDropdown").on("shown.bs.dropdown", async function () {
+    try {
+      $(".notifyRedPoing").hide();
+      const res = await auth.apiFetch("/getNotify", { method: "GET" });
+      if (!res.ok) {
+        $("#messageContext").empty();
+        $("#messageContext").append(
+          '<li><a class="dropdown-item">暫無通知</a></li>'
+        );
+      } else {
+        res.json().then((result) => {
+          const html = result
+            .map((item) => {
+              return `
                 <li class="notify-item ">
-                    ${item.notifysUrl ? `<a href="${item.notifysUrl}">` : ''}
+                    ${item.notifysUrl ? `<a href="${item.notifysUrl}">` : ""}
                         <span class="notify-content">
                         <strong>${item.name}</strong>（${item.title}）
                         </span>
                         <br>
                         <span class="notify-date">${item.sendDate}</span>
-                    ${item.notifysUrl ? `</a>` : ''}
+                    ${item.notifysUrl ? `</a>` : ""}
 
                     
                 </li>
             `;
+            })
+            .join("<hr>");
 
-
-                    }).join('<hr>');
-
-                    $("#messageContext").empty();
-                    $("#messageContext").append(html);
-                });
-            }
-
-        } catch (e) {
-            $("#messageContext").empty();
-            $("#messageContext").append(
-                '<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>'
-            );
-        }
-    });
-</script>
-<link rel="stylesheet"
-    href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css" />
-<style>
-    df-messenger {
-        z-index: 999;
-        position: fixed;
-        --df-messenger-font-color: #000;
-        --df-messenger-font-family: Google Sans;
-        --df-messenger-chat-background: #f3f6fc;
-        --df-messenger-message-user-background: #d3e3fd;
-        --df-messenger-message-bot-background: #fff;
-        bottom: 16px;
-        right: 64px;
+          $("#messageContext").empty();
+          $("#messageContext").append(html);
+        });
+      }
+    } catch (e) {
+      $("#messageContext").empty();
+      $("#messageContext").append(
+        '<li><a class="dropdown-item" href="#">尚未登入，請先登入會員</a></li>'
+      );
     }
+  });
+</script>
+<link
+  rel="stylesheet"
+  href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css"
+/>
+<style>
+  df-messenger {
+    z-index: 999;
+    position: fixed;
+    --df-messenger-font-color: #000;
+    --df-messenger-font-family: Google Sans;
+    --df-messenger-chat-background: #f3f6fc;
+    --df-messenger-message-user-background: #d3e3fd;
+    --df-messenger-message-bot-background: #fff;
+    bottom: 16px;
+    right: 64px;
+  }
 </style>
 <!-- 引入 SignalR 程式庫 -->
-<script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"
+></script>
 <script>
-    let connection;
-    async function isLogin() {
-        const messenger = document.querySelector("df-messenger");
-        if (!messenger) {
-            await createMessenger();
+  let connection;
+  async function isLogin() {
+    const user = await auth.me();
+    const messenger = document.querySelector("df-messenger");
+    if (!messenger) {
+      await createMessenger();
+    }
+    //建立signalR物件
+    connection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:7104/chathub")
+      .build();
+    //與Server建立連線
+    connection
+      .start()
+      .then(function () {
+        console.log("Hub 連線完成");
+        connection.invoke("addUser", user.id + "", "");
+      })
+      .catch(function (err) {
+        console.log("Hub 連線失敗");
+      });
+    connection.on("newNotify", function (msg) {
+      $(".notifyRedPoing").show();
+      newNotify();
+    });
+  }
+  function isLogout() {
+    const messenger = document.querySelector("df-messenger");
+    if (messenger) {
+      messenger.remove();
+    }
+  }
+  async function createMessenger(notClear) {
+    const user = await auth.me();
+    if (!notClear) {
+      // localStorage
+      Object.keys(localStorage).forEach((k) => {
+        if (k.startsWith("df-messenger-")) {
+          localStorage.removeItem(k);
         }
-        //建立signalR物件
-        connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7104/chathub")
-            .build();
-        //與Server建立連線
-        connection.start().then(function () {
-            console.log("Hub 連線完成");
-        }).catch(function (err) {
-            console.log("Hub 連線失敗");
-        });
-    }
-    function isLogout() {
-        const messenger = document.querySelector("df-messenger");
-        if (messenger) {
-            messenger.remove();
+      });
+
+      // sessionStorage
+      Object.keys(sessionStorage).forEach((k) => {
+        if (k.startsWith("df-messenger-")) {
+          sessionStorage.removeItem(k);
         }
+      });
     }
-    async function createMessenger() {
-        const user = await auth.me();
-        // localStorage
-        Object.keys(localStorage).forEach(k => {
-            if (k.startsWith("df-messenger-")) {
-                localStorage.removeItem(k);
-            }
-        });
-
-        // sessionStorage
-        Object.keys(sessionStorage).forEach(k => {
-            if (k.startsWith("df-messenger-")) {
-                sessionStorage.removeItem(k);
-            }
-        });
-        const messenger = document.createElement("df-messenger");
-        messenger.setAttribute("project-id", "vitalbridge");
-        messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
-        messenger.setAttribute("language-code", "zh-tw");
-        messenger.setAttribute("max-query-length", "-1");
-        const bubble = document.createElement("df-messenger-chat-bubble");
-        bubble.setAttribute("chat-title", "樂齡橋小助手");
-        messenger.appendChild(bubble);
-        document.body.appendChild(messenger);
-        messenger.addEventListener('df-messenger-loaded', () => {
-            messenger.sendQuery(`這段訊息是要告訴你uid 非使用者發送 不必回覆 uid:${user.id} 使用者姓名:${user.name}`);
-        });
-        messenger.addEventListener("df-request-sent", (e) => {
-            //使用者發送的訊息
-            var userMsg = e.detail.data.requestBody.queryInput.text.text;
-            if (userMsg.includes("轉人工")) {
-                switchToHuman();
-            }
-        });
-    }
-
+    const messenger = document.createElement("df-messenger");
+    messenger.setAttribute("project-id", "vitalbridge");
+    messenger.setAttribute("agent-id", "781ae899-3a72-4c13-be95-1e138057b383");
+    messenger.setAttribute("language-code", "zh-tw");
+    messenger.setAttribute("max-query-length", "-1");
+    const bubble = document.createElement("df-messenger-chat-bubble");
+    bubble.setAttribute("chat-title", "樂齡橋小助手");
+    messenger.appendChild(bubble);
+    document.body.appendChild(messenger);
+    messenger.addEventListener("df-messenger-loaded", () => {
+      messenger.sendQuery(
+        `這段訊息是要告訴你uid 非使用者發送 不必回覆 uid:${user.id} 使用者姓名:${user.name}`
+      );
+    });
+    messenger.addEventListener("df-request-sent", (e) => {
+      //使用者發送的訊息
+      var userMsg = e.detail.data.requestBody.queryInput.text.text;
+      if (userMsg.includes("轉人工")) {
+        switchToHuman();
+      }
+    });
+  }
 </script>
 <script>
-    async function switchToHuman() {
-        // 移除 AI messenger
-        const messenger = document.querySelector("df-messenger");
-        if (messenger) messenger.remove();
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
-        // 建立「假 messenger」
-        const fake = document.createElement("df-messenger");
-        const bubble = document.createElement("df-messenger-chat-bubble");
-        bubble.setAttribute("chat-title", "真人客服");
-        fake.appendChild(bubble);
-        document.body.appendChild(fake);
+  async function switchToHuman() {
+    // 移除 AI messenger
+    const messenger = document.querySelector("df-messenger");
+    if (messenger) messenger.remove();
 
-        // 在這裡完全自己控制訊息流程
-        fake.renderCustomText('**|已轉接真人客服，AI 已暫停回覆|**');
-        const user = await auth.me();
-        // 監聽輸入事件
-        fake.addEventListener("df-request-sent", (e) => {
-            //使用者發送的訊息
-            var userMsg = e.detail.data.requestBody.queryInput.text.text;
-            connection.invoke("SendMessage", user.id + "", userMsg).catch(function (err) {
-                alert('傳送錯誤: ' + err.toString());
-            });
-            // fake.renderCustomText("客服9527："+userMsg);
+    // 建立「假 messenger」
+    const fake = document.createElement("df-messenger");
+    const bubble = document.createElement("df-messenger-chat-bubble");
+    bubble.setAttribute("chat-title", "真人客服");
+    fake.appendChild(bubble);
+    document.body.appendChild(fake);
+
+    // 在這裡完全自己控制訊息流程
+    fake.renderCustomText("**|正在轉接真人客服，AI 已暫停回覆|**");
+    await sleep(500);
+    fake.renderCustomText("**連線中**");
+    await sleep(500);
+    const user = await auth.me();
+    // 監聽輸入事件
+    fake.addEventListener("df-request-sent", (e) => {
+      //使用者發送的訊息
+      var userMsg = e.detail.data.requestBody.queryInput.text.text;
+      connection
+        .invoke("SendMessage", user.id + "", userMsg)
+        .catch(function (err) {
+          // alert('傳送錯誤: ' + err.toString());
         });
-        connection.on("UpdContent", function (msg) {
-            fake.renderCustomText(msg);
-        });
-    } 
+      // fake.renderCustomText("客服9527："+userMsg);
+    });
+    connection.on("UpdContent", function (msg) {
+      fake.renderCustomText(msg);
+    });
+    connection.on("openAgent", function (msg) {
+      fake.remove();
+      createMessenger(true);
+    });
+    connection
+      .invoke("SendMessage", user.id + "", user.name + "")
+      .catch(function (err) {});
+  }
 </script>
 
 <!-- Google登入按鈕 -->
@@ -383,4 +510,23 @@
         // 監聽 auth 變化：若登入後保留提示可自動移除
         // auth:changed 事件目前無需處理提示移除
     })();
+</script>
+<div
+  id="alertBox"
+  class="alert alert-success text-center mb-0"
+  role="alert"
+  style="display: none"
+>
+  您有新通知
+</div>
+<script>
+  function newNotify() {
+    const alertBox = $("#alertBox");
+    alertBox.show();
+    setTimeout(() => {
+      if (alertBox) {
+        alertBox.hide();
+      }
+    }, 3000);
+  }
 </script>
