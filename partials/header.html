@@ -371,6 +371,7 @@
       });
     connection.on("newNotify", function (msg) {
       $(".notifyRedPoing").show();
+      newNotify();
     });
   }
   function isLogout() {
@@ -468,3 +469,22 @@
 
 <!-- Google登入按鈕 -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<div
+  id="alertBox"
+  class="alert alert-success text-center mb-0"
+  role="alert"
+  style="display: none"
+>
+  您有新通知
+</div>
+<script>
+  function newNotify() {
+    const alertBox = $("#alertBox");
+    alertBox.show();
+    setTimeout(() => {
+      if (alertBox) {
+        alertBox.hide();
+      }
+    }, 3000);
+  }
+</script>
