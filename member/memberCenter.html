@@ -270,6 +270,7 @@
     <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
     <script src="/assets/js/fragment-loader.js" defer></script>
+    <script src="/assets/js/member-center.js" defer></script>
     <script>
         // 強制需登入：未登入則導回首頁並開登入 modal（若可行）
         async function requireLogin() {
@@ -409,8 +410,9 @@
 
         function populateProfileMeta(user) {
             if (!user) return;
-            const id = user.memberId || user.id || user.userId || '';
-            $('#profileId').text(id || '--');
+            // 不在這裡預先顯示主鍵/會員編號，避免在 member-center.js 正式取得 profile 前出現閃爍或顯示真實主鍵
+            // 真正的顯示（含可能的遮罩/格式化）交由 assets/js/member-center.js 的 fill() 處理
+            $('#profileId').text('--');
             // 填寫基本欄位（若後端已有資料）
             if (user.name) $('#profileName').val(user.name);
             if (user.phone) $('#profilePhone').val(user.phone);
