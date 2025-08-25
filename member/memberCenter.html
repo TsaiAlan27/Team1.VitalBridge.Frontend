@@ -315,7 +315,13 @@
         }
 
         function bindForms() {
-            $('#formProfile').on('submit', async function (e) { e.preventDefault(); $('#profileSaveStatus').text('儲存中...'); setTimeout(() => { $('#profileSaveStatus').text('已儲存 (mock)'); }, 600); });
+            $('#formProfile').on('submit', async function (e) {
+                e.preventDefault();
+                // 交由 member-center.js 的 updateProfile 控制；此處不再顯示 mock 文字
+                if (window.memberCenter && typeof window.memberCenter.updateProfile === 'function') {
+                    window.memberCenter.updateProfile();
+                }
+            });
             $('#orderFilter').on('change', function () { loadOrders(); });
         }
 

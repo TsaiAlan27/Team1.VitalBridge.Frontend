@@ -36,26 +36,55 @@
         return null;
     }
 
+    // ---- JWT payload utilities ----
+    function decodeJwtPayload(token) {
+        if (!token || typeof token !== 'string') return null;
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        try { return JSON.parse(atob(parts[1])); } catch { return null; }
+    }
+    function tokenHasSub(token) {
+        const p = decodeJwtPayload(token);
+        if (!p) return false;
+        const candidates = [
+            'sub', 'nameid', 'nameId', 'nameID', 'NameId',
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+        ];
+        return candidates.some(k => p[k] != null && p[k] !== '');
+    }
+
     async function fetchProfile() {
+        await waitForAuthReady();
+        const debugOn = !!(window.memberCenter && window.memberCenter.debugProfile);
+        const dbg = (...m) => { if (debugOn) log('[profile]', ...m); };
+        let headers = await buildAuthHeaders(false);
+        if (debugOn && headers.Authorization) {
+            try { dbg('token payload', decodeJwtPayload(headers.Authorization.replace(/^Bearer\s+/, ''))); } catch { }
+        }
+        // 第一次打
+        let res = await fetch(PROFILE_API + '?_=' + Date.now(), { method: 'GET', headers, credentials: 'include' });
+        if (res.status === 401) {
+            dbg('401 -> refresh retry');
+            const ok = await ensureRefreshed();
+            if (ok) { headers = await buildAuthHeaders(false); res = await fetch(PROFILE_API + '?_=' + Date.now(), { method: 'GET', headers, credentials: 'include' }); }
+        }
+        if (!res.ok) { let body = ''; try { body = await res.text(); } catch { } dbg('fail', res.status, body.slice(0, 200)); throw new Error('讀取失敗(' + res.status + ')'); }
+        const json = await res.json();
+        dbg('ok keys', Object.keys(json || {}));
+        return json;
+    }
+
+    // 共用：建構帶權杖/防偽標頭（支援可選 Content-Type）
+    async function buildAuthHeaders(json = false) {
         await waitForAuthReady();
         let token = getAccessToken();
         if (!token) { try { await ensureRefreshed(); token = getAccessToken(); } catch { } }
-    const headers = { 'Accept': 'application/json' };
+        const headers = { 'Accept': 'application/json' };
+        if (json) headers['Content-Type'] = 'application/json';
         const xsrf = getXsrf();
         if (xsrf) { headers['X-XSRF-TOKEN'] = xsrf; headers['RequestVerificationToken'] = xsrf; }
         if (token) headers['Authorization'] = 'Bearer ' + token;
-        let res;
-        try { res = await fetch(PROFILE_API + '?_=' + Date.now(), { method: 'GET', headers, credentials: 'include' }); } catch (e) { throw new Error('連線失敗:' + e.message); }
-        if (res.status === 401) {
-            const ok = await ensureRefreshed();
-            if (ok) {
-                const nt = getAccessToken();
-                if (nt) { headers['Authorization'] = 'Bearer ' + nt; }
-                res = await fetch(PROFILE_API + '?_=' + Date.now(), { method: 'GET', headers, credentials: 'include' });
-            }
-        }
-        if (!res.ok) throw new Error('讀取失敗(' + res.status + ')');
-        return await res.json();
+        return headers;
     }
 
     // 共用 GET JSON（給城市/鄉鎮）
@@ -156,6 +185,62 @@
         sel.disabled = false;
     }
 
+    // ========== 更新資料 (PUT /api/member/profile) ==========
+    let saving = false;
+    function collectFormPayload() {
+        const name = (document.getElementById('profileName')?.value || '').trim();
+        const phone = (document.getElementById('profilePhone')?.value || '').trim();
+        const cityIdRaw = document.getElementById('profileCity')?.value || '';
+        const townshipIdRaw = document.getElementById('profileDistrict')?.value || '';
+        const address = (document.getElementById('profileAddressDetail')?.value || '').trim();
+        const cityId = cityIdRaw === '' ? null : (isNaN(Number(cityIdRaw)) ? cityIdRaw : Number(cityIdRaw));
+        const townshipId = townshipIdRaw === '' ? null : (isNaN(Number(townshipIdRaw)) ? townshipIdRaw : Number(townshipIdRaw));
+        return { name, phone, cityId, townshipId, address };
+    }
+
+    function payloadChanged(pOld, payload) {
+        if (!pOld) return true;
+        return (
+            (payload.name ?? '') !== (pOld.Name ?? '') ||
+            (payload.phone ?? '') !== (pOld.Phone ?? '') ||
+            (payload.cityId ?? null) != (pOld.CityId ?? null) ||
+            (payload.townshipId ?? null) != (pOld.TownshipId ?? null) ||
+            (payload.address ?? '') !== (pOld.Address ?? '')
+        );
+    }
+
+    async function updateProfile() {
+        if (saving) return;
+        const debugOn = !!(window.memberCenter && window.memberCenter.debugProfile);
+        const dbg = (...m) => { if (debugOn) log('[update]', ...m); };
+        const statusEl = document.getElementById('profileSaveStatus');
+        const btn = document.querySelector('#formProfile button[type="submit"]');
+        const payload = collectFormPayload();
+        const current = window.memberCenter?.profile;
+        if (!payload.name) { if (statusEl) statusEl.textContent = '姓名必填'; return; }
+        if (!payloadChanged(current, payload)) { if (statusEl) statusEl.textContent = '沒有變更'; return; }
+        saving = true; if (statusEl) statusEl.textContent = '';
+        if (btn) {
+            btn.disabled = true;
+            btn.dataset.originalHtml = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>儲存中...';
+        }
+        try {
+            let headers = await buildAuthHeaders(true);
+            let res = await fetch(PROFILE_API, { method: 'PUT', headers, credentials: 'include', body: JSON.stringify(payload) });
+            if (res.status === 401) {
+                dbg('401 -> refresh retry');
+                const ok = await ensureRefreshed();
+                if (ok) { headers = await buildAuthHeaders(true); res = await fetch(PROFILE_API, { method: 'PUT', headers, credentials: 'include', body: JSON.stringify(payload) }); }
+            }
+            if (!res.ok) { let body = ''; try { body = await res.text(); } catch { } dbg('fail', res.status, body.slice(0, 200)); if (statusEl) statusEl.textContent = '儲存失敗(' + res.status + ')'; return; }
+            let updated = null; try { updated = await res.json(); } catch { }
+            if (updated) fill(updated); else if (current) { current.Name = payload.name; current.Phone = payload.phone; current.CityId = payload.cityId; current.TownshipId = payload.townshipId; current.Address = payload.address; completeness(); }
+            if (statusEl) { statusEl.textContent = '已儲存'; }
+        } catch (e) { if (statusEl) statusEl.textContent = '錯誤:' + (e.message || '無法儲存'); dbg('exception', e); }
+        finally { saving = false; if (btn) { btn.disabled = false; if (btn.dataset.originalHtml) { btn.innerHTML = btn.dataset.originalHtml; delete btn.dataset.originalHtml; } else { btn.textContent = '儲存變更'; } } }
+    }
+
     // ---- UI helpers ----
     const txt = (id, v) => { const el = document.getElementById(id); if (!el) return; el.textContent = (v === null || v === undefined || v === '') ? '--' : v; };
     const val = (id, v) => { const el = document.getElementById(id); if (!el) return; el.value = v == null ? '' : v; };
@@ -253,6 +338,10 @@
                 completeness();
             });
         }
+        const form = document.getElementById('formProfile');
+        if (form) {
+            form.addEventListener('submit', e => { e.preventDefault(); updateProfile(); });
+        }
     }
 
     function initCore() { if (document.getElementById('formProfile')) { bindTab(); bindFields(); /* 初次不立即載入城市，待使用者開啟或 profile 填入 */ } }
@@ -273,5 +362,5 @@
 
     function init() { if (document.getElementById('formProfile')) { setInitialPlaceholders(); initCore(); } }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-    try { window.memberCenter = window.memberCenter || {}; window.memberCenter.loadProfile = loadProfile; } catch { }
+    try { window.memberCenter = window.memberCenter || {}; window.memberCenter.loadProfile = loadProfile; window.memberCenter.updateProfile = updateProfile; } catch { }
 })();
