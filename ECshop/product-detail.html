@@ -519,7 +519,18 @@
   <!-- 其他要裝的js放在這之前 -->
   <script src="/assets/js/fragment-loader.js" defer></script>
 
-
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div id="cart-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="bi bi-cart-check-fill text-success me-2"></i>
+        <strong class="me-auto">購物車</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        <span id="toast-message">成功加入購物車！</span>
+      </div>
+    </div>
+  </div>
 
 </body>
 
@@ -811,9 +822,7 @@
             // 加入購物車
             async addToCart() {
               console.log('=== 開始加入購物車流程 ===');
-              console.log('當前商品資料:', this.product);
-              console.log('商品ID:', this.product?.id);
-              console.log('選擇數量:', this.selectedQuantity);
+
               // 1. 檢查登入狀態
               try {
                 const userInfo = await auth.me(); // 🔥 改用 auth，不是 window.auth
@@ -884,7 +893,7 @@
 
                         if (retryResponse.ok) {
                           const retryResult = await retryResponse.text();
-                          alert(retryResult || '成功加入購物車！');
+                          this.showToast(retryResult || '成功加入購物車！', 'success');
                           await this.updateCartCount();
                           return;
                         } else {
@@ -895,7 +904,7 @@
                       }
                     } catch (refreshError) {
                       console.error('❌ Token 刷新失敗:', refreshError);
-                      alert('登入已過期，請重新登入');
+                      this.showToast('登入已過期，請重新登入', 'error');
                       return;
                     }
                   }
@@ -904,18 +913,56 @@
                 // 5. 成功處理
                 const result = await response.text();
                 console.log('✅ 成功回應:', result);
-                alert(result || '成功加入購物車！');
+                this.showToast(result || '成功加入購物車！', 'success');
 
                 // 6. 更新導覽列購物車數量
                 await this.updateCartCount();
               }
               catch (error) {
                 console.error('加入購物車失敗:', error);
-                alert(error.message || '加入購物車失敗，請稍後再試');
+                alert(error.message || '加入購物車失敗，請稍後再試', 'error');
               }
               finally {
                 this.addingToCart = false;
               }
+            },
+
+            // 新增：顯示提示訊息的方法
+            showToast(message, type = 'success') {
+              // 更新訊息內容
+              const toastMessage = document.getElementById('toast-message');
+              if (toastMessage) {
+                toastMessage.textContent = message;
+              }
+
+              // 根據類型更改圖示和樣式
+              const toast = document.getElementById('cart-toast');
+              const toastHeader = toast.querySelector('.toast-header i');
+
+              // 重置所有樣式
+              toastHeader.className = 'me-2';
+              toast.className = 'toast';
+
+              switch (type) {
+                case 'success':
+                  toastHeader.classList.add('bi', 'bi-cart-check-fill', 'text-success');
+                  break;
+                case 'warning':
+                  toastHeader.classList.add('bi', 'bi-exclamation-triangle-fill', 'text-warning');
+                  break;
+                case 'error':
+                  toastHeader.classList.add('bi', 'bi-x-circle-fill', 'text-danger');
+                  break;
+                default:
+                  toastHeader.classList.add('bi', 'bi-info-circle-fill', 'text-info');
+              }
+
+              // 顯示 Toast
+              const bsToast = new bootstrap.Toast(toast, {
+                autohide: true,
+                delay: 3000  // 3秒後自動隱藏
+              });
+              bsToast.show();
             },
 
             // 新增：更新購物車數量的方法
