@@ -476,22 +476,24 @@
 
 <!-- Google登入按鈕 -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<div
+<!-- <div
   id="alertBox"
   class="alert alert-success text-center mb-0"
   role="alert"
   style="display: none"
 >
   您有新通知
-</div>
+</div> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   function newNotify() {
-    const alertBox = $("#alertBox");
-    alertBox.show();
-    setTimeout(() => {
-      if (alertBox) {
-        alertBox.hide();
-      }
-    }, 3000);
+    Swal.fire("您有新通知");
+    // const alertBox = $("#alertBox");
+    // alertBox.show();
+    // setTimeout(() => {
+    //   if (alertBox) {
+    //     alertBox.hide();
+    //   }
+    // }, 3000);
   }
 </script>
