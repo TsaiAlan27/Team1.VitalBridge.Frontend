@@ -222,7 +222,7 @@
                 </section>
 
                 <!-- 測試區域 -->
-                <section class="test-section py-4">
+                <!-- <section class="test-section py-4">
                     <div class="alert alert-info rounded-3">
                         <h5>測試資訊：</h5>
                         <p><strong>當前分類ID：</strong>{{ currentCategoryId || '無' }}</p>
@@ -230,7 +230,7 @@
                         <p><strong>當前頁碼：</strong>{{ currentPage }}</p>
                         <p><strong>每頁數量：</strong>{{ pageSize }}</p>
                     </div>
-                </section>
+                </section> -->
                 <!-- 商品數量資訊和篩選控件 -->
                 <div class="products-info mb-4">
                     <div class="row align-items-center">
@@ -277,15 +277,15 @@
                     </div>
 
                     <!-- 錯誤狀態 -->
-                    <div v-else-if="error" class="alert alert-danger rounded-3" role="alert">
+                    <!-- <div v-else-if="error" class="alert alert-danger rounded-3" role="alert">
                         <h5 class="alert-heading">載入失敗</h5>
                         <p>{{ error }}</p>
                         <hr>
                         <button class="btn btn-outline-danger" @click="fetchProducts">重新載入</button>
-                    </div>
+                    </div> -->
 
                     <!-- 無商品結果 -->
-                    <div v-else-if="products.length === 0" class="text-center py-5">
+                    <!-- <div v-else-if="products.length === 0" class="text-center py-5">
                         <div class="mb-4">
                             <i class="bi bi-search" style="font-size: 4rem; color: #6c757d;"></i>
                         </div>
@@ -295,7 +295,7 @@
                             <span v-else-if="currentCategoryId">此分類目前沒有商品</span>
                             <span v-else>目前沒有可顯示的商品</span>
                         </p>
-                    </div>
+                    </div> -->
                     <!-- 商品網格 -->
                     <div v-else>
                         <!-- 商品數量資訊 -->
@@ -395,6 +395,7 @@
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/assets/js/auth.js"></script>
     <script src="/assets/js/fragment-loader.js" defer></script>
 
 </body>
@@ -433,6 +434,7 @@
                         // 狀態管理
                         loading: false,         // 載入狀態
                         error: null,           // 錯誤訊息
+                        addingToCart: false, // 🔥 新增：防止重複點擊
 
                         // 我的最愛 (沿用首頁邏輯)
                         favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
@@ -473,8 +475,17 @@
                             this.pageTitle = `搜尋結果`;
                             this.pageSubtitle = `關鍵字：${this.currentSearchQuery}`;
                         } else if (this.currentCategoryId) {
-                            this.pageTitle = `商品分類`;
-                            this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            // 如果有從 API 回傳的分類名稱，使用它
+                            // this.pageTitle = `商品分類`;
+                            // this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            if (this.searchInfo?.categoryName) {
+                                this.pageTitle = this.searchInfo.categoryName;
+                                this.pageSubtitle = '瀏覽此分類的商品';
+                            } else {
+                                this.pageTitle = '商品分類';
+                                this.pageSubtitle = `分類ID：${this.currentCategoryId}`;
+                            }
+
                         } else {
                             this.pageTitle = '所有商品';
                             this.pageSubtitle = '瀏覽全部商品';
@@ -523,9 +534,11 @@
                             this.searchInfo = data.searchInfo || null;
 
                             // 更新頁面標題 (使用 API 回傳的分類名稱)
-                            if (this.searchInfo?.categoryName) {
-                                this.pageSubtitle = this.searchInfo.categoryName;
-                            }
+                            // if (this.searchInfo?.categoryName) {
+                            //     this.pageSubtitle = this.searchInfo.categoryName;
+                            // }
+                            // 修改：在 API 資料載入後立即更新頁面標題
+                            this.updatePageTitle();
 
                         } catch (error) {
                             console.error('載入商品失敗:', error);
@@ -562,26 +575,82 @@
 
                     // 沿用首頁的方法：前往商品詳情
                     goToProduct(productId) {
-                        window.location.href = `/ECshop/product-detail.html?id=${productId}`;
+                        window.location.href = `/VitalBridge/ECshop/product-detail.html?id=${productId}`;
                     },
 
                     // 沿用首頁的方法：加入購物車
                     async addToCart(product) {
-                        // TODO: 檢查登入狀態
+                        // 檢查登入狀態
                         if (!this.checkLoginStatus()) {
                             alert('請先登入會員才能加入購物車');
-                            window.location.href = '/login.html';
+                            window.location.href = '/VitalBridge/index.html';
                             return;
                         }
 
+                        // 防止重複點擊
+                        if (this.addingToCart) return;
+                        this.addingToCart = true;
+
                         try {
-                            console.log('加入購物車:', product);
-                            alert(`${product.name} 已加入購物車！`);
+                            // 確保 token 有效
+                            try {
+                                await auth.me();
+                            } catch (authError) {
+                                console.error('登入檢查失敗，嘗試刷新 token:', authError);
+                                try {
+                                    await auth.ensureRefreshed();
+                                } catch (refreshError) {
+                                    alert('登入已過期，請重新登入');
+                                    window.location.href = '/VitalBridge/index.html';
+                                    return;
+                                }
+                            }
+
+                            // 呼叫加入購物車 API
+                            const response = await fetch('https://localhost:7104/api/CartApi/AddItem', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({
+                                    productId: product.id,
+                                    quantity: 1
+                                })
+                            });
+
+                            if (!response.ok) {
+                                const errorText = await response.text();
+                                console.error('加入購物車 API 錯誤:', errorText);
+
+                                if (response.status === 401) {
+                                    alert('登入已過期，請重新登入');
+                                    window.location.href = '/VitalBridge/index.html';
+                                    return;
+                                }
+
+                                throw new Error(errorText || '加入購物車失敗');
+                            }
+
+                            // 🔥 後端回傳純文字，不是 JSON
+                            const result = await response.text();
+                            console.log('加入購物車成功:', result);
+
+                            // 成功提示
+                            alert(' 已成功加入購物車！');
+
+                            // 更新導覽列購物車數量
+                            this.updateCartCount();
+
                         } catch (error) {
                             console.error('加入購物車失敗:', error);
-                            alert('加入購物車時發生錯誤，請稍後再試');
+                            alert('❌ 加入購物車時發生錯誤：' + error.message);
+                        } finally {
+                            this.addingToCart = false;
                         }
                     },
+
 
                     // 沿用首頁的方法：切換我的最愛
                     toggleFavorite(productId) {
@@ -601,11 +670,40 @@
                         return this.favorites.includes(productId);
                     },
 
-                    // 沿用首頁的方法：檢查登入狀態
+                    // 🔥 修正 checkLoginStatus 方法
                     checkLoginStatus() {
-                        // TODO: 實作真正的登入狀態檢查
-                        return false;
+                        try {
+                            const token = auth.getAccessToken();
+                            return !!token;
+                        } catch (error) {
+                            console.error('檢查登入狀態失敗:', error);
+                            return false;
+                        }
                     },
+                    // 🔥 新增：更新購物車數量方法
+                    async updateCartCount() {
+                        try {
+                            const response = await fetch('https://localhost:7104/api/CartApi/Count', {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                                },
+                                credentials: 'include'
+                            });
+
+                            if (response.ok) {
+                                const count = await response.json();
+                                const cartCountElement = document.getElementById('cart-count');
+                                if (cartCountElement) {
+                                    cartCountElement.textContent = count || 0;
+                                    console.log('購物車數量更新為:', count);
+                                }
+                            }
+                        } catch (error) {
+                            console.error('更新購物車數量失敗:', error);
+                        }
+                    },
+
 
                     // 處理排序變更
                     handleSortChange() {

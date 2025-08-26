@@ -436,6 +436,7 @@
 
 
   <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/auth.js"></script>
   <script src="/assets/js/fragment-loader.js" defer></script>
 
 
@@ -476,6 +477,7 @@
 
               // 狀態管理
               loading: false, // 移除載入狀態
+              addingToCart: false, // 🔥 新增：防止重複點擊
 
               // 我的最愛清單 (localStorage)
               favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
@@ -542,24 +544,100 @@
             },
             // 加入購物車
             async addToCart(product) {
-              // TODO: 檢查登入狀態
+              // 🔥 檢查登入狀態
               if (!this.checkLoginStatus()) {
                 alert('請先登入會員才能加入購物車');
-                // 導向登入頁面
-                window.location.href = '/login.html';
+                // 導向登入頁面或首頁
+                window.location.href = '/VitalBridge/index.html';
                 return;
               }
+              // 防止重複點擊
+              if (this.addingToCart) return;
+              this.addingToCart = true;
+
 
               try {
-                // TODO: 呼叫加入購物車 API
-                console.log('加入購物車:', product);
-                alert(`${product.name} 已加入購物車！`);
+                // 🔥 確保 token 有效
+                try {
+                  await auth.me(); // 檢查登入狀態
+                } catch (authError) {
+                  console.error('登入檢查失敗，嘗試刷新 token:', authError);
+                  try {
+                    await auth.ensureRefreshed();
+                  } catch (refreshError) {
+                    alert('登入已過期，請重新登入');
+                    window.location.href = '/VitalBridge/index.html';
+                    return;
+                  }
+                }
+
+                // 🔥 呼叫加入購物車 API
+                const response = await fetch('https://localhost:7104/api/CartApi/AddItem', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                  },
+                  credentials: 'include',
+                  body: JSON.stringify({
+                    productId: product.id,
+                    quantity: 1 // 預設加入 1 個
+                  })
+                });
+
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  console.error('加入購物車 API 錯誤:', errorText);
+
+                  if (response.status === 401) {
+                    alert('登入已過期，請重新登入');
+                    window.location.href = '/VitalBridge/index.html';
+                    return;
+                  }
+
+                  throw new Error(errorText || '加入購物車失敗');
+                }
+
+                // 🔥 修正：後端回傳純文字，不是 JSON
+                const result = await response.text(); // 改用 text() 而非 json()
+                console.log('加入購物車成功:', result);
+
+                // 🔥 成功提示
+                alert('成功加入購物車！');
+
+                // 🔥 更新導覽列購物車數量
+                this.updateCartCount();
 
               } catch (error) {
                 console.error('加入購物車失敗:', error);
-                alert('加入購物車時發生錯誤，請稍後再試');
+                alert('❌ 加入購物車時發生錯誤：' + error.message);
+              } finally {
+                this.addingToCart = false;
+              }
+            },// 更新導覽列購物車數量
+            async updateCartCount() {
+              try {
+                const response = await fetch('https://localhost:7104/api/CartApi/Count', {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                  },
+                  credentials: 'include'
+                });
+
+                if (response.ok) {
+                  const count = await response.json();
+                  const cartCountElement = document.getElementById('cart-count');
+                  if (cartCountElement) {
+                    cartCountElement.textContent = count || 0;
+                    console.log('購物車數量更新為:', count);
+                  }
+                }
+              } catch (error) {
+                console.error('更新購物車數量失敗:', error);
               }
             },
+
             // 切換我的最愛
             toggleFavorite(productId) {
               const index = this.favorites.indexOf(productId);
@@ -587,9 +665,15 @@
               window.location.href = `/VitalBridge/ECshop/category.html?categoryId=${categoryId}&name=${encodeURIComponent(categoryName)}`;
             },
 
-            // 檢查登入狀態 (暫時模擬)
+            // 檢查登入狀態
             checkLoginStatus() {
-              return false;
+              try {
+                const token = auth.getAccessToken();
+                return !!token; // 有 token 就算登入
+              } catch (error) {
+                console.error('檢查登入狀態失敗:', error);
+                return false;
+              }
             }
 
 

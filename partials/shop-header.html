@@ -30,7 +30,7 @@
                             <li><a class="dropdown-item"
                                     href="/VitalBridge/ECshop/category.html?categoryId=7&name=軟質餐">軟質餐</a></li>
                             <li><a class="dropdown-item"
-                                    href="/VitalBridge/ECshop/category.html?categoryId=8&name=容易咀嚼">容易咀嚼</a>
+                                    href="/VitalBridge/ECshop/category.html?categoryId=8&name=管灌食品">管灌食品</a>
                             </li>
                             <li><a class="dropdown-item"
                                     href="/VitalBridge/ECshop/category.html?categoryId=9&name=流質餐">流質餐</a></li>
@@ -166,8 +166,8 @@
                         <a href="/VitalBridge/ECshop/category.html?categoryId=7&name=軟質餐" class="mobile-submenu-link">
                             軟質餐
                         </a>
-                        <a href="/VitalBridge/ECshop/category.html?categoryId=8&name=容易咀嚼" class="mobile-submenu-link">
-                            容易咀嚼
+                        <a href="/VitalBridge/ECshop/category.html?categoryId=8&name=管灌食品" class="mobile-submenu-link">
+                            管灌食品
                         </a>
                         <a href="/VitalBridge/ECshop/category.html?categoryId=9&name=流質餐" class="mobile-submenu-link">
                             流質餐
@@ -614,7 +614,9 @@
 
 <!-- JavaScript for mobile dropdown toggle -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+    function initSearchFunction() {
+        console.log('初始化搜尋功能...');
 
         // 處理搜尋表單提交
         function handleSearch(searchInputId) {
@@ -632,6 +634,8 @@
 
 
         }
+
+
         // 綁定搜尋事件
         // 桌面版搜尋
         const desktopSearchBtn = document.querySelector('.search-box .btn');
@@ -645,6 +649,9 @@
                     handleSearch('shop-search');
                 }
             });
+            console.log('桌面版搜尋已綁定');
+        } else {
+            console.log('桌面版搜尋元素未找到');
         }
         // 手機版搜尋
         const mobileSearchBtn = document.querySelector('#mobileSearch .btn');
@@ -658,7 +665,13 @@
                     handleSearch('mobile-shop-search');
                 }
             });
+            console.log('搜尋功能已綁定'); // 除錯用
         }
+        else {
+            console.log('搜尋元素未找到'); // 除錯用
+        }
+
+
         // 手機版點擊切換下拉選單
         if (window.innerWidth <= 768) {
             const dropdownToggles = document.querySelectorAll('.shop-categories .dropdown-toggle');
@@ -690,5 +703,102 @@
 
 
 
-    });
+    };
+
+    // 正確的事件監聽設置
+    (function onFullyReady(run) {
+        function once(ev) {
+            return new Promise(res => {
+                function h(e) {
+                    window.removeEventListener(ev, h);
+                    res(e);
+                }
+                window.addEventListener(ev, h);
+            });
+        }
+        function waitAppReady() {
+            if (window.appReadyAt !== undefined) return Promise.resolve();
+            return once('app:ready');
+        }
+        function waitWindowLoad() {
+            if (document.readyState === 'complete') return Promise.resolve();
+            return once('load');
+        }
+        Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) {
+            console.error('搜尋功能初始化錯誤', e);
+        });
+    })(initSearchFunction);
+
+    // 備用初始化 - 如果上面的方式失敗
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🔄 DOMContentLoaded 觸發，嘗試初始化搜尋');
+            setTimeout(initSearchFunction, 500);
+        });
+    } else {
+        console.log('🔄 DOM 已載入，直接初始化搜尋');
+        setTimeout(initSearchFunction, 500);
+    }
+    // 全域購物車數量更新功能
+    (function () {
+        // 頁面載入時檢查購物車數量
+        function loadCartCount() {
+            // 檢查是否有登入
+            if (typeof window.auth === 'undefined' || !window.auth.me) {
+                return;
+            }
+
+            window.auth.me().then(function () {
+                // 已登入，載入購物車數量
+                // 🔥 修正：使用直接 fetch 而不是 auth.apiFetch
+                return fetch('https://localhost:7104/api/CartApi/Count', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + (window.auth.getAccessToken() || '')
+                    },
+                    credentials: 'include'
+                });
+            }).then(function (response) {
+                if (response && response.ok) {
+                    return response.json();
+                }
+                return 0;
+            }).then(function (count) {
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = count || 0;
+                    // 如果數量為0，隱藏badge
+                    cartCountElement.style.display = (count && count > 0) ? 'inline' : 'none';
+                }
+                console.log('✅ 購物車數量更新成功:', count);
+            }).catch(function (error) {
+                console.warn('⚠️ 購物車數量更新失敗:', error);
+                // 未登入或其他錯誤，隱藏數量
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.style.display = 'none';
+                }
+            });
+        }
+        // 🔥 新增：提供全域方法供其他頁面呼叫
+        window.updateCartCount = function () {
+            loadCartCount();
+        };
+        // 等待認證系統載入完成後執行
+        function waitForAuth() {
+            if (typeof window.auth !== 'undefined') {
+                loadCartCount();
+            } else {
+                setTimeout(waitForAuth, 100);
+            }
+        }
+        // 頁面載入完成後執行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForAuth);
+        } else {
+            waitForAuth();
+        }
+
+
+    })();
 </script>
