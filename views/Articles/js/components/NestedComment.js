@@ -147,7 +147,7 @@ export default {
                         />
                     </div>
                     <div v-else class="max-depth-message">
-                        <em>Maximum nesting level reached. <a href="#" @click.prevent="$emit('reply-to', comment)">Reply</a> to continue the conversation.</em>
+                        <em>到底了，無法顯示留言</em>
                     </div>
                 </div>
             </div>
