@@ -2,6 +2,12 @@
   #notificationDropdown::after {
     display: none !important;
   }
+  .notifyRedPoing {
+    max-width: 15px;
+    max-height: 15px;
+    font-size: 0.6rem;
+    display: inline-block;
+  }
 </style>
 <header
   id="header"
@@ -73,6 +79,7 @@
         <i class="bi bi-bell fs-4"></i>
         <span
           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-danger notifyRedPoing"
+          style="display: none"
         >
           1
           <span class="visually-hidden">unread notifications</span>
