@@ -9,130 +9,27 @@
 </head>
 
 <body>
+    <div class="articleContentBody" id="app">
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Design & Innovation</h1>
-            <p>Exploring the intersection of design, technology, and culture through thoughtful analysis and practical
-                insights.</p>
-        </div>
-    </section>
+        <article-content></article-content>
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
+        <comment-section></comment-section>
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
 
-    <!-- Main Content Section -->
-    <main class="main-content">
-        <div class="container">
 
-            <!-- Article Section -->
-            <article class="article">
-                <!-- Article Header -->
-                <div class="article-header">
-                    <div class="article-meta">
-                        <div class="author-avatar">MM</div>
-                        <div>
-                            <div><strong>Mika Matikainen</strong></div>
-                            <div>Apr 15, 2020 · 4 min read</div>
-                        </div>
-                    </div>
-                    <h2>A few words about this blog platform, Ghost, and how this site was made</h2>
-                </div>
-
-                <!-- Article Content -->
-                <div class="article-content">
-                    <!-- Article will be populated by JavaScript -->
-                </div>
-
-                <!-- Article Footer -->
-                <div class="article-footer">
-                    <div class="author-signature">
-                        <p>Thanks for reading,<br><strong>Mika</strong></p>
-                    </div>
-
-                    <!-- no tags for now -->
-                    <!-- <div class="tags">
-                        <a href="#" class="tag">product design</a>
-                        <a href="#" class="tag">culture</a>
-                    </div> -->
-
-                    <div class="share-buttons">
-                        <a href="#" class="share-btn">Share Link</a>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Section Divider -->
-            <div class="section-divider"></div>
-
-            <!-- Comments Section -->
-            <section class="comments-section">
-                <h3 class="comments-header">Comments</h3>
-
-                <div class="comment-form">
-                    <div style="flex: 1;">
-                        <div class="reply-indicator">
-                            <span class="reply-text">Replying to <strong></strong></span>
-                            <button class="reply-close">×</button>
-                        </div>
-                        <textarea class="comment-input" placeholder="Write a comment..." rows="1"></textarea>
-                    </div>
-                    <button class="post-btn">Post</button>
-                </div>
-
-                <div class="comments-container">
-                    <!-- Comments will be populated by JavaScript -->
-                </div>
-
-                <div class="pagination-section">
-                    <div class="pagination">
-                        <button class="page-btn" id="prevBtn" disabled>‹</button>
-                        <div class="page-numbers"></div>
-                        <button class="page-btn" id="nextBtn">›</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section Divider -->
-            <div class="section-divider"></div>
-
-            <!-- Sidebar Section -->
-            <aside class="sidebar">
-                <h3>What to read next</h3>
-                <ul class="related-posts">
-                    <li><a href="#">Connecting artificial intelligence with digital product design</a></li>
-                    <li><a href="#">Hello world, or, in other words, why this blog exists</a></li>
-                    <li><a href="#">Here are some things you should know regarding how we work</a></li>
-                    <li><a href="#">Updating list of 50+ sources on distributed teams, remote work, and how to make it
-                            all work better</a></li>
-                    <li><a href="#">How modern remote working tools get along with Old School Cowboy's methods</a></li>
-                </ul>
-            </aside>
-
-            <!-- Section Divider -->
-            <div class="section-divider"></div>
-
-            <!-- Author Bio Section -->
-            <section class="author-bio">
-                <div class="author-bio-header">About the Author</div>
-                <div class="author-bio-content">Mika Matikainen is a Design Founder &
-                    Advisor, Berlin School of Creative Leadership Executive MBA participant, Zippie advisor, Wolt
-                    co-founder, and Nordic Rose stakeholder.</div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer Section -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Mika's Blog. All rights reserved.</p>
-        </div>
-    </footer>
+    </div>
 
     <!-- Script Section -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3.5.18/dist/vue.global.js"></script>
     <script>
         // Wait for the DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', async function () {
             // Initialize Vue app
-            await import("/views/Articles/js/ArticleIndex.js");
+            await import("/views/Articles/js/ArticleContent.js");
         });
     </script>
 </body>

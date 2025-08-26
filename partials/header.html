@@ -26,7 +26,7 @@
         </li>
         <li><a href="/orgs/orgSearch.html">找機構</a></li>
         <li><a href="/VitalBridge/ECshop/index.html">樂齡商城</a></li>
-        <li><a href="/views/Articles/ArticleIndex.html">專欄文章</a></li>
+        <li><a href="/VitalBridge/views/Articles/ArticleIndex.html">專欄文章</a></li>
         <li><a class="nav-member-center" href="/VitalBridge/member/memberCenter.html">會員中心</a></li>
         <li><a href="#">關於我們</a></li>
 
@@ -380,20 +380,20 @@
       messenger.remove();
     }
   }
-  async function createMessenger(notClear) {
+  async function createMessenger(notClear)  {
     const user = await auth.me();
     if (!notClear) {
       // localStorage
       Object.keys(localStorage).forEach((k) => {
         if (k.startsWith("df-messenger-")) {
-          localStorage.removeItem(k);
+              localStorage.removeItem(k);
         }
       });
 
       // sessionStorage
       Object.keys(sessionStorage).forEach((k) => {
         if (k.startsWith("df-messenger-")) {
-          sessionStorage.removeItem(k);
+              sessionStorage.removeItem(k);
         }
       });
     }

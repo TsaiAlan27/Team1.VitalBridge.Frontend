@@ -19,6 +19,9 @@ export default {
                     <span></span>
                     <span></span>
                 </div>
+                <div>
+                    <a href="/VitalBridge/views/Articles/ArticleIndex.html">All
+                </div>
             </div>
             <div class="pageHeader-right">
                 <input type="search" class="search-input" placeholder="Search...">

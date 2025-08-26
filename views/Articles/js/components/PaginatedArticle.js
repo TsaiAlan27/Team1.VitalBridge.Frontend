@@ -29,8 +29,8 @@ export default {
                 >
                     <div class="featured-image-container">
                         <img
-                        v-if="article.coverPic"
-                        :src="'data:image/jpeg;base64,' + article.coverPic"
+                        v-if="article.coverPicFileName"
+                        :src="'/api/UploadFile/GetFile?fileName=' + article.coverPicFileName"
                         :alt="article.title"
                         class="featured-image"
                         @error="handleImageError"
@@ -44,7 +44,7 @@ export default {
                     </div>
                     <div class="featured-content">
                         <div class="category-breadcrumb">
-                            <a :href="'/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
+                            <a :href="'/VitalBridge/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
                             <a href="#" class="subcategory-pill" v-if="article.subcategory">{{ article.subcategory }}</a>
                         </div>
                         <h1 class="featured-headline">{{ article.title }}</h1>
@@ -87,6 +87,8 @@ export default {
             <div v-if="isLoading && currentPage > 1" class="loading-indicator">
                 Loading page {{ currentPage }}...
             </div>
+            
+            
         </section>
     `,
     data() {
@@ -122,7 +124,7 @@ export default {
         navigateToArticle(article) {
             const articleId = article.id || article.link;
             if (articleId) {
-                window.location.href = `/views/Articles/ArticleContent.html?id=${articleId}`;
+                window.location.href = `/VitalBridge/views/Articles/ArticleContent.html?id=${articleId}`;
             } else {
                 console.warn('Article ID/link not found:', article);
             }

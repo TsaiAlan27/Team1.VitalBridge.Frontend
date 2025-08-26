@@ -19,8 +19,8 @@ export default {
                 >
                     <div class="article-image-container">
                         <img 
-                            v-if="article.coverPic" 
-                            :src="'data:image/jpeg;base64,' + article.coverPic" 
+                            v-if="article.coverPicFileName" 
+                            :src="'/api/UploadFile/GetFile?fileName=' + article.coverPicFileName" 
                             :alt="article.title"
                             class="article-image"
                             @error="handleImageError"
@@ -34,7 +34,7 @@ export default {
                     </div>
                     <div class="article-card-content">
                         <div class="category-breadcrumb">
-                            <a :href="'/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
+                            <a :href="'/VitalBridge/views/Articles/ArticleCategory.html?id=' + article.categoryId" class="category-pill">{{ article.category }}</a>
                             <a href="#" class="subcategory-pill" v-if="article.subcategory">{{ article.subcategory }}</a>
                         </div>
                         <h3 class="article-card-title">{{ article.title }}</h3>
@@ -90,7 +90,7 @@ export default {
             // Use article.id or article.link as the identifier
             const articleId = article.id || article.link;
             if (articleId) {
-                window.location.href = `/views/Articles/ArticleContent.html?id=${articleId}`;
+                window.location.href = `/VitalBridge/views/Articles/ArticleContent.html?id=${articleId}`;
             } else {
                 console.warn('Article ID/link not found:', article);
             }
