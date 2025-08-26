@@ -99,6 +99,20 @@
     border-bottom: 2px solid #f5f5f5;
 }
 
+.article-body {
+    max-width: 80%;
+    font-size: 18px;
+    line-height: 1.8;
+    /* force long text to wrap */
+    word-wrap: break-word;
+    /* legacy */
+    overflow-wrap: break-word;
+    /* modern */
+    word-break: break-word;
+    /* fallback */
+    color: #333;
+}
+
 .article h3 {
     font-size: 24px;
     font-weight: 600;
