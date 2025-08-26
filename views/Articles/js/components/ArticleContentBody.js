@@ -3,7 +3,7 @@ export default {
     name: 'ArticleContent',
     template: `
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" v-if="article && article.coverPicFileName">
         <img 
                     :src="'/api/UploadFile/GetFile?fileName=' + article.coverPicFileName" 
                     :alt="article.title"
@@ -122,7 +122,7 @@ export default {
 
             try {
                 this.article = await this.fetchArticleById(this.articleId);
-                console.log('Loaded article:', this.article);
+                // console.log('Loaded article:', this.article);
             } catch (error) {
                 this.error = error.message || 'Failed to load article';
                 console.error('Error loading article:', error);
@@ -167,7 +167,7 @@ export default {
     },
 
     async mounted() {
-        console.log('ArticleContent component mounted');
+        // console.log('ArticleContent component mounted');
         await this.loadArticle();
     }
 };

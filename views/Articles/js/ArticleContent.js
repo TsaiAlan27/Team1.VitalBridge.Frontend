@@ -1,5 +1,5 @@
 
-import ArticleContent from './components/ArticleContent.js';
+import ArticleContent from './components/ArticleContentBody.js';
 import NestedComments from './components/NestedComment.js';
 import CommentSection from './components/CommentSection.js';
 

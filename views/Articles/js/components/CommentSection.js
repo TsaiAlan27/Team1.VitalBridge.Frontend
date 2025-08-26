@@ -43,7 +43,7 @@ export default {
         },
 
         canSubmit() {
-            return this.commentText.trim() && !this.submitting;
+            return this.currentUser && this.commentText.trim() && !this.submitting;
         },
 
         displayedPages() {
@@ -61,16 +61,31 @@ export default {
         // Get contentId from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         this.contentId = urlParams.get('id');
-        
+
         if (!this.contentId) {
             console.error('No content ID found in URL parameters');
             return;
         }
-        
+
+        await this.loadCurrentUser();
         await this.loadComments();
+
         this.setupTextareaAutoResize();
     },
     methods: {
+        //current user simulation
+        async loadCurrentUser() {
+            try {
+                var udata = await auth.me();
+                this.currentUser.id = udata.id;
+                this.currentUser.name = udata.name;
+                this.currentUser.handle = "@" + udata.name + udata.id;
+            }
+            catch (err) {
+                console.error("Error fetching user:", err);
+                this.currentUser = null;
+            }
+        },
         // API Methods
         async loadComments(page = 1) {
             this.loading = true;
@@ -91,11 +106,11 @@ export default {
                 if (!response.ok) {
                     throw new Error('Failed to load comments');
                 }
-                
+
                 const data = await response.json();
-                
+
                 // Debug logging
-                console.log('API Response:', data);
+                // console.log('API Response:', data);
 
                 this.comments = data.comments || [];
                 this.totalComments = data.totalComments || 0;
@@ -131,7 +146,7 @@ export default {
                 }
 
                 const replies = await response.json();
-                
+
                 // Debug logging
                 console.log(`Loaded ${replies.length} replies for comment ${commentId}:`, replies);
 
@@ -150,10 +165,9 @@ export default {
 
             const commentData = {
                 articleId: this.contentId, // Fixed: changed from contentId to articleId to match API
-                text: this.commentText.trim(),
+                userId: this.currentUser.id,
                 parentCommentId: this.replyingTo?.id || null,
-                author: this.currentUser.name,
-                handle: this.currentUser.handle
+                text: this.commentText.trim(),
             };
 
             try {

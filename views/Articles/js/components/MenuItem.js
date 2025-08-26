@@ -44,7 +44,9 @@ export default {
         </li>
     `,
     methods: {
-        async toggleSubmenu() {
+        async toggleSubmenu(event) {
+            event.stopPropagation(); // Prevent event bubbling
+
             if (!this.item.hasSubcategories) return;
 
             // If closing, just toggle

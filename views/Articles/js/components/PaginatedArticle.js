@@ -87,6 +87,8 @@ export default {
             <div v-if="isLoading && currentPage > 1" class="loading-indicator">
                 Loading page {{ currentPage }}...
             </div>
+            
+            
         </section>
     `,
     data() {
