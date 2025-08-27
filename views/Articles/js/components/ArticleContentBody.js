@@ -169,5 +169,23 @@ export default {
     async mounted() {
         // console.log('ArticleContent component mounted');
         await this.loadArticle();
+        try {
+            const baseAddress = 'https://localhost:7104';
+            const response = await fetch(`${baseAddress}/api/ContentArticleContentAPI/ViewPlusOne`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    articleId: this.articleId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Error fetching articles:", error);
+        }
     }
 };

@@ -86,7 +86,7 @@ export default {
     },
     methods: {
         // Navigate to article content page
-        navigateToArticle(article) {
+        async navigateToArticle(article) {
             // Use article.id or article.link as the identifier
             const articleId = article.id || article.link;
             if (articleId) {

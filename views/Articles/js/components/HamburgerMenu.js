@@ -23,11 +23,12 @@ export default {
                     <a href="/VitalBridge/views/Articles/ArticleIndex.html">All
                 </div>
             </div>
-            <div class="pageHeader-right">
-                <input type="search" class="search-input" placeholder="Search...">
-            </div>
         </div>
     `,
+    
+            // <div class="pageHeader-right">
+            //     <input type="search" class="search-input" placeholder="Search...">
+            // </div>
     methods: {
         toggleMenu() {
             this.isMenuOpen = !this.isMenuOpen;

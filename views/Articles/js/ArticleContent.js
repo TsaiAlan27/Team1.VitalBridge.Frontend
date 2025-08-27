@@ -19,7 +19,7 @@ const vueApp = {
         // Define your functions here
     },
     mounted() {
-
+        
     }
 };
 
