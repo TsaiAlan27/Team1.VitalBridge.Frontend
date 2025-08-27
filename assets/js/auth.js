@@ -461,9 +461,11 @@ function setupDomHandlers() {
             const nameInput = document.getElementById('regName');
             const emailInput = document.getElementById('regEmail');
             const passwordInput = document.getElementById('regPassword');
+            const password2Input = document.getElementById('regPassword2');
             const name = nameInput?.value?.trim() || '';
             const email = emailInput?.value?.trim() || '';
             const password = passwordInput?.value || '';
+            const password2 = password2Input?.value || '';
             const alertEl = document.getElementById('regAlert');
             // helpers for field error rendering
             const setInvalid = (el, msg) => {
@@ -485,7 +487,7 @@ function setupDomHandlers() {
                 if (fb && fb.classList && fb.classList.contains('invalid-feedback')) fb.textContent = '';
             };
             // clear previous state
-            [nameInput, emailInput, passwordInput].forEach(clearInvalid);
+            [nameInput, emailInput, passwordInput, password2Input].forEach(clearInvalid);
             if (alertEl) { alertEl.classList.add('d-none'); alertEl.classList.remove('alert-danger', 'alert-success'); alertEl.textContent = ''; }
             // validate
             const errors = {};
@@ -495,9 +497,11 @@ function setupDomHandlers() {
             else if (!emailRegex.test(email)) errors.email = 'Email 格式不正確';
             if (!password) errors.password = '請輸入密碼';
             else if (password.length < 6) errors.password = '密碼至少需 6 個字元';
+            else if (password2 && password !== password2) errors.password2 = '兩次密碼不一致';
             if (errors.name) setInvalid(nameInput, errors.name);
             if (errors.email) setInvalid(emailInput, errors.email);
             if (errors.password) setInvalid(passwordInput, errors.password);
+            if (errors.password2) setInvalid(password2Input, errors.password2);
             if (Object.keys(errors).length) {
                 if (alertEl) { alertEl.classList.remove('d-none'); alertEl.classList.add('alert-danger'); alertEl.textContent = '請修正紅框欄位後再送出'; }
                 return;
@@ -514,6 +518,12 @@ function setupDomHandlers() {
                     submitBtn.dataset.originalText = submitBtn.innerHTML;
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>註冊中...';
+                }
+                // 再次檢查一致性（避免極端競態）
+                if (password !== password2) {
+                    setInvalid(password2Input, '兩次密碼不一致');
+                    if (alertEl) { alertEl.classList.remove('d-none'); alertEl.classList.add('alert-danger'); alertEl.textContent = '請確認密碼一致'; }
+                    return;
                 }
                 await register({ name, email, password });
                 // 成功後關閉註冊視窗並顯示成功提示 Modal
