@@ -304,6 +304,7 @@
           <!-- 付款方式 -->
           <div class="form-section">
             <h5><i class="bi bi-credit-card me-2"></i>付款方式</h5>
+            <!-- 原有的付款方式選項 -->
             <div v-for="payment in checkoutData.paymentMethods" :key="payment.id" class="form-check mb-2">
               <input class="form-check-input" type="radio" name="payment" :id="'pay-' + payment.id" :value="payment.id"
                 v-model="formData.paymentMethodId">
