@@ -8,6 +8,13 @@
         // reset endpoint 將在獨立 reset-password.html 使用，這裡僅保留名稱（不再於此流程使用）
         reset: API_BASE + '/reset-password'
     };
+    /** 前端本地冷卻秒數（與後端限制對齊；若後端調整請同步修改） */
+    const COOLDOWN_SECONDS = 300; // 5 分鐘
+    /** localStorage key prefix */
+    const LS_KEY_PREFIX = 'fp_last_';
+    /** 若後端回傳訊息中含以下關鍵字，視為頻率限制觸發（可再增修） */
+    const RATE_LIMIT_HINT_WORDS = ['頻繁', '稍後再試', 'too frequent', 'rate limit'];
+    let cooldownTicker = null; // setInterval handler
 
     // ===================== DOM / 工具 =====================
     const qs = (id) => document.getElementById(id);
@@ -104,6 +111,66 @@
     function bindRequestForm() {
         const form = qs('fpRequestForm');
         if (!form) return;
+        // 若沒有提示倒數的元素，可動態建立 (不強制 HTML 改動)
+        let countdownEl = qs('fpCooldownHint');
+        if (!countdownEl) {
+            countdownEl = document.createElement('div');
+            countdownEl.id = 'fpCooldownHint';
+            countdownEl.className = 'text-muted small mt-1';
+            const target = qs('fpRequestBtn');
+            if (target && target.parentElement) target.parentElement.appendChild(countdownEl);
+        }
+
+        function storageKey(email) { return LS_KEY_PREFIX + email.toLowerCase(); }
+        function nowSec() { return Math.floor(Date.now() / 1000); }
+        function getLastTs(email) {
+            if (!email) return 0;
+            const v = localStorage.getItem(storageKey(email));
+            return v ? parseInt(v, 10) || 0 : 0;
+        }
+        function setLastTs(email) {
+            try { localStorage.setItem(storageKey(email), String(nowSec())); } catch { }
+        }
+        function calcRemain(email) {
+            const last = getLastTs(email);
+            const remain = last + COOLDOWN_SECONDS - nowSec();
+            return remain > 0 ? remain : 0;
+        }
+        function stopTicker() { if (cooldownTicker) { clearInterval(cooldownTicker); cooldownTicker = null; } }
+        function startTicker(email, btn) {
+            stopTicker();
+            function fmt(sec) {
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            const update = () => {
+                const remain = calcRemain(email);
+                if (remain <= 0) {
+                    stopTicker();
+                    if (countdownEl) countdownEl.textContent = '';
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+                if (countdownEl) countdownEl.textContent = `請稍後 ${fmt(remain)} 再重新寄送`;
+                if (btn) btn.disabled = true;
+            };
+            update();
+            cooldownTicker = setInterval(update, 1000);
+        }
+
+        function preCheck(email, alertEl, btn) {
+            const remain = calcRemain(email);
+            if (remain > 0) {
+                const m = Math.floor(remain / 60).toString().padStart(2, '0');
+                const s = (remain % 60).toString().padStart(2, '0');
+                setAlert(alertEl, 'warning', `操作太頻繁，請 ${m}:${s} 後再試`);
+                startTicker(email, btn);
+                return false;
+            }
+            return true;
+        }
+
         form.addEventListener('submit', e => {
             e.preventDefault();
             const email = (qs('fpEmail')?.value || '').trim();
@@ -111,12 +178,34 @@
             clearAlert(alertEl);
             if (!email) { setAlert(alertEl, 'danger', '請輸入 Email'); return; }
             const btn = qs('fpRequestBtn');
+            // 本地冷卻預檢
+            if (!preCheck(email, alertEl, btn)) return;
             withLoading(btn, '寄送中...', () => requestReset(email)
                 .then(msg => {
                     setAlert(alertEl, 'success', msg + '，請前往信箱點擊重設連結');
+                    setLastTs(email);
+                    startTicker(email, btn);
                 })
-                .catch(err => setAlert(alertEl, 'danger', err.message || '寄送失敗')));
+                .catch(err => {
+                    const message = err.message || '寄送失敗';
+                    // 若後端已拒絕也可啟動冷卻（避免暴力嘗試）
+                    const lowered = message.toLowerCase();
+                    if (RATE_LIMIT_HINT_WORDS.some(k => lowered.includes(k))) {
+                        // 假設後端拒絕時不更新 timestamp（或可選擇更新)，這裡仍更新以防使用者刷新
+                        setLastTs(email);
+                        startTicker(email, btn);
+                        setAlert(alertEl, 'warning', message); // 後端訊息可能不含剩餘秒數，倒數顯示在下方
+                    } else {
+                        setAlert(alertEl, 'danger', message);
+                    }
+                }));
         });
+
+        // 初始載入時，如果使用者剛重新整理頁面仍在冷卻，啟動倒數
+        const initialEmail = (qs('fpEmail')?.value || '').trim();
+        if (initialEmail && calcRemain(initialEmail) > 0) {
+            startTicker(initialEmail, qs('fpRequestBtn'));
+        }
     }
 
     function bindResetForm() {
