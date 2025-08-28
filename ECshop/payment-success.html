@@ -18,6 +18,9 @@
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
+  <!-- <script src="/assets/js/auth.js"></script> -->
+
+
   <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
@@ -349,6 +352,7 @@
 
   <script>
     (function () {
+
       /*
       // 創建慶祝彩紙效果
       function createConfetti() {
@@ -392,6 +396,7 @@
         },
 
         async mounted() {
+
           await this.checkPaymentResult();
         },
 
@@ -401,47 +406,70 @@
            */
           // 從 URL 取得訂單編號
           getOrderNumberFromUrl() {
-            // 方法1: 從 URL 參數取得
             const urlParams = new URLSearchParams(window.location.search);
-            this.orderNumber = urlParams.get('orderNumber') || urlParams.get('orderId') || urlParams.get('order_id');
+            const orderNumber = urlParams.get('orderNumber');
+            console.log('URL 查詢參數:', window.location.search);
+            console.log('取得的訂單編號:', orderNumber);
+            return orderNumber; // 需要回傳值
 
           },
+          // 檢查付款結果
           async checkPaymentResult() {
-            try {
-              if (!this.orderNumber) {
-                console.error('未找到訂單編號');
-                this.loading = false;
-                return;
-              }
-              // 1. 先嘗試從 URL 參數取得訂單編號
-              this.orderNumber = this.getOrderNumberFromUrl();
 
-              if (!this.orderNumber) {
+            try {
+              this.loading = true;
+              // 1. 從 URL 參數取得訂單編號
+              const orderNumber = this.getOrderNumberFromUrl(); // 修正：接收回傳值
+
+              if (!orderNumber) {
                 throw new Error('找不到訂單編號');
               }
-              console.log('查詢訂單狀態:', this.orderNumber);
 
-              // 呼叫後端API 查詢訂單狀態
-              const response = await fetch(`${this.baseApiUrl}/api/Orders/payment-status/${this.orderNumber}`, {
+              console.log('查詢訂單狀態:', orderNumber);
+
+              // 2. 呼叫後端API 查詢訂單狀態
+              const response = await fetch(`${this.orderInfo.baseApiUrl}/api/Orders/payment-status/${orderNumber}`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
+                  // 如果有 JWT token，需要加上 Authorization header
+                  // 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                  'Authorization': `Bearer ${auth.getAccessToken()}`
                 }
-
               });
+
               if (!response.ok) {
+                if (response.status === 401) {
+                  // Session 過期，引導重新登入
+                  alert('登入已過期，請重新登入');
+                  window.location.href = 'https://localhost:7184/VitalBridge/ECshop/index.html';
+                  return;
+                }
                 throw new Error('無法查詢訂單狀態');
               }
               const result = await response.json();
               console.log('訂單狀態查詢結果:', result);
 
-
-
+              // 3. 更新訂單資訊
+              this.orderInfo = {
+                orderNumber: result.orderNumber,
+                paymentDate: result.paidAt || result.createdAt,
+                amount: result.totalAmount,
+                transactionId: result.transactionId,
+                baseApiUrl: this.orderInfo.baseApiUrl
+              };
             }
-            catch () {
-
+            catch (error) {
+              console.error('查詢訂單狀態失敗:', error);
+              this.orderInfo = {
+                orderNumber: 'N/A',
+                paymentDate: new Date().toISOString(),
+                amount: 0,
+                baseApiUrl: this.orderInfo.baseApiUrl
+              };
+            } finally {
+              this.loading = false;
             }
-
           },
 
           /**
