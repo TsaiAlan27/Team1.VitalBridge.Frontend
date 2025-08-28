@@ -293,10 +293,11 @@
                 }
             } catch (e) { log('prefill location error', e); }
         })();
+
         val('profileAddressDetail', p.Address || '');
-        txt('profileCreatedAt', fmt(p.CreatedAt));
-        txt('profileUpdatedAt', fmt(p.UpdatedAt));
-        txt('profileLastLoginAt', fmt(p.LastLoginAt));
+        txt('profileCreatedAt', p.CreatedAt || '--');
+        txt('profileUpdatedAt', p.UpdatedAt || '--');
+        txt('profileLastLoginAt', p.LastLoginAt || '--');
         completeness();
     }
 
