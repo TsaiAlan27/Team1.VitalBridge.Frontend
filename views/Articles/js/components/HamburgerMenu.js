@@ -20,7 +20,7 @@ export default {
                     <span></span>
                 </div>
                 <div>
-                    <a href="/VitalBridge/views/Articles/ArticleIndex.html">All
+                    <a href="/VitalBridge/views/Articles/ArticleIndex.html">專欄首頁
                 </div>
             </div>
         </div>

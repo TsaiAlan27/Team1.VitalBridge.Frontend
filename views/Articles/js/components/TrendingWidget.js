@@ -2,7 +2,7 @@ export default {
     name: 'TrendingWidget',
     template: `
         <div class="widget-box">
-            <h3 class="widget-title">最近熱門 (Trending Now)</h3>
+            <h3 class="widget-title">最近熱門</h3>
             
             <!-- Loading state -->
             <div v-if="loading" class="widget-list">

@@ -8,11 +8,11 @@ export default {
     },
     template: `
         <div class="widget-box" id="popularCategoriesWidget">
-            <h3 class="widget-title">熱門子分類 (Popular Subcategories)</h3>
+            <h3 class="widget-title">熱門子分類</h3>
             
             <!-- Loading state -->
             <ul v-if="loading" class="widget-list">
-                <li v-for="i in 5" :key="i">
+                <li v-for="i in 1" :key="i">
                     <a href="#" style="color: #999;">載入中...</a>
                     <span class="badge count-badge">--</span>
                 </li>
