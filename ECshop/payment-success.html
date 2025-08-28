@@ -26,7 +26,7 @@
 
   <style>
     body {
-      /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+      background: linear-gradient(135deg, #a6f6fc 0%, #d7f7d7 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -253,7 +253,7 @@
         opacity: 0;
       }
     }
-
+*/
     .loading-state {
       display: none;
     }
@@ -277,7 +277,6 @@
         transform: rotate(360deg);
       }
     }
-      */
   </style>
 </head>
 
@@ -383,53 +382,66 @@
           return {
             loading: false,
             orderInfo: {
-              orderNumber: 'SO202501151234567890', // 示例數據
+              orderNumber: null, // 示例數據
               paymentDate: new Date().toISOString(),
-              amount: 1500,
-              transactionId: 'T123456789'
+              amount: null,
+              transactionId: null,
+              baseApiUrl: 'https://localhost:7104'
             }
           };
         },
 
-        mounted() {
-          this.loadOrderInfo();
+        async mounted() {
+          await this.checkPaymentResult();
         },
 
         methods: {
           /**
            * 載入訂單資訊
            */
-          loadOrderInfo() {
-            // 從 URL 參數或 sessionStorage 取得訂單資訊
+          // 從 URL 取得訂單編號
+          getOrderNumberFromUrl() {
+            // 方法1: 從 URL 參數取得
             const urlParams = new URLSearchParams(window.location.search);
+            this.orderNumber = urlParams.get('orderNumber') || urlParams.get('orderId') || urlParams.get('order_id');
 
-            // 方法 1：從 URL 參數取得
-            if (urlParams.has('orderNumber')) {
-              this.orderInfo = {
-                orderNumber: urlParams.get('orderNumber') || 'N/A',
-                amount: urlParams.get('amount') || '0',
-                paymentDate: new Date().toISOString(),
-                transactionId: urlParams.get('transactionId') || null
-              };
-            } else {
-              // 方法 2：從 sessionStorage 取得
-              try {
-                const storedOrder = sessionStorage.getItem('orderResult');
-                if (storedOrder) {
-                  const orderData = JSON.parse(storedOrder);
-                  this.orderInfo = {
-                    orderNumber: orderData.orderNumber || 'N/A',
-                    amount: orderData.totalAmount || '0',
-                    paymentDate: new Date().toISOString(),
-                    transactionId: orderData.transactionId || null
-                  };
-                  // 清除 sessionStorage
-                  sessionStorage.removeItem('orderResult');
-                }
-              } catch (error) {
-                console.error('讀取訂單資訊失敗:', error);
+          },
+          async checkPaymentResult() {
+            try {
+              if (!this.orderNumber) {
+                console.error('未找到訂單編號');
+                this.loading = false;
+                return;
               }
+              // 1. 先嘗試從 URL 參數取得訂單編號
+              this.orderNumber = this.getOrderNumberFromUrl();
+
+              if (!this.orderNumber) {
+                throw new Error('找不到訂單編號');
+              }
+              console.log('查詢訂單狀態:', this.orderNumber);
+
+              // 呼叫後端API 查詢訂單狀態
+              const response = await fetch(`${this.baseApiUrl}/api/Orders/payment-status/${this.orderNumber}`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+
+              });
+              if (!response.ok) {
+                throw new Error('無法查詢訂單狀態');
+              }
+              const result = await response.json();
+              console.log('訂單狀態查詢結果:', result);
+
+
+
             }
+            catch () {
+
+            }
+
           },
 
           /**
