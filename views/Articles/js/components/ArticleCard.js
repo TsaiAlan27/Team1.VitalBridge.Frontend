@@ -10,7 +10,7 @@ export default {
     template: `
         <div class="articles-container">
             <div id="articleGrid" class="article-grid">
-                <div 
+                <div
                     v-for="article in displayedArticles" 
                     :key="article.id || article.title"
                     class="article-card"
@@ -183,19 +183,19 @@ export default {
         handleScroll() {
             // Throttle scroll events to improve performance
             if (this.scrollTimeout) return;
-            
+
             this.scrollTimeout = setTimeout(() => {
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
-                
+
                 // Check if user has scrolled near the bottom
                 const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
-                
+
                 if (distanceFromBottom < this.scrollThreshold && !this.isLoading && !this.allArticlesLoaded) {
                     this.loadMoreArticles();
                 }
-                
+
                 this.scrollTimeout = null;
             }, 100); // Throttle to every 100ms
         },
@@ -227,7 +227,7 @@ export default {
         await this.loadInitialArticles();
         console.log('Loaded', this.displayedArticles.length, 'articles');
 
-         // Add scroll listener for infinite scrolling
+        // Add scroll listener for infinite scrolling
         this.addScrollListener();
     },
     beforeUnmount() {
