@@ -4,6 +4,7 @@ import NavigationMenu from "./components/NavigationMenu.js"
 import MenuItem from './components/MenuItem.js' // Also import MenuItem as NavigationMenu depends on it
 import PaginatedArticle from "./components/PaginatedArticle.js";
 import TrendingWidget from "./components/TrendingWidget.js";
+import PopularCategoriesWidget from "./components/PopularCategoriesWidget.js";
 
 // Clean Vue script template
 const vueApp = {
@@ -13,6 +14,7 @@ const vueApp = {
         'menu-item': MenuItem,
         'paginated-article': PaginatedArticle,
         'trending-widget': TrendingWidget,
+        'popular-categories-widget': PopularCategoriesWidget
 
     },
     data() {
