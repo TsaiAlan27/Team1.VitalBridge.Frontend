@@ -495,7 +495,7 @@
                   console.log('✅ 使用者已登入:', userInfo);
                 } catch (authError) {
                   console.error('❌ 認證失敗，跳轉至登入頁');
-                  window.location.href = '/VitalBridge/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                  window.location.href = 'https://localhost:7184/VitalBridge/ECshop/index.html';
                   return;
                 }
 
@@ -513,7 +513,7 @@
                   if (response.status === 401) {
                     // 🔧 修正：使用和 cart.html 相同的跳轉方式
                     alert('請先登入會員');
-                    window.location.href = '/VitalBridge/login.html';
+                    window.location.href = 'https://localhost:7184/VitalBridge/index.html';
                     return;
                   }
                   const errorText = await response.text();
