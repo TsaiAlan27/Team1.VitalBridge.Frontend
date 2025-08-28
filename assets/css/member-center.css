@@ -115,6 +115,100 @@
     font-weight: 600;
 }
 
+/* Change password card / security pane */
+#pane-security #passwordCard {
+    border: 1px solid #e6e9ef;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+#pane-security .form-label {
+    font-size: .75rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+#pane-security .input-group .form-control {
+    border-right: 0;
+}
+
+#pane-security .input-group .btn {
+    border-left: 0;
+}
+
+#pane-security .input-group .btn:hover {
+    background: #f1f5f9;
+}
+
+.pw-meter {
+    display: flex;
+    gap: .3rem;
+}
+
+.pw-meter .seg {
+    flex: 1;
+    height: 6px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.pw-meter .seg.active {
+    background: linear-gradient(90deg, #5b8def, #3461c1);
+}
+
+.pw-meter .seg.l2 {
+    background: linear-gradient(90deg, #60a5fa, #3b82f6);
+}
+
+.pw-meter .seg.l3 {
+    background: linear-gradient(90deg, #34d399, #059669);
+}
+
+.pw-meter .seg.l4 {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+.pw-meter .seg.l5 {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+/* 強度顏色邏輯: 依 JS 動態套用 class 以區分 filled 區間顏色，可再調整順序 */
+.pw-meter[data-score="1"] .seg:nth-child(-n+1),
+.pw-meter[data-score="2"] .seg:nth-child(-n+2),
+.pw-meter[data-score="3"] .seg:nth-child(-n+3),
+.pw-meter[data-score="4"] .seg:nth-child(-n+4),
+.pw-meter[data-score="5"] .seg:nth-child(-n+5) {
+    background: #f87171;
+}
+
+.pw-meter[data-score="2"] .seg:nth-child(-n+2) {
+    background: #fb923c;
+}
+
+.pw-meter[data-score="3"] .seg:nth-child(-n+3) {
+    background: #facc15;
+}
+
+.pw-meter[data-score="4"] .seg:nth-child(-n+4) {
+    background: #34d399;
+}
+
+.pw-meter[data-score="5"] .seg:nth-child(-n+5) {
+    background: #3b82f6;
+}
+
+#pane-security #cpStatus.text-success {
+    color: #047857 !important;
+}
+
+#pane-security #cpStatus.text-danger {
+    color: #b91c1c !important;
+}
+
 .profile-card .row.g-3>[class*="col-"],
 .profile-card .row.g-3 {
     --bs-gutter-y: 1rem;
