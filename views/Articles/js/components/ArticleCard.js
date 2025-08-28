@@ -45,24 +45,23 @@ export default {
             </div>
             
             <div v-if="isLoading" class="loading-indicator">
-                Loading more articles...
+                載入更多...
             </div>
             
-            <button 
-                id="loadMoreBtn"
-                @click="loadMoreArticles"
-                :disabled="isLoadMoreDisabled || isLoading"
-                class="load-more-btn"
-                v-show="!allArticlesLoaded"
-            >
-                {{ loadMoreButtonText }}
-            </button>
-            
             <div v-if="allArticlesLoaded" class="no-more-articles">
-                No more articles to load
+                沒有更多文章了
             </div>
         </div>
     `,
+    // <button 
+    //             id="loadMoreBtn"
+    //             @click="loadMoreArticles"
+    //             :disabled="isLoadMoreDisabled || isLoading"
+    //             class="load-more-btn"
+    //             v-show="!allArticlesLoaded"
+    //         >
+    //             {{ loadMoreButtonText }}
+    //         </button>
     data() {
         return {
             allArticles: [],
@@ -71,7 +70,8 @@ export default {
             currentPage: 1,
             isLoading: false,
             allArticlesLoaded: false,
-            totalArticles: 0
+            totalArticles: 0,
+            scrollThreshold: 200 // pixels from bottom to trigger loading
         };
     },
     computed: {
@@ -179,6 +179,41 @@ export default {
             event.target.style.display = 'none';
         },
 
+        // Scroll event handler for infinite scrolling
+        handleScroll() {
+            // Throttle scroll events to improve performance
+            if (this.scrollTimeout) return;
+            
+            this.scrollTimeout = setTimeout(() => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                
+                // Check if user has scrolled near the bottom
+                const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
+                
+                if (distanceFromBottom < this.scrollThreshold && !this.isLoading && !this.allArticlesLoaded) {
+                    this.loadMoreArticles();
+                }
+                
+                this.scrollTimeout = null;
+            }, 100); // Throttle to every 100ms
+        },
+
+        // Add scroll event listener
+        addScrollListener() {
+            window.addEventListener('scroll', this.handleScroll, { passive: true });
+        },
+
+        // Remove scroll event listener
+        removeScrollListener() {
+            window.removeEventListener('scroll', this.handleScroll);
+            if (this.scrollTimeout) {
+                clearTimeout(this.scrollTimeout);
+                this.scrollTimeout = null;
+            }
+        },
+
         formatDate(dateString) {
             // Format the date for display
             if (!dateString) return '';
@@ -191,5 +226,12 @@ export default {
         console.log('Articles component mounted');
         await this.loadInitialArticles();
         console.log('Loaded', this.displayedArticles.length, 'articles');
+
+         // Add scroll listener for infinite scrolling
+        this.addScrollListener();
+    },
+    beforeUnmount() {
+        // Clean up scroll listener when component is destroyed
+        this.removeScrollListener();
     }
 };

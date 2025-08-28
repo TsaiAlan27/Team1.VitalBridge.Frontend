@@ -61,7 +61,7 @@ export default {
                     @click="goToPage(currentPage - 1)"
                     :disabled="currentPage === 1 || isLoading"
                 >
-                    Previous
+                    上頁
                 </button>
                 
                 <button 
@@ -80,12 +80,12 @@ export default {
                     @click="goToPage(currentPage + 1)"
                     :disabled="currentPage === totalPages || isLoading"
                 >
-                    Next
+                    下頁
                 </button>
             </div>
             
             <div v-if="isLoading && currentPage > 1" class="loading-indicator">
-                Loading page {{ currentPage }}...
+                載入頁面 {{ currentPage }}...
             </div>
             
             
