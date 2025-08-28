@@ -37,200 +37,494 @@
     <!-- 自己想改的樣式放這邊 -->
     <style>
         /* 機構搜尋頁面自訂樣式 */
+        body {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffeaa7 30%, #fdcb6e 100%);
+            min-height: 100vh;
+        }
+
         .search-container {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 2rem 0;
-            border-radius: 15px;
+            background: linear-gradient(135deg, #ffcc66 0%, #ffe066 30%, #ffd700 60%, #ffcc66 100%);
+            padding: 3rem 0;
+            border-radius: 20px;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 204, 102, 0.4);
+        }
+
+        .search-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
         }
 
         .search-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(255, 204, 102, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
         }
 
         .form-label {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 700;
+            color: #000000;
             margin-bottom: 0.75rem;
+            font-size: 1rem;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control,
+        .form-select {
+            border: 2px solid #ffe066;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #ffcc66;
+            box-shadow: 0 0 0 0.2rem rgba(255, 204, 102, 0.25);
+            background: white;
+            color: #000000;
+        }
+
+        /* 下拉選單選項統一樣式 */
+        .form-select option {
+            color: #000000;
+            font-weight: 600;
+            background-color: #ffffff;
+        }
+
+        .form-select option:hover,
+        .form-select option:focus {
+            background-color: #fffaeb;
+            color: #000000;
+        }
+
+        /* 每頁顯示筆數下拉選單樣式 */
+        .page-select {
+            color: #000000;
+            font-weight: 700;
+            width: auto;
+            min-width: 120px;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .page-select option {
+            color: #000000;
+            font-weight: 700;
+            background-color: #ffffff;
         }
 
         .price-range-container {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
             margin-top: 0.5rem;
+            border: 2px solid #ffe066;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-range-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ffcc66, #ffe066, #ffd700);
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        .form-range {
+            height: 8px;
+            background: linear-gradient(to right, #ffe066, #ffcc66);
+            border-radius: 4px;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ffcc66, #e6b84d);
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         }
 
         .price-display {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #28a745;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #cc9900;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .checkbox-group {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
             margin-top: 0.5rem;
+            border: 2px solid #ffe066;
+            box-shadow: inset 0 2px 4px rgba(255, 204, 102, 0.1);
+        }
+
+        .form-check {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-check-input {
+            width: 1.2em;
+            height: 1.2em;
+            border: 2px solid #ffcc66;
+            border-radius: 6px;
         }
 
         .form-check-input:checked {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #ffcc66;
+            border-color: #ffcc66;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+        }
+
+        .form-check-label {
+            font-weight: 600;
+            color: #000000;
+            margin-left: 0.5rem;
         }
 
         .search-btn {
-            background: linear-gradient(45deg, #007bff, #0056b3);
+            background: linear-gradient(45deg, #ffcc66, #e6b84d, #d4a843);
             border: none;
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            border-radius: 8px;
+            padding: 1rem 3rem;
+            font-weight: 700;
+            border-radius: 12px;
             transition: all 0.3s ease;
+            color: #000000;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 204, 102, 0.4);
+        }
+
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .search-btn:hover::before {
+            left: 100%;
         }
 
         .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 204, 102, 0.6);
+            background: linear-gradient(45deg, #e6b84d, #ccaa44, #b8963a);
+            color: #000000;
+        }
+
+        .search-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 204, 102, 0.4);
         }
 
         .org-card {
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(255, 204, 102, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 2rem;
             overflow: hidden;
-            min-height: 280px;
+            min-height: 300px;
+            background: linear-gradient(145deg, #ffffff 0%, #fefefe 100%);
+            border: 1px solid rgba(255, 204, 102, 0.2);
+            position: relative;
+        }
+
+        .org-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffcc66, #ffe066, #ffd700);
         }
 
         .org-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 204, 102, 0.25);
         }
 
         .clickable-card {
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .clickable-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-            background-color: #f8f9fa;
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(255, 204, 102, 0.2);
+            background: linear-gradient(145deg, #fffaeb 0%, #fff8e1 100%);
         }
 
         .clickable-card:active {
             transform: translateY(-1px);
         }
 
-        .org-image {
-            width: calc(100% - 30px);
-            height: calc(100% - 30px);
-            object-fit: cover;
-            border-radius: 10px;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-        }
-
         .card-img-container {
-            height: 200px;
+            height: 220px;
             width: 100%;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .org-image {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            object-fit: cover;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .org-card:hover .org-image {
+            transform: scale(1.05);
         }
 
         .card-img-container.no-image {
-            width: calc(100% - 30px);
-            height: calc(100% - 30px);
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border: 2px dashed #dee2e6;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
+            border: 3px dashed #ffcc66;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 15px;
-            border-radius: 10px;
+            margin: 10px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .card-img-container.no-image::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #ffcc66, #ffe066);
+            border-radius: 12px;
+            z-index: -1;
+            opacity: 0.3;
         }
 
         .card-img-container.no-image::after {
             content: "📷\A暫無照片";
             white-space: pre;
             text-align: center;
-            color: #6c757d;
-            font-size: 2rem;
+            color: #cc9900;
+            font-size: 2.2rem;
             line-height: 1.2;
+            font-weight: 600;
         }
 
         .org-title {
-            color: #2c3e50;
-            font-weight: 700;
+            color: #000000;
+            font-weight: 800;
             margin-bottom: 0.5rem;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
+            line-height: 1.3;
+            background: linear-gradient(45deg, #000000, #333333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .org-location {
-            color: #6c757d;
+            color: #555555;
             font-size: 1rem;
             margin-bottom: 0.5rem;
-        }
-
-        .org-address {
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .org-price {
-            color: #28a745;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .org-location i {
+            color: #ffcc66;
             font-size: 1.1rem;
         }
 
+        .org-address {
+            color: #333333;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .org-price {
+            color: #cc9900;
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, #cc9900, #e6b84d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .detail-btn {
-            background: linear-gradient(45deg, #28a745, #20c997);
+            background: linear-gradient(45deg, #66cc66, #52b352, #47a047);
             border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.7rem 2rem;
+            font-weight: 700;
             transition: all 0.3s ease;
+            color: white;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 204, 102, 0.3);
+        }
+
+        .detail-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .detail-btn:hover::before {
+            left: 100%;
         }
 
         .detail-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 204, 102, 0.5);
+            background: linear-gradient(45deg, #52b352, #47a047, #3d8b3d);
+            color: white;
         }
 
         .loading-spinner {
-            color: #007bff;
+            color: #ffcc66;
+        }
+
+        /* 新增漂亮的載入動畫 */
+        .search-btn .spinner-border {
+            width: 1.2rem;
+            height: 1.2rem;
+            border-width: 2px;
+        }
+
+        /* 美化圖示 */
+        .form-label i {
+            color: #ffcc66;
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* 增加微動畫效果 */
+        @keyframes gentle-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-2px);
+            }
+        }
+
+        .search-btn:not(:disabled):hover {
+            animation: gentle-bounce 1s ease-in-out infinite;
+        }
+
+        /* 美化輸入框 */
+        .form-control::placeholder {
+            color: #666666;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* 增加陰影層次 */
+        .search-container {
+            box-shadow:
+                0 10px 30px rgba(255, 204, 102, 0.4),
+                0 1px 8px rgba(255, 204, 102, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .pagination {
             justify-content: center;
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
 
         .page-link {
-            border-radius: 8px;
-            margin: 0 2px;
+            border-radius: 12px;
+            margin: 0 4px;
             border: none;
-            background: #f8f9fa;
-            color: #495057;
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
+            color: #000000;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 204, 102, 0.1);
         }
 
         .page-link:hover {
-            background: #007bff;
-            color: white;
+            background: linear-gradient(135deg, #ffcc66 0%, #ffe066 100%);
+            color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 204, 102, 0.3);
         }
 
         .page-item.active .page-link {
-            background: #007bff;
-            border-color: #007bff;
+            background: linear-gradient(135deg, #ffcc66 0%, #e6b84d 100%);
+            border-color: #ffcc66;
+            color: #000000;
+            box-shadow: 0 4px 15px rgba(255, 204, 102, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .page-item.disabled .page-link {
+            background: #f8f9fa;
+            color: #6c757d;
+            box-shadow: none;
         }
 
         .breadcrumb {
@@ -241,17 +535,21 @@
 
         .breadcrumb-item+.breadcrumb-item::before {
             content: ">";
-            color: #6c757d;
+            color: #000000;
+        }
+
+        .breadcrumb-item a {
+            color: #000000;
         }
 
         .no-results {
             text-align: center;
             padding: 3rem;
-            color: #6c757d;
+            color: #000000;
         }
 
         .error-message {
-            background: #f8d7da;
+            background: #ffebee;
             color: #721c24;
             padding: 1rem;
             border-radius: 8px;
@@ -289,8 +587,8 @@
 
         .feature-service-icon:hover {
             transform: scale(1.1);
-            border-color: #007bff;
-            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+            border-color: #ffcc66;
+            box-shadow: 0 2px 8px rgba(255, 204, 102, 0.4);
         }
 
         .feature-service-img {
@@ -302,17 +600,17 @@
         .feature-service-placeholder {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
-            color: #6c757d;
+            color: #cc9900;
         }
 
         .feature-service-name {
             font-size: 1rem;
-            color: #495057;
+            color: #000000;
             line-height: 1.2;
             word-break: break-word;
             overflow: hidden;
@@ -325,26 +623,68 @@
 
         /* 簡潔的排序選項樣式 */
         .sort-options-wrapper {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            border: 1px solid #dee2e6;
+            background: linear-gradient(135deg, #fffaeb 0%, #fff2d9 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #ffe066;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(255, 204, 102, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sort-options-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffcc66, #ffe066, #ffd700);
         }
 
         .sort-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             flex-wrap: nowrap;
         }
 
         .sort-label {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 700;
+            color: #000000;
             white-space: nowrap;
             min-width: fit-content;
             margin-bottom: 0;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-group .btn {
+            border-radius: 8px !important;
+            margin: 0 2px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary {
+            border-color: #ffe066;
+            color: #000000;
+        }
+
+        .btn-outline-primary,
+        .btn-outline-success,
+        .btn-outline-info {
+            border-color: #ffcc66;
+            color: #000000;
+        }
+
+        .btn-check:checked+.btn {
+            background: linear-gradient(45deg, #ffcc66, #e6b84d);
+            border-color: #ffcc66;
+            color: #000000;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 204, 102, 0.3);
         }
 
         .sort-item .btn-group {
@@ -354,13 +694,24 @@
         .sort-item .btn {
             padding: 0.375rem 0.75rem;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: #000000;
         }
 
+        /* 統一強化所有下拉選單字體 */
+        select,
+        .form-select,
         .page-select {
-            width: auto;
-            min-width: 120px;
-            flex-shrink: 0;
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+
+        select option,
+        .form-select option,
+        .page-select option {
+            color: #000000 !important;
+            font-weight: 700 !important;
+            background-color: #ffffff !important;
         }
 
         /* 響應式調整 */
@@ -435,7 +786,7 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                background: rgba(40, 167, 69, 0.9);
+                background: rgba(102, 204, 102, 0.9);
                 color: white;
                 padding: 4px 8px;
                 border-radius: 12px;
@@ -445,8 +796,8 @@
             }
 
             .clickable-card:hover {
-                border-color: #28a745;
-                background-color: #f8fff9;
+                border-color: #66cc66;
+                background-color: #fffaeb;
             }
         }
     </style>
@@ -462,7 +813,7 @@
             <div class="container">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/index.html">首頁</a></li>
+                        <li class="breadcrumb-item"><a href="/VitalBridge/index.html">首頁</a></li>
                         <li class="breadcrumb-item active" aria-current="page">找機構</li>
                     </ol>
                 </nav>
@@ -474,8 +825,14 @@
             <div class="container">
                 <div class="search-container">
                     <div class="text-center mb-4">
-                        <h1 class="fw-bold text-primary">長照機構搜尋</h1>
-                        <p class="lead text-muted">找到最適合的長照機構</p>
+                        <h1 class="fw-bold mb-3"
+                            style="color: #000000; font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); letter-spacing: 1px;">
+                            長照機構搜尋</h1>
+                        <p class="lead mb-0" style="color: #333333; font-size: 1.2rem; font-weight: 600;">🏥 找到最適合的長照機構
+                            🏥</p>
+                        <div class="mt-2"
+                            style="width: 100px; height: 3px; background: linear-gradient(90deg, #ffcc66, #ffe066); margin: 0 auto; border-radius: 2px;">
+                        </div>
                     </div>
 
                     <div class="search-form">
@@ -529,13 +886,13 @@
                                     <!-- 價格輸入框 -->
                                     <div class="row g-2 mt-2">
                                         <div class="col-6">
-                                            <label class="form-label small">最低價格</label>
+                                            <label class="form-label small" style="color: #000000;">最低價格</label>
                                             <input type="number" class="form-control form-control-sm"
                                                 v-model.number="searchForm.minPrice" min="0" max="500000" step="1000"
                                                 placeholder="0" aria-label="最低價格輸入" @keyup.enter="performNewSearch">
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label small">最高價格</label>
+                                            <label class="form-label small" style="color: #000000;">最高價格</label>
                                             <input type="number" class="form-control form-control-sm"
                                                 v-model.number="searchForm.maxPrice" min="0" max="500000" step="1000"
                                                 placeholder="500000" aria-label="最高價格輸入"
@@ -549,7 +906,7 @@
                                         <span class="price-display">NT$ {{ formatPrice(searchForm.maxPrice) }}</span>
                                     </div>
                                     <div class="text-center mt-1">
-                                        <small class="text-muted">
+                                        <small style="color: #333333;">
                                             價格範圍：NT$ {{ formatPrice(searchForm.minPrice || 0) }} - NT$ {{
                                             formatPrice(searchForm.maxPrice) }}
                                         </small>
@@ -604,8 +961,8 @@
                 <!-- Search Results -->
                 <div v-if="searchResults.length > 0">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3>搜尋結果 ({{ totalResults }} 筆)</h3>
-                        <small class="text-muted">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</small>
+                        <h3 style="color: #000000;">搜尋結果 ({{ totalResults }} 筆)</h3>
+                        <small style="color: #333333;">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</small>
                     </div>
 
                     <!-- 排序選項與分頁設定 -->
@@ -702,7 +1059,8 @@
                                                     <!-- 特色服務圖示 -->
                                                     <div v-if="org.featureServiceNames && org.featureServiceNames.length > 0"
                                                         class="feature-services">
-                                                        <small class="text-muted d-block mb-1">特色服務：</small>
+                                                        <small style="color: #333333;"
+                                                            class="d-block mb-1">特色服務：</small>
                                                         <div class="feature-services-grid">
                                                             <div v-for="(serviceName, index) in org.featureServiceNames.slice(0, 8)"
                                                                 :key="index" class="feature-service-item"
@@ -727,7 +1085,8 @@
                                                     class="col-md-4 col-12 d-flex flex-column justify-content-between text-end text-center-mobile h-100">
                                                     <div>
                                                         <div class="mb-2">
-                                                            <small class="text-muted">床位數: {{ org.bedCount }}</small>
+                                                            <small style="color: #333333;">床位數: {{ org.bedCount
+                                                                }}</small>
                                                         </div>
                                                         <div class="mb-3">
                                                             <span class="org-price">NT$ {{
@@ -781,16 +1140,16 @@
 
                 <!-- No Results -->
                 <div v-else-if="!loading && hasSearched" class="no-results">
-                    <i class="bi bi-search display-1 text-muted"></i>
-                    <h3 class="mt-3">找不到符合條件的機構</h3>
-                    <p>請調整搜尋條件後再試一次</p>
+                    <i class="bi bi-search display-1" style="color: #cc9900;"></i>
+                    <h3 class="mt-3" style="color: #000000;">找不到符合條件的機構</h3>
+                    <p style="color: #333333;">請調整搜尋條件後再試一次</p>
                 </div>
 
                 <!-- Initial State -->
                 <div v-else-if="!loading && !hasSearched" class="no-results">
-                    <i class="bi bi-building display-1 text-muted"></i>
-                    <h3 class="mt-3">請設定搜尋條件</h3>
-                    <p>輸入關鍵字或選擇篩選條件開始搜尋</p>
+                    <i class="bi bi-building display-1" style="color: #cc9900;"></i>
+                    <h3 class="mt-3" style="color: #000000;">請設定搜尋條件</h3>
+                    <p style="color: #333333;">輸入關鍵字或選擇篩選條件開始搜尋</p>
                 </div>
             </div>
         </section>
@@ -1206,7 +1565,7 @@
                             };
                             localStorage.setItem('orgSearchState', JSON.stringify(searchState));
 
-                            window.location.href = `/orgs/orgDetail.html?id=${organizationId}`;
+                            window.location.href = `/VitalBridge/orgs/orgDetail.html?id=${organizationId}`;
                         },
 
                         // 格式化價格
