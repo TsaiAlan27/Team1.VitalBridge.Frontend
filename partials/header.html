@@ -117,9 +117,14 @@
           </div>
 
           <!-- Step-Up：起初隱藏，第三次才顯示 我不是機器人驗證 -->
-          <div id="captchaBox" style="display:none;margin:8px 0;">
+
+          <!-- reCAPTCHA Step-Up Wrapper (初始隱藏) -->
+          <div id="loginCaptchaWrapper" class="mb-3 d-none">
             <div class="g-recaptcha" data-sitekey="6LeYELQrAAAAANBTQHWuLu1PPWX7L1Suhxi-F-RG"></div>
+            <small class="form-text text-muted d-block mt-1">此驗證僅在多次失敗登入後需要。</small>
           </div>
+
+
 
           <div id="loginAlert" class="alert d-none" role="alert"></div>
 
@@ -217,6 +222,8 @@
 <script type="module" src="/assets/js/GoogleLogin.js"></script>
 <!-- 忘記密碼流程模組（獨立，不修改 auth.js） -->
 <script type="module" src="/assets/js/forgot-password.js"></script>
+<!-- Google登入按鈕 -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- 載入 reCAPTCHA v2 -->
 <script src="https://www.google.com/recaptcha/api.js?hl=zh-TW" async defer></script>
 
@@ -429,8 +436,7 @@
   }
 </script>
 
-<!-- Google登入按鈕 -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script>
   // 會員中心點擊攔截：未登入則阻止並開啟登入視窗
   (function initMemberCenterGuard() {
@@ -493,54 +499,4 @@
     //   }
     // }, 3000);
   }
-</script>
-
-<script>
-  const API_BASE = "https://localhost:7104"; // 你的後端 API base
-
-  // 從錯誤回應中判斷是否需要人機驗證：
-  // A.（推薦）後端回 JSON: { requireCaptcha: true/false }
-  // B.（暫時）偵測訊息包含「需要人機驗證」
-  function parseNeedCaptcha(errJson) {
-    if (errJson && typeof errJson.requireCaptcha === 'boolean') return errJson.requireCaptcha;
-    if (errJson && typeof errJson.message === 'string') return errJson.message.includes("需要人機驗證");
-    return false;
-  }
-
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const showingCaptcha = captchaBox.style.display !== 'none';
-    const token = showingCaptcha ? (window.grecaptcha?.getResponse() || "") : "";
-
-    const body = {
-      email: document.getElementById('email').value,
-      password: document.getElementById('password').value,
-      recaptchaToken: token || null   // 只有需要時才會帶
-    };
-
-    const r = await fetch(`${API_BASE}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      credentials: 'include' // 你後端會種 refresh cookie，保留這行
-    });
-
-    if (r.ok) {
-      // 登入成功：可導頁或處理 access token
-      alert('登入成功');
-      return;
-    }
-
-    // 失敗：解析錯誤訊息
-    const err = await r.json().catch(() => ({}));
-
-    // 若需要人機驗證 → 顯示 captcha 並重置
-    if (parseNeedCaptcha(err)) {
-      captchaBox.style.display = '';
-      if (window.grecaptcha) grecaptcha.reset();
-    }
-
-    alert(err?.message || '登入失敗');
-  });
 </script>
