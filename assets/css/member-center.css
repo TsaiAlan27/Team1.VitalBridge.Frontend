@@ -313,6 +313,26 @@
     color: #b63636;
 }
 
+/* 新增：訂單三狀態快捷磁貼色彩 */
+.quick-action-card.qa-order-unpaid .qa-icon {
+    background: #fff5eb;
+    color: #c2410c;
+}
+
+.quick-action-card.qa-order-toship .qa-icon {
+    background: #f0f9ff;
+    color: #0369a1;
+}
+
+.quick-action-card.qa-order-receive .qa-icon {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.quick-action-card.dimmed {
+    opacity: .5;
+}
+
 .quick-action-card .qa-title {
     font-size: .8rem;
     font-weight: 600;
@@ -520,5 +540,93 @@
 
     .member-header .stats-col-inner {
         justify-content: flex-start;
+    }
+
+    /* ===== Notification Center (Member Tab) ===== */
+    #pane-notify .notify-toolbar .btn {
+        font-size: .75rem;
+        padding: .35rem .65rem;
+    }
+
+    #pane-notify .notify-list {
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+        background: transparent;
+    }
+
+    #pane-notify .notify-list .list-group-item {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #ffffff;
+        padding: .9rem 1rem .85rem;
+        transition: .25s ease;
+        font-size: .88rem;
+        line-height: 1.35;
+        position: relative;
+    }
+
+    #pane-notify .notify-list .list-group-item.unread {
+        background: #f5f9ff;
+        border-color: #bfd7ff;
+    }
+
+    #pane-notify .notify-list .list-group-item.unread::before {
+        content: '';
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #2563eb;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+    }
+
+    #pane-notify .notify-list .d-flex strong {
+        font-size: .95rem;
+        font-weight: 600;
+        letter-spacing: .3px;
+    }
+
+    #pane-notify .notify-list .small.text-muted {
+        font-size: .7rem;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+
+    #pane-notify .notify-list .small:not(.text-muted) {
+        font-size: .8rem;
+    }
+
+    #pane-notify .notify-list .list-group-item:hover {
+        box-shadow: 0 6px 18px -4px rgba(0, 0, 0, .15);
+        transform: translateY(-2px);
+    }
+
+    #pane-notify .notify-list a.small {
+        display: inline-block;
+        margin-top: .4rem;
+        color: #1d4ed8;
+        font-weight: 500;
+    }
+
+    #pane-notify .notify-list a.small:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 575.98px) {
+        #pane-notify .notify-list .list-group-item {
+            padding: .75rem .85rem .7rem;
+            font-size: .82rem;
+        }
+
+        #pane-notify .notify-toolbar .btn {
+            font-size: .7rem;
+        }
+
+        #pane-notify .notify-list .d-flex strong {
+            font-size: .9rem;
+        }
     }
 }

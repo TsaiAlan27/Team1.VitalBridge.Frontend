@@ -295,9 +295,9 @@
         })();
 
         val('profileAddressDetail', p.Address || '');
-        txt('profileCreatedAt', p.CreatedAt || '--');
-        txt('profileUpdatedAt', p.UpdatedAt || '--');
-        txt('profileLastLoginAt', p.LastLoginAt || '--');
+        txt('profileCreatedAt', fmt(p.CreatedAt));
+        txt('profileUpdatedAt', fmt(p.UpdatedAt));
+        txt('profileLastLoginAt', fmt(p.LastLoginAt));
         completeness();
     }
 

@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="stat-box text-center">
                                         <div class="stat-val" id="statOrders">--</div>
-                                        <div class="stat-label">訂單數</div>
+                                        <div class="stat-label">待收貨</div>
                                     </div>
                                     <div class="stat-box text-center">
                                         <div class="stat-val" id="statLastLogin">--</div>
@@ -73,21 +73,28 @@
                     <div class="tab-content member-content-area" id="memberTabContent">
                         <!-- 概覽 -->
                         <div class="tab-pane fade show active" id="pane-dashboard" role="tabpanel">
-                            <div class="dashboard-quick-actions mb-4">
+                            <div class="dashboard-quick-actions mb-3">
                                 <div class="quick-actions-grid" id="quickActions">
-                                    <div class="quick-action-card qa-profile" data-bs-toggle="pill"
-                                        data-bs-target="#pane-profile" role="button" tabindex="0" aria-label="前往個人資料">
-                                        <div class="qa-icon"><i class="bi bi-person-lines-fill"></i></div>
-                                        <p class="qa-title">個人資料</p>
-                                        <p class="qa-value" id="qaProfilePercent">--%</p>
-                                        <div class="qa-meta">完整度</div>
+                                    <div class="quick-action-card qa-order-unpaid" role="button" tabindex="0"
+                                        aria-label="檢視待付款" data-order-filter="unpaid">
+                                        <div class="qa-icon"><i class="bi bi-exclamation-circle"></i></div>
+                                        <p class="qa-title">待付款</p>
+                                        <p class="qa-value" id="qaOrderUnpaid">--</p>
+                                        <div class="qa-meta">筆</div>
                                     </div>
-                                    <div class="quick-action-card qa-orders" data-bs-toggle="pill"
-                                        data-bs-target="#pane-orders" role="button" tabindex="0" aria-label="前往訂單紀錄">
-                                        <div class="qa-icon"><i class="bi bi-bag-check"></i></div>
-                                        <p class="qa-title">訂單</p>
-                                        <p class="qa-value" id="qaOrdersCount">--</p>
-                                        <div class="qa-meta">筆數</div>
+                                    <div class="quick-action-card qa-order-toship" role="button" tabindex="0"
+                                        aria-label="檢視待出貨" data-order-filter="toShip">
+                                        <div class="qa-icon"><i class="bi bi-box-seam"></i></div>
+                                        <p class="qa-title">待出貨</p>
+                                        <p class="qa-value" id="qaOrderToShip">--</p>
+                                        <div class="qa-meta">筆</div>
+                                    </div>
+                                    <div class="quick-action-card qa-order-receive" role="button" tabindex="0"
+                                        aria-label="檢視待收貨" data-order-filter="shipped">
+                                        <div class="qa-icon"><i class="bi bi-truck"></i></div>
+                                        <p class="qa-title">待收貨</p>
+                                        <p class="qa-value" id="qaOrderReceive">--</p>
+                                        <div class="qa-meta">筆</div>
                                     </div>
                                     <div class="quick-action-card qa-notify" data-bs-toggle="pill"
                                         data-bs-target="#pane-notify" role="button" tabindex="0" aria-label="前往通知中心">
@@ -98,46 +105,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card border-0 shadow-sm mb-4">
-                                <div class="card-body p-3 p-md-4">
-                                    <h5 class="card-title mb-3">歡迎回來</h5>
-                                    <p class="text-muted small mb-0">在上方資訊列可快速查看您的帳號概況，使用左側（或上方）導覽切換功能。</p>
-                                </div>
-                            </div>
-                            <div class="card border-0 shadow-sm mb-4" id="orderStatusSummaryCard">
-                                <div class="card-body p-3 p-md-4">
-                                    <h6 class="card-title mb-3">訂單狀態概覽</h6>
-                                    <div class="order-status-summary">
-                                        <div class="oss-item status-unpaid">
-                                            <div class="oss-icon"><i class="bi bi-exclamation-circle"></i></div>
-                                            <div class="oss-text">
-                                                <span class="oss-label">未付款</span>
-                                                <span class="oss-val" id="ossUnpaid">0</span>
-                                            </div>
-                                        </div>
-                                        <div class="oss-item status-paid">
-                                            <div class="oss-icon"><i class="bi bi-credit-card"></i></div>
-                                            <div class="oss-text">
-                                                <span class="oss-label">已付款</span>
-                                                <span class="oss-val" id="ossPaid">0</span>
-                                            </div>
-                                        </div>
-                                        <div class="oss-item status-toship">
-                                            <div class="oss-icon"><i class="bi bi-box-seam"></i></div>
-                                            <div class="oss-text">
-                                                <span class="oss-label">待出貨</span>
-                                                <span class="oss-val" id="ossToShip">0</span>
-                                            </div>
-                                        </div>
-                                        <div class="oss-item status-shipped">
-                                            <div class="oss-icon"><i class="bi bi-truck"></i></div>
-                                            <div class="oss-text">
-                                                <span class="oss-label">已出貨</span>
-                                                <span class="oss-val" id="ossShipped">0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="dashboard-welcome small text-muted mb-3 ps-1">
+                                <i class="bi bi-info-circle me-1"></i>可點上方狀態快速篩選訂單，通知磁貼可直達通知中心。
                             </div>
                         </div>
                         <!-- 個人資料 -->
@@ -146,12 +115,7 @@
                                 <div class="card-body p-3 p-md-4">
                                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                         <h4 class="mb-0">個人資料</h4>
-                                        <div class="small text-muted d-flex align-items-center gap-2">
-                                            <span
-                                                class="badge bg-light text-secondary fw-normal border profile-completeness-badge"
-                                                id="profileCompletenessBadge">完整度 <span
-                                                    id="qaProfilePercentInline">--%</span></span>
-                                        </div>
+                                        <!-- 移除完整度徽章 -->
                                     </div>
                                     <div class="profile-id-line">會員編號：<span id="profileId">--</span></div>
                                     <form id="formProfile" class="align-items-start">
@@ -285,8 +249,19 @@
                         <!-- 通知中心 -->
                         <div class="tab-pane fade" id="pane-notify" role="tabpanel">
                             <h4 class="mb-3">通知中心</h4>
-                            <div id="notifyList" class="list-group small">
-                                <div class="text-muted">載入中...</div>
+                            <div
+                                class="notify-toolbar d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+                                <div class="notify-summary small text-muted"><span id="notifyUnreadCount">--</span> 則未讀
+                                </div>
+                                <div class="notify-actions d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-secondary" id="btnRefreshNotify"
+                                        type="button"><i class="bi bi-arrow-clockwise"></i> 重新整理</button>
+                                    <button class="btn btn-sm btn-outline-primary" id="btnMarkAllRead" type="button"><i
+                                            class="bi bi-check2-all"></i> 全部已讀</button>
+                                </div>
+                            </div>
+                            <div id="notifyList" class="list-group notify-list">
+                                <div class="text-muted p-2">載入中...</div>
                             </div>
                         </div>
                         <!-- FAQ -->
@@ -365,7 +340,6 @@
                 $('#statOrders').text('0');
                 const now = new Date();
                 $('#statLastLogin').text(formatDateTime(now));
-                updateQuickProfileCompleteness();
                 loadOrders();
                 loadNotifies();
                 populateProfileMeta(user);
@@ -425,55 +399,124 @@
             // mock 加入多種狀態示例
             allOrders = [
                 { id: 'O20250001', status: 'unpaid', total: 1234, date: '2025-08-01' },
-                { id: 'O20250002', status: 'paid', total: 560, date: '2025-08-15' },
-                { id: 'O20250003', status: 'toShip', total: 890, date: '2025-08-18' },
-                { id: 'O20250004', status: 'shipped', total: 320, date: '2025-08-20' }
+                { id: 'O20250002', status: 'toShip', total: 890, date: '2025-08-18' },
+                { id: 'O20250003', status: 'shipped', total: 320, date: '2025-08-20' }
             ];
             const filtered = allOrders.filter(o => status === 'all' || o.status === status);
-            const statusLabel = { unpaid: '未付款', paid: '已付款', toShip: '待出貨', shipped: '已出貨' };
+            const statusLabel = { unpaid: '待付款', toShip: '待出貨', shipped: '待收貨' };
             const list = filtered.map(o => `<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><span><strong>${o.id}</strong><br><span class=\"text-muted small\">${o.date}</span></span><span class=\"badge bg-secondary\">${statusLabel[o.status] || o.status}</span></a>`).join('');
             $('#ordersList').html(list || '<div class="text-muted">無資料</div>');
             // 更新總數與快捷卡
-            $('#statOrders').text(allOrders.length);
-            $('#qaOrdersCount').text(allOrders.length);
-            if (!allOrders.length) $('#qaOrdersCount').closest('.quick-action-card').addClass('dimmed'); else $('#qaOrdersCount').closest('.quick-action-card').removeClass('dimmed');
-            updateOrderStatusSummary();
+            // 概覽統計「待收貨」= shipped 狀態筆數
+            // 更新三種狀態值
+            const counts = { unpaid: 0, toShip: 0, shipped: 0 };
+            allOrders.forEach(o => { if (counts[o.status] != null) counts[o.status]++; });
+            $('#statOrders').text(counts.shipped);
+            $('#qaOrderUnpaid').text(counts.unpaid);
+            $('#qaOrderToShip').text(counts.toShip);
+            $('#qaOrderReceive').text(counts.shipped);
+            // 視覺淡化 0
+            $('.qa-order-unpaid, .qa-order-toship, .qa-order-receive').each(function () {
+                const idMap = { 'qa-order-unpaid': counts.unpaid, 'qa-order-toship': counts.toShip, 'qa-order-receive': counts.shipped };
+                const cls = Array.from(this.classList).find(c => idMap[c] !== undefined);
+                if (cls && idMap[cls] === 0) $(this).addClass('dimmed'); else $(this).removeClass('dimmed');
+            });
         }
+        // 點擊狀態卡 -> 切換到訂單分頁並套 filter
+        $(document).on('click keypress', '.quick-action-card[data-order-filter]', function (e) {
+            if (e.type === 'keypress' && e.key !== 'Enter' && e.key !== ' ') return;
+            const filter = this.getAttribute('data-order-filter');
+            $('#orderFilter').val(filter || 'all');
+            loadOrders();
+            const tabBtn = document.querySelector('button[data-bs-target="#pane-orders"]');
+            if (tabBtn) { if (window.bootstrap) window.bootstrap.Tab.getOrCreateInstance(tabBtn).show(); else tabBtn.click(); }
+        });
 
-        function updateOrderStatusSummary() {
-            const counts = { unpaid: 0, paid: 0, toShip: 0, shipped: 0 };
-            allOrders.forEach(o => { if (counts[o.status] !== undefined) counts[o.status]++; });
-            $('#ossUnpaid').text(counts.unpaid);
-            $('#ossPaid').text(counts.paid);
-            $('#ossToShip').text(counts.toShip);
-            $('#ossShipped').text(counts.shipped);
-        }
-
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
         async function loadNotifies() {
-            try { const res = await auth.apiFetch('/getNotify', { method: 'GET' }); if (!res.ok) throw new Error('fetch failed'); const data = await res.json(); if (!Array.isArray(data) || !data.length) { $('#notifyList').html('<div class="text-muted">暫無通知</div>'); return; } const html = data.map(n => `<div class=\"list-group-item\"><div class=\"d-flex justify-content-between\"><strong>${n.name || '通知'}</strong><span class=\"small text-muted\">${n.sendDate || ''}</span></div><div class=\"small\">${n.title || ''}</div>${n.notifysUrl ? `<a href=\"${n.notifysUrl}\" class=\"small\">前往</a>` : ''}</div>`).join(''); $('#notifyList').html(html); $('#statUnread').text(data.length); } catch (e) { $('#notifyList').html('<div class="text-muted">無法取得通知或尚未登入</div>'); }
-            // 更新快捷未讀
-            const unread = parseInt($('#statUnread').text(), 10) || 0;
+            $('#notifyList').html('<div class="text-muted">載入全部通知中...</div>');
+            try {
+                // 直接讀取全部通知（後端若有大量資料建議改成分頁）
+                const res = await auth.apiFetch('/getAllNotify', { method: 'GET' });
+                if (!res.ok) throw new Error('fetch failed');
+                const data = await res.json();
+                if (!Array.isArray(data) || !data.length) {
+                    $('#notifyList').html('<div class="text-muted">暫無通知</div>');
+                    $('#statUnread').text('0');
+                } else {
+                    const frag = document.createDocumentFragment();
+                    let unreadCount = 0;
+                    data.forEach(n => {
+                        if (!n.isRead) unreadCount++;
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item';
+                        const top = document.createElement('div');
+                        top.className = 'd-flex justify-content-between';
+                        const strong = document.createElement('strong');
+                        strong.textContent = n.name || '通知';
+                        const dateSpan = document.createElement('span');
+                        dateSpan.className = 'small text-muted';
+                        dateSpan.textContent = n.sendDate || '';
+                        top.appendChild(strong); top.appendChild(dateSpan);
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'small';
+                        titleDiv.textContent = n.title || '';
+                        item.appendChild(top);
+                        item.appendChild(titleDiv);
+                        if (n.notifysUrl) {
+                            const link = document.createElement('a');
+                            link.href = n.notifysUrl;
+                            link.className = 'small';
+                            link.textContent = '前往';
+                            item.appendChild(link);
+                        }
+                        if (!n.isRead) item.classList.add('unread');
+                        frag.appendChild(item);
+                    });
+                    const list = document.getElementById('notifyList');
+                    list.innerHTML = '';
+                    list.appendChild(frag);
+                    $('#statUnread').text(unreadCount);
+                }
+            } catch (e) {
+                $('#notifyList').html('<div class="text-muted">無法取得通知或尚未登入</div>');
+                $('#statUnread').text('0');
+            }
+            // 更新快捷未讀 (使用未讀計數，沒有 isRead 時退回總數)
+            let unread = parseInt($('#statUnread').text(), 10);
+            if (isNaN(unread)) unread = 0;
             $('#qaNotifyUnread').text(unread);
-            if (!unread) $('#qaNotifyUnread').closest('.quick-action-card').classList.add('dimmed');
+            // 保持通知卡片永遠可點，不因 0 未讀而淡出
+            $('#qaNotifyUnread').closest('.quick-action-card').removeClass('dimmed');
+            $('#notifyUnreadCount').text(unread);
         }
+        // 監聽 tab 顯示：使用者點開通知再載入，避免初次渲染阻塞
+        document.addEventListener('shown.bs.tab', e => {
+            const target = e.target && e.target.getAttribute('data-bs-target');
+            if (target === '#pane-notify') loadNotifies(); // 每次切換都重新抓（確保即時性）
+        });
 
-        function updateQuickProfileCompleteness() {
-            // 基於目前填寫欄位簡單計算（姓名 / 電話 / 縣市 / 鄉鎮 / 詳細地址）
-            const fields = ['#profileName', '#profilePhone', '#profileCity', '#profileDistrict', '#profileAddressDetail'];
-            let filled = 0;
-            fields.forEach(sel => { const v = $(sel).val?.() || ''; if (v && v.trim().length > 0) filled++; });
-            const percent = Math.round((filled / fields.length) * 100);
-            $('#qaProfilePercent').text(percent + '%');
-            $('#qaProfilePercentInline').text(percent + '%');
-            const card = $('#qaProfilePercent').closest('.quick-action-card');
-            if (percent < 40) card.addClass('dimmed'); else card.removeClass('dimmed');
-            // 百分比徽章色彩
-            const badge = $('#profileCompletenessBadge');
-            badge.removeClass('pc-low pc-mid pc-high');
-            if (percent < 40) badge.addClass('pc-low');
-            else if (percent < 80) badge.addClass('pc-mid');
-            else badge.addClass('pc-high');
-        }
+        // 通知工具列按鈕
+        $(document).on('click', '#btnRefreshNotify', function () { loadNotifies(); });
+        $(document).on('click', '#btnMarkAllRead', async function () {
+            const $btn = $(this);
+            if ($btn.prop('disabled')) return;
+            $btn.prop('disabled', true).data('orig', $btn.html()).html('<span class="spinner-border spinner-border-sm me-1"></span>處理中');
+            try {
+                const res = await auth.apiFetch('/AllRead', { method: 'GET' }); // 若可改成 POST 更佳
+                if (res.ok) {
+                    // 標記 UI
+                    $('#notifyList .list-group-item.unread').removeClass('unread');
+                    $('#statUnread, #qaNotifyUnread, #notifyUnreadCount').text('0');
+                    // 保持卡片不加 dimmed
+                }
+            } catch (e) { /* 忽略錯誤，可加提示 */ }
+            finally {
+                if ($btn.data('orig')) $btn.html($btn.data('orig'));
+                $btn.prop('disabled', false);
+            }
+        });
+
 
         function populateProfileMeta(user) {
             if (!user) return;
@@ -504,13 +547,10 @@
             if (created) $('#profileCreatedAt').text(formatDateTime(created));
             if (updated) $('#profileUpdatedAt').text(formatDateTime(updated));
             if (lastLogin) $('#profileLastLoginAt').text(formatDateTime(lastLogin)); else $('#profileLastLoginAt').text($('#statLastLogin').text());
-            updateQuickProfileCompleteness();
-            // 初始化完整度徽章同步
-            $('#qaProfilePercentInline').text($('#qaProfilePercent').text());
+            // 已移除完整度顯示
         }
 
-        // 監聽個資欄位變更動態更新完整度
-        $(document).on('input change', '#formProfile input', function () { updateQuickProfileCompleteness(); });
+        // 已移除完整度監聽
 
         function formatDateTime(dt) {
             try {
@@ -524,6 +564,35 @@
                 return `${y}-${m}-${day} ${hh}:${mm}`;
             } catch { return '--'; }
         }
+
+        // 點擊「通知」磁貼 -> 直接切換並更新 hash，支援外部連結 /member/memberCenter.html#pane-notify
+        (function enableNotifyTileJump() {
+            $(document).on('click', '.quick-action-card.qa-notify', function (e) {
+                try {
+                    const btn = document.querySelector('button[data-bs-target="#pane-notify"]');
+                    if (btn && window.bootstrap) {
+                        const tab = window.bootstrap.Tab.getOrCreateInstance(btn);
+                        tab.show();
+                    } else if (btn) {
+                        btn.click();
+                    }
+                    // 設定 hash（使用 replaceState 避免多段歷史）
+                    if (location.hash !== '#pane-notify') {
+                        history.replaceState(null, '', location.pathname + location.search + '#pane-notify');
+                    }
+                    // 若尚未載入則觸發載入（保險）
+                    loadNotifies();
+                } catch { }
+            });
+            // 初次載入如果 URL 已帶 #pane-notify 直接顯示
+            if (location.hash === '#pane-notify') {
+                const btn = document.querySelector('button[data-bs-target="#pane-notify"]');
+                if (btn) {
+                    if (window.bootstrap) window.bootstrap.Tab.getOrCreateInstance(btn).show(); else btn.click();
+                    loadNotifies();
+                }
+            }
+        })();
     </script>
 </body>
 
