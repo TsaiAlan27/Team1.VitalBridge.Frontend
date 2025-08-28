@@ -30,88 +30,37 @@
 
   <!-- 自己想改的樣式放這邊 -->
   <!-- 購物車專用樣式 -->
-  <!-- <style>
-    .cart-container {
-      min-height: 500px;
+
+  <style>
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
     }
 
-    .cart-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 15px;
-      background: white;
-    }
-
-    .cart-item-image {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .quantity-controls {
+    .step {
       display: flex;
       align-items: center;
-      gap: 10px;
+      margin: 0 1rem;
     }
 
-    .quantity-btn {
-      width: 30px;
-      height: 30px;
-      border: 1px solid #198754;
-      background: white;
-      color: #198754;
-      border-radius: 4px;
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #6c757d;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: bold;
+      margin-right: 0.5rem;
     }
 
-    .quantity-btn:hover {
+    .step.active .step-number {
       background: #198754;
-      color: white;
     }
 
-    .quantity-input {
-      width: 60px;
-      text-align: center;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 5px;
-    }
-
-    .cart-summary {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
-      position: sticky;
-      top: 100px;
-    }
-
-    .btn-checkout {
-      background-color: #198754;
-      color: white;
-      padding: 12px 30px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      width: 100%;
-    }
-
-    .btn-checkout:hover {
-      background-color: #157347;
-      color: white;
-    }
-
-    .empty-cart {
-      text-align: center;
-      padding: 60px 20px;
-      color: #6c757d;
-    }
-  </style> -->
-  <style>
     .cart-container {
       min-height: 500px;
       margin-top: 2rem;
@@ -124,19 +73,11 @@
       font-weight: 700;
       margin-bottom: 2rem;
       padding-bottom: 1rem;
-      border-bottom: 3px solid #198754;
-      position: relative;
+      /* border-bottom: 3px solid #198754;
+      position: relative; */
     }
 
-    .cart-title::after {
-      content: '';
-      position: absolute;
-      bottom: -3px;
-      left: 0;
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, #198754, #20c997);
-    }
+
 
     /* 🎨 精美的表格設計 */
     .cart-table-wrapper {
@@ -522,6 +463,25 @@
   <div class="headerpage"></div> <!-- 主導覽 -->
   <div class="shop-headerpage"></div> <!-- 購物導覽 -->
 
+  <!-- 步驟指示器 -->
+  <div class="step-indicator">
+    <div class="step active">
+      <div class="step-number">✓</div>
+      <span>購物車</span>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <span>填寫資料</span>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <span>訂單確認</span>
+    </div>
+    <div class="step">
+      <div class="step-number">4</div>
+      <span>完成付款</span>
+    </div>
+  </div>
 
   <main class="main">
     <div id="cart-app" class="container cart-container">

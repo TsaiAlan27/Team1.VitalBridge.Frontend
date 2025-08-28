@@ -79,7 +79,84 @@
       top: 20px;
     }
 
-    .product-item {
+    /* 更新商品列表樣式 - 類似購物車的表格樣式 */
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .product-table th {
+      background-color: #f8f9fa;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid #dee2e6;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .product-table td {
+      padding: 15px 12px;
+      border-bottom: 1px solid #dee2e6;
+      vertical-align: middle;
+    }
+
+    .product-table tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .product-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+
+    .product-info {
+      padding-left: 15px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .product-code {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .product-description {
+      color: #868e96;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .price-cell {
+      text-align: right;
+      font-weight: 600;
+      color: #198754;
+      font-size: 1.1rem;
+    }
+
+    .quantity-cell {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .subtotal-cell {
+      text-align: right;
+      font-weight: 700;
+      color: #198754;
+      font-size: 1.2rem;
+    }
+
+    /* .product-item {
       display: flex;
       align-items: center;
       padding: 1rem 0;
@@ -96,7 +173,25 @@
       object-fit: cover;
       border-radius: 4px;
       margin-right: 1rem;
+    } */
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .product-table {
+        font-size: 0.9rem;
+      }
+
+      .product-image {
+        width: 60px;
+        height: 60px;
+      }
+
+      .product-info {
+        padding-left: 10px;
+      }
     }
+
+
 
     .btn-submit {
       background: #198754;
@@ -195,7 +290,62 @@
       <!-- 左側：訂單詳情 -->
       <div class="col-lg-8">
         <!-- 商品清單 -->
+        <!-- 商品清單 -->
         <div class="info-section">
+          <h5><i class="bi bi-bag me-2"></i>購買商品</h5>
+
+          <!-- 商品表格 -->
+          <div class="table-responsive">
+            <table class="product-table">
+              <thead>
+                <tr>
+                  <th colspan="2">商品</th>
+                  <th>單價</th>
+                  <th>數量</th>
+                  <th>小計</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in checkoutData.cartItems" :key="item.cartItemId">
+                  <!-- 商品圖片 -->
+                  <td style="width: 100px;">
+                    <img :src="getImageUrl(item.imageFileName)" :alt="item.productName" class="product-image"
+                      @error="handleImageError">
+                  </td>
+
+                  <!-- 商品資訊 -->
+                  <td>
+                    <div class="product-info">
+                      <div class="product-name">{{ item.productName }}</div>
+                      <div class="product-code">貨號: {{ item.itemNumber }}</div>
+                      <div class="product-description" v-if="item.description">
+                        {{ item.description }}
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- 單價 -->
+                  <td class="price-cell">
+                    NT$ {{ formatPrice(item.unitPrice) }}
+                  </td>
+
+                  <!-- 數量 -->
+                  <td class="quantity-cell">
+                    {{ item.quantity }}
+                  </td>
+
+                  <!-- 小計 -->
+                  <td class="subtotal-cell">
+                    NT$ {{ formatPrice(item.subtotal) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+        <!-- <div class="info-section">
           <h5><i class="bi bi-bag me-2"></i>購買商品</h5>
           <div class="product-list">
             <div v-for="item in checkoutData.cartItems" :key="item.cartItemId" class="product-item">
@@ -211,7 +361,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- 顧客資料 -->
         <div class="info-section">
           <h5><i class="bi bi-person me-2"></i>顧客資料</h5>
