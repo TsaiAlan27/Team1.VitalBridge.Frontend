@@ -1,4 +1,20 @@
 /* Member Center page specific styles extracted from inline <style> */
+/* 全域字體：微軟正黑體優先 */
+body,
+.member-content-area,
+.accordion-button,
+.quick-action-card,
+.profile-card,
+.order-detail-table,
+.btn,
+.nav-link,
+.stat-box,
+.badge,
+.form-control,
+.form-select {
+    font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', 'Poppins', 'Roboto', system-ui, sans-serif;
+}
+
 .member-layout-row {
     --vb-nav-width: 200px;
 }
@@ -629,4 +645,181 @@
             font-size: .9rem;
         }
     }
+}
+
+/* ===== Orders Accordion & Badges ===== */
+.order-detail-table th {
+    background: #f8f9fa;
+    font-weight: 500;
+}
+
+.order-detail-table td,
+.order-detail-table th {
+    padding: .4rem .6rem;
+}
+
+.order-detail-table {
+    border: 1px solid #e5e7eb;
+    border-radius: .4rem;
+    overflow: hidden;
+}
+
+.order-detail-table tr+tr td,
+.order-detail-table tr+tr th {
+    border-top: 1px solid #eceff3;
+}
+
+.accordion-item {
+    background: #fff;
+}
+
+.accordion-button {
+    font-size: .85rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background: #f1f5f9;
+    box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 .15rem rgba(52, 97, 193, .15);
+}
+
+.order-badge-pay,
+.order-badge-ship,
+.order-badge-shipped,
+.order-badge-done,
+.order-badge-cancel,
+.order-badge-refund,
+.order-badge-refunded {
+    letter-spacing: .5px;
+    font-size: .65rem;
+}
+
+.btn-status-pill {
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .55rem;
+    --bs-btn-font-size: .65rem;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    border-radius: 2rem;
+    font-weight: 500;
+    letter-spacing: .5px;
+}
+
+.btn-status-pill:hover {
+    background: #e2e8f6;
+}
+
+.btn-status-pill.active {
+    background: #3461c1;
+    color: #fff;
+    border-color: #2c55ad;
+}
+
+.btn-status-pill .badge {
+    font-size: .55rem;
+    padding: .25em .35em;
+}
+
+.pagination .page-link {
+    padding: .3rem .55rem;
+}
+
+.skeleton .placeholder {
+    display: inline-block;
+    height: .9rem;
+    background: linear-gradient(90deg, #f2f4f7, #e4e7ec, #f2f4f7);
+    border-radius: 4px;
+    animation: skl 1.2s infinite;
+}
+
+@keyframes skl {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.order-row-head {
+    font-size: .92rem;
+}
+
+.order-head-number {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.order-head-time {
+    font-size: .72rem;
+    letter-spacing: .5px;
+}
+
+.order-head-amount {
+    font-size: .85rem;
+    font-weight: 600;
+    color: #0f416d;
+}
+
+.accordion-button {
+    min-height: 72px;
+}
+
+.accordion-button .badge {
+    transform: translateY(-1px);
+}
+
+/* 新版狀態徽章左置樣式與分頁置中保險 */
+.order-row-head .order-head-status.badge {
+    font-size: .7rem;
+    padding: .45em .6em;
+    align-self: flex-start;
+}
+
+.order-row-head .order-head-number {
+    min-width: 120px;
+}
+
+#ordersPagination {
+    display: flex;
+    justify-content: center;
+}
+
+/* ===== Accessibility: larger fonts for order section (senior-friendly) ===== */
+#pane-orders .accordion-button {
+    font-size: .95rem;
+}
+
+#pane-orders .order-row-head {
+    font-size: 1rem;
+}
+
+#pane-orders .order-head-number {
+    font-size: 1.05rem;
+}
+
+#pane-orders .order-head-amount {
+    font-size: .95rem;
+}
+
+#pane-orders .order-head-time {
+    font-size: .78rem;
+}
+
+#pane-orders .order-detail-table td,
+#pane-orders .order-detail-table th {
+    font-size: .9rem;
+}
+
+#pane-orders .btn-status-pill {
+    --bs-btn-font-size: .75rem;
+}
+
+#pane-orders .btn-status-pill .badge {
+    font-size: .6rem;
 }
