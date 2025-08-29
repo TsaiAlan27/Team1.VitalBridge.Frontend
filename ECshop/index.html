@@ -235,19 +235,34 @@
 <!-- <body class="index-page"> -->
 
 <body>
-  <div class="headerpage"></div> <!-- 主導覽 -->
-  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+  <div class="fixed-top mb-5">
+    <div class="headerpage"></div> <!-- 主導覽 -->
+    <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+  </div>
 
-
-  <main class="main">
+  <main class="main mt-5 pt-5">
     <!-- 你們的主要頁面內容放這邊下面 -->
-    <div id="shop-app">
+    <div id="shop-app" class="mt-5 pt-5">
       <!-- 所有購物相關內容都放在這裡 -->
 
 
       <!-- 廣告區塊 -->
-      <div class="container">
-        <section class="ad-section">
+      <div class="container mt-5 pt-5">
+        <div class="banner">
+          <p></p>
+        </div>
+
+        <div class="adv-right-left">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <hr>
+            </div>
+            <div class="col-md-6">
+              <hr>
+            </div>
+          </div>
+        </div>
+        <!-- <section class="ad-section">
           <div class="row g-3">
             <div class="col-md-6">
               <div class="ad-block" id="ad-1">
@@ -268,7 +283,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
       </div>
 
       <!-- 銀髮食品區塊 -->
@@ -371,37 +386,37 @@
 
 
         <!-- 保健照護區塊 -->
-        <div class="container">
-          <section class="product-category-section">
-            <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(10, '保健照護')">保健照護</h2>
-            <div class="row g-4">
-              <div class="col-lg-3 col-md-6 col-6" v-for="product in healthCare" :key="product.id">
-                <div class="card product-card">
-                  <div class="product-image-container">
-                    <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
-                      @click="goToProduct(product.id)" @error="handleImageError">
-                  </div>
-                  <div class="product-info">
-                    <h5 class="product-name" @click="goToProduct(product.id)">
-                      {{ truncateName(product.name) }}
-                    </h5>
-                    <p class="product-keypoint">{{ product.keypoint }}</p>
-                    <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
-                    <div class="product-actions">
-                      <button class="btn btn-cart" @click="addToCart(product)">
-                        <i class="bi bi-cart-plus"></i> 加入購物車
-                      </button>
-                      <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
-                        @click="toggleFavorite(product.id)">
-                        <i class="bi bi-heart-fill"></i>
-                      </button>
-                    </div>
+        <!-- <div class="container"> -->
+        <section class="product-category-section">
+          <h2 class="category-title" style="cursor: pointer;" @click="goToCategory(10, '保健照護')">保健照護</h2>
+          <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-6" v-for="product in healthCare" :key="product.id">
+              <div class="card product-card">
+                <div class="product-image-container">
+                  <img :src="getImageUrl(product.imageFileName)" :alt="product.name" class="product-image"
+                    @click="goToProduct(product.id)" @error="handleImageError">
+                </div>
+                <div class="product-info">
+                  <h5 class="product-name" @click="goToProduct(product.id)">
+                    {{ truncateName(product.name) }}
+                  </h5>
+                  <p class="product-keypoint">{{ product.keypoint }}</p>
+                  <div class="product-price">NT$ {{ formatPrice(product.price) }}</div>
+                  <div class="product-actions">
+                    <button class="btn btn-cart" @click="addToCart(product)">
+                      <i class="bi bi-cart-plus"></i> 加入購物車
+                    </button>
+                    <button class="btn-favorite" :class="{ active: isFavorite(product.id) }"
+                      @click="toggleFavorite(product.id)">
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+        <!-- </div> -->
       </div>
 
 
@@ -436,7 +451,9 @@
 
 
   <!-- 其他要裝的js放在這之前 -->
+
   <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/cart-utils.js"></script>
   <script src="/assets/js/fragment-loader.js" defer></script>
 
 
@@ -477,7 +494,7 @@
 
               // 狀態管理
               loading: false, // 移除載入狀態
-              addingToCart: false, // 🔥 新增：防止重複點擊
+              // addingToCart: false, // 🔥 新增：防止重複點擊
 
               // 我的最愛清單 (localStorage)
               favorites: JSON.parse(localStorage.getItem('vitalbridge_favorites') || '[]')
@@ -543,100 +560,114 @@
               window.location.href = `/VitalBridge/ECshop/product-detail.html?id=${productId}`;
             },
             // 加入購物車
+
+            // async addToCart(product) {
+            //   // 🔥 檢查登入狀態
+            //   if (!this.checkLoginStatus()) {
+            //     alert('請先登入會員才能加入購物車');
+            //     // 導向登入頁面或首頁
+            //     window.location.href = '/VitalBridge/index.html';
+            //     return;
+            //   }
+            //   // 防止重複點擊
+            //   if (this.addingToCart) return;
+            //   this.addingToCart = true;
+
+
+            //   try {
+            //     // 🔥 確保 token 有效
+            //     try {
+            //       await auth.me(); // 檢查登入狀態
+            //     } catch (authError) {
+            //       console.error('登入檢查失敗，嘗試刷新 token:', authError);
+            //       try {
+            //         await auth.ensureRefreshed();
+            //       } catch (refreshError) {
+            //         alert('登入已過期，請重新登入');
+            //         window.location.href = '/VitalBridge/index.html';
+            //         return;
+            //       }
+            //     }
+
+            //     // 🔥 呼叫加入購物車 API
+            //     const response = await fetch('https://localhost:7104/api/CartApi/AddItem', {
+            //       method: 'POST',
+            //       headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': `Bearer ${auth.getAccessToken()}`
+            //       },
+            //       credentials: 'include',
+            //       body: JSON.stringify({
+            //         productId: product.id,
+            //         quantity: 1 // 預設加入 1 個
+            //       })
+            //     });
+
+            //     if (!response.ok) {
+            //       const errorText = await response.text();
+            //       console.error('加入購物車 API 錯誤:', errorText);
+
+            //       if (response.status === 401) {
+            //         alert('登入已過期，請重新登入');
+            //         window.location.href = '/VitalBridge/index.html';
+            //         return;
+            //       }
+
+            //       throw new Error(errorText || '加入購物車失敗');
+            //     }
+
+            //     // 🔥 修正：後端回傳純文字，不是 JSON
+            //     const result = await response.text(); // 改用 text() 而非 json()
+            //     console.log('加入購物車成功:', result);
+
+            //     // 🔥 成功提示
+            //     alert('成功加入購物車！');
+
+            //     // 🔥 更新導覽列購物車數量
+            //     this.updateCartCount();
+
+            //   } catch (error) {
+            //     console.error('加入購物車失敗:', error);
+            //     alert('❌ 加入購物車時發生錯誤：' + error.message);
+            //   } finally {
+            //     this.addingToCart = false;
+            //   }
+            // },// 更新導覽列購物車數量
             async addToCart(product) {
-              // 🔥 檢查登入狀態
-              if (!this.checkLoginStatus()) {
-                alert('請先登入會員才能加入購物車');
-                // 導向登入頁面或首頁
-                window.location.href = '/VitalBridge/index.html';
-                return;
-              }
-              // 防止重複點擊
-              if (this.addingToCart) return;
-              this.addingToCart = true;
-
+              console.log('=== 首頁：加入購物車 ===', product.id);
 
               try {
-                // 🔥 確保 token 有效
-                try {
-                  await auth.me(); // 檢查登入狀態
-                } catch (authError) {
-                  console.error('登入檢查失敗，嘗試刷新 token:', authError);
-                  try {
-                    await auth.ensureRefreshed();
-                  } catch (refreshError) {
-                    alert('登入已過期，請重新登入');
-                    window.location.href = '/VitalBridge/index.html';
-                    return;
-                  }
-                }
-
-                // 🔥 呼叫加入購物車 API
-                const response = await fetch('https://localhost:7104/api/CartApi/AddItem', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.getAccessToken()}`
-                  },
-                  credentials: 'include',
-                  body: JSON.stringify({
-                    productId: product.id,
-                    quantity: 1 // 預設加入 1 個
-                  })
-                });
-
-                if (!response.ok) {
-                  const errorText = await response.text();
-                  console.error('加入購物車 API 錯誤:', errorText);
-
-                  if (response.status === 401) {
-                    alert('登入已過期，請重新登入');
-                    window.location.href = '/VitalBridge/index.html';
-                    return;
-                  }
-
-                  throw new Error(errorText || '加入購物車失敗');
-                }
-
-                // 🔥 修正：後端回傳純文字，不是 JSON
-                const result = await response.text(); // 改用 text() 而非 json()
-                console.log('加入購物車成功:', result);
-
-                // 🔥 成功提示
-                alert('成功加入購物車！');
-
-                // 🔥 更新導覽列購物車數量
-                this.updateCartCount();
+                // 🔥 修正：傳入 product.id 而不是整個 product 物件
+                await CartUtils.quickAddToCart(product.id, 1);
 
               } catch (error) {
-                console.error('加入購物車失敗:', error);
-                alert('❌ 加入購物車時發生錯誤：' + error.message);
-              } finally {
-                this.addingToCart = false;
-              }
-            },// 更新導覽列購物車數量
-            async updateCartCount() {
-              try {
-                const response = await fetch('https://localhost:7104/api/CartApi/Count', {
-                  method: 'GET',
-                  headers: {
-                    'Authorization': `Bearer ${auth.getAccessToken()}`
-                  },
-                  credentials: 'include'
-                });
-
-                if (response.ok) {
-                  const count = await response.json();
-                  const cartCountElement = document.getElementById('cart-count');
-                  if (cartCountElement) {
-                    cartCountElement.textContent = count || 0;
-                    console.log('購物車數量更新為:', count);
-                  }
-                }
-              } catch (error) {
-                console.error('更新購物車數量失敗:', error);
+                console.error('首頁加入購物車失敗:', error);
               }
             },
+
+
+            // async updateCartCount() {
+            //   try {
+            //     const response = await fetch('https://localhost:7104/api/CartApi/Count', {
+            //       method: 'GET',
+            //       headers: {
+            //         'Authorization': `Bearer ${auth.getAccessToken()}`
+            //       },
+            //       credentials: 'include'
+            //     });
+
+            //     if (response.ok) {
+            //       const count = await response.json();
+            //       const cartCountElement = document.getElementById('cart-count');
+            //       if (cartCountElement) {
+            //         cartCountElement.textContent = count || 0;
+            //         console.log('購物車數量更新為:', count);
+            //       }
+            //     }
+            //   } catch (error) {
+            //     console.error('更新購物車數量失敗:', error);
+            //   }
+            // },
 
             // 切換我的最愛
             toggleFavorite(productId) {

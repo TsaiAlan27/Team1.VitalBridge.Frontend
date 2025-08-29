@@ -131,14 +131,16 @@
 <!-- <body class="index-page"> -->
 
 <body>
-  <div class="headerpage"></div> <!-- 主導覽 -->
-  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+  <div class="fixed-top mb-5">
+    <div class="headerpage"></div> <!-- 主導覽 -->
+    <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+  </div>
 
 
-  <main class="container my-4" id="checkout-app">
+  <main class="container my-4 mt-5 pt-5" id="checkout-app">
     <!-- 你們的主要頁面內容放這邊下面 -->
     <!-- 步驟指示器 -->
-    <div class="step-indicator">
+    <div class="step-indicator mt-5 pt-5">
       <div class="step completed">
         <div class="step-number">✓</div>
         <span>購物車</span>
@@ -304,6 +306,7 @@
           <!-- 付款方式 -->
           <div class="form-section">
             <h5><i class="bi bi-credit-card me-2"></i>付款方式</h5>
+            <!-- 原有的付款方式選項 -->
             <div v-for="payment in checkoutData.paymentMethods" :key="payment.id" class="form-check mb-2">
               <input class="form-check-input" type="radio" name="payment" :id="'pay-' + payment.id" :value="payment.id"
                 v-model="formData.paymentMethodId">
@@ -494,7 +497,7 @@
                   console.log('✅ 使用者已登入:', userInfo);
                 } catch (authError) {
                   console.error('❌ 認證失敗，跳轉至登入頁');
-                  window.location.href = '/VitalBridge/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                  window.location.href = 'https://localhost:7184/VitalBridge/ECshop/index.html';
                   return;
                 }
 
@@ -512,7 +515,7 @@
                   if (response.status === 401) {
                     // 🔧 修正：使用和 cart.html 相同的跳轉方式
                     alert('請先登入會員');
-                    window.location.href = '/VitalBridge/login.html';
+                    window.location.href = 'https://localhost:7184/VitalBridge/index.html';
                     return;
                   }
                   const errorText = await response.text();

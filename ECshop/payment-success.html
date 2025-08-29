@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>樂齡商城</title>
+  <meta name="description" content="專為銀髮族設計的健康商城">
+  <meta name="keywords" content="銀髮食品,保健食品,健康飲品,保健照護">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- 自己想改的樣式放這邊 -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #a6f6fc 0%, #d7f7d7 100%);
+      min-height: 100vh;
+      /* display: flex; */
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* 🔧 新增：讓 main 區域居中顯示 */
+    .main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 200px);
+      padding: 2rem 0;
+    }
+
+
+    .success-container {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #28a745, #20c997, #17a2b8);
+    }
+
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: successPulse 2s ease-in-out infinite;
+    }
+
+    .success-icon i {
+      font-size: 3rem;
+      color: white;
+      animation: checkmarkAnimation 0.8s ease-in-out 0.3s both;
+    }
+
+    @keyframes successPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(40, 167, 69, 0);
+      }
+    }
+
+    @keyframes checkmarkAnimation {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #28a745;
+      margin-bottom: 1rem;
+      animation: slideInUp 0.8s ease-out 0.5s both;
+    }
+
+    .success-message {
+      font-size: 1.1rem;
+      color: #6c757d;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      animation: slideInUp 0.8s ease-out 0.7s both;
+    }
+
+    .order-info {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: left;
+      animation: slideInUp 0.8s ease-out 0.9s both;
+    }
+
+    .order-info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .order-info-item:last-child {
+      border-bottom: none;
+    }
+
+    .order-info-label {
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .order-info-value {
+      font-weight: 600;
+      color: #212529;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      animation: slideInUp 0.8s ease-out 1.1s both;
+    }
+
+    .btn-home {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border: none;
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-home:hover {
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+    }
+
+    .btn-orders {
+      background: white;
+      border: 2px solid #28a745;
+      color: #28a745;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-orders:hover {
+      background: #28a745;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    @keyframes slideInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /*
+    .celebration-confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #28a745;
+      animation: confetti-fall linear infinite;
+    }
+
+    .confetti-piece:nth-child(2n) {
+      background: #20c997;
+    }
+
+    .confetti-piece:nth-child(3n) {
+      background: #17a2b8;
+    }
+
+    .confetti-piece:nth-child(4n) {
+      background: #ffc107;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+*/
+    .loading-state {
+      display: none;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* 🔧 新增：響應式設計 */
+    @media (max-width: 768px) {
+      .main {
+        min-height: calc(100vh - 150px);
+        padding: 1rem 0;
+      }
+
+      .success-container {
+        padding: 2rem 1.5rem;
+        margin: 0 1rem;
+      }
+
+      .success-title {
+        font-size: 1.5rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .btn-home,
+      .btn-orders {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+
+</head>
+
+<!-- <body class="index-page"> -->
+
+<body>
+  <div class="fixed-top mb-5">
+    <div class="headerpage"></div> <!-- 主導覽 -->
+    <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+  </div>
+
+
+  <main class="main my-4 mt-5 pt-5">
+    <!-- 你們的主要頁面內容放這邊下面 -->
+    <div id="payment-success-app" class="mt-5 pt-5">
+      <!-- 所有購物相關內容都放在這裡 -->
+      <!-- 成功畫面 -->
+      <div class="success-container">
+        <!-- 載入狀態 -->
+        <div v-if="loading" class="loading-state" style="display: block;">
+          <div class="loading-spinner"></div>
+          <p>正在確認付款狀態...</p>
+        </div>
+
+        <!-- 成功狀態 -->
+        <div v-else>
+          <!-- 成功圖示 -->
+          <div class="success-icon">
+            <i class="bi bi-check2"></i>
+          </div>
+
+          <!-- 成功訊息 -->
+          <h1 class="success-title">付款成功！</h1>
+          <p class="success-message">
+            恭喜您完成付款！您的訂單已經成功建立，我們將盡快為您處理和出貨。<br>
+            感謝您選擇樂齡商城！
+          </p>
+          <!-- 訂單資訊 -->
+          <div class="order-info" v-if="orderInfo">
+            <div class="order-info-item">
+              <span class="order-info-label">訂單編號</span>
+              <span class="order-info-value">{{ orderInfo.orderNumber }}</span>
+            </div>
+            <div class="order-info-item">
+              <span class="order-info-label">付款時間</span>
+              <span class="order-info-value">{{ formatDateTime(orderInfo.paymentDate) }}</span>
+            </div>
+            <div class="order-info-item">
+              <span class="order-info-label">付款金額</span>
+              <span class="order-info-value">NT$ {{ formatPrice(orderInfo.amount) }}</span>
+            </div>
+            <!-- <div class="order-info-item" v-if="orderInfo.transactionId">
+            <span class="order-info-label">交易編號</span>
+            <span class="order-info-value">{{ orderInfo.transactionId }}</span>
+          </div> -->
+          </div>
+          <!-- 操作按鈕 -->
+          <div class="action-buttons">
+            <a href="/VitalBridge/ECshop/index.html" class="btn-home">
+              <i class="bi bi-house-fill"></i>
+              回到首頁
+            </a>
+            <!--<a href="/VitalBridge/ECshop/order-history.html" class="btn-orders">
+          <i class="bi bi-receipt"></i>
+          查看訂單
+          </a> -->
+          </div>
+
+        </div>
+
+        <!-- 其他頁面內容也會在這裡 -->
+        <!-- 你們的主要頁面內容放這邊上面 -->
+      </div>
+  </main>
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Main JS File -->
+  <!-- <script src="assets/js/main.js"></script> -->
+
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+
+
+
+</body>
+
+<!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+    // 例如：
+    // $(document).ready(function () {
+    //   console.log("✅ jQuery .ready() 測試成功！");
+    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
+    // });
+    // 等待 auth 物件載入完成
+    async function waitForAuth() {
+      return new Promise((resolve) => {
+        function checkAuth() {
+          if (typeof window.auth !== 'undefined') {
+            resolve();
+          } else {
+            setTimeout(checkAuth, 100); // 每 100ms 檢查一次
+          }
+        }
+        checkAuth();
+      });
+    }
+
+    //Vue的部分寫這邊
+    (function mountVue() {
+      // 把頁面專屬的 Vue 程式寫在這個函式裡
+      function initPageVue() {
+        if (typeof Vue === 'undefined') return; // 若未載入 Vue 則跳過
+        const { createApp } = Vue;
+        // 範例：把實際程式改成你要的內容
+
+        createApp({
+          data() { // data 就是Model
+            return {
+              loading: false,
+              orderInfo: {
+                orderNumber: null, // 示例數據
+                paymentDate: new Date().toISOString(),
+                amount: null,
+                transactionId: null,
+                baseApiUrl: 'https://localhost:7104'
+              }
+            };
+          },
+          async mounted() {
+            await waitForAuth(); // 等待 auth 載入完成
+            await this.checkPaymentResult();
+          },
+          methods: { // methods 就是Controller
+
+
+            /**
+           * 載入訂單資訊
+           */
+            // 從 URL 取得訂單編號
+            getOrderNumberFromUrl() {
+              const urlParams = new URLSearchParams(window.location.search);
+              const orderNumber = urlParams.get('orderNumber');
+              console.log('URL 查詢參數:', window.location.search);
+              console.log('取得的訂單編號:', orderNumber);
+              return orderNumber; // 需要回傳值
+
+            },
+            // 檢查付款結果
+            async checkPaymentResult() {
+
+              try {
+                this.loading = true;
+                // 1. 從 URL 參數取得訂單編號
+                const orderNumber = this.getOrderNumberFromUrl(); // 修正：接收回傳值
+
+                if (!orderNumber) {
+                  throw new Error('找不到訂單編號');
+                }
+
+                console.log('查詢訂單狀態:', orderNumber);
+
+                // 2. 先確保使用者已登入並取得有效 token
+                try {
+                  await auth.me(); // 這會自動處理 token 刷新
+                  console.log('✅ 使用者認證成功');
+                } catch (authError) {
+                  console.error('❌ 認證失敗:', authError);
+                  alert('登入已過期，請重新登入');
+                  window.location.href = 'https://localhost:7184/VitalBridge/ECshop/index.html';
+                  return;
+                }
+
+                // 3. 呼叫後端API 查詢訂單狀態
+                const response = await fetch(`${this.orderInfo.baseApiUrl}/api/Orders/payment-status/${orderNumber}`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    // 如果有 JWT token，需要加上 Authorization header
+                    // 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    'Authorization': `Bearer ${auth.getAccessToken()}`
+                  }
+                });
+
+                if (!response.ok) {
+                  if (response.status === 401) {
+                    // Session 過期，引導重新登入
+                    alert('登入已過期，請重新登入');
+                    window.location.href = 'https://localhost:7184/VitalBridge/ECshop/index.html';
+                    return;
+                  }
+                  throw new Error('無法查詢訂單狀態');
+                }
+                const result = await response.json();
+                console.log('訂單狀態查詢結果:', result);
+
+                // 3. 更新訂單資訊
+                this.orderInfo = {
+                  orderNumber: result.orderNumber,
+                  paymentDate: result.paidAt || result.createdAt,
+                  amount: result.totalAmount,
+                  transactionId: result.transactionId,
+                  baseApiUrl: this.orderInfo.baseApiUrl
+                };
+              }
+              catch (error) {
+                console.error('查詢訂單狀態失敗:', error);
+                this.orderInfo = {
+                  orderNumber: 'N/A',
+                  paymentDate: new Date().toISOString(),
+                  amount: 0,
+                  baseApiUrl: this.orderInfo.baseApiUrl
+                };
+              } finally {
+                this.loading = false;
+              }
+            },
+
+            /**
+             * 格式化價格
+             */
+            formatPrice(price) {
+              if (!price) return '0';
+              return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            },
+
+            /**
+             * 格式化日期時間
+             */
+            formatDateTime(dateString) {
+              if (!dateString) return new Date().toLocaleString('zh-TW');
+
+              try {
+                const date = new Date(dateString);
+                return date.toLocaleString('zh-TW', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                });
+              } catch (error) {
+                return new Date().toLocaleString('zh-TW');
+              }
+            }
+          }
+
+
+        },
+          // methods: { ... }, mounted() { ... } 等可在此加入
+
+
+        ).mount('#payment-success-app');
+        console.log(" Vue EC mount 成功！");
+      }
+      // 立即執行（外層 post-load 已確保時機正確）
+      initPageVue();
+    })();
+    // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
+  });
+</script>
+
+</html>
