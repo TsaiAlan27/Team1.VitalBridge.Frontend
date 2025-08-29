@@ -58,7 +58,7 @@ function loadAdsByDate(dateStr) {
                         <div class="carousel-indicators">
                             ${btn}
                         </div>
-                        <div class="carousel-inner" style="height: 400px;">
+                        <div class="carousel-inner" style="width:100%; aspect-ratio: 2.5 / 1;" >
                             ${html}
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
