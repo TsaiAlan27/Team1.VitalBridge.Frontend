@@ -11,7 +11,7 @@
   }
 </style>
 <header id="header" class="header d-flex align-items-center light-background sticky-top">
-  <div class="container-fluid position-relative d-flex align-items-center justify-content-between ">
+  <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
     <a href="/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="assets/img/logo.png" alt=""> -->
@@ -107,10 +107,25 @@
             <label for="loginPassword" class="form-label">密碼</label>
             <input type="password" class="form-control" id="loginPassword" required />
           </div>
+          <div class="text-end mb-3">
+            <a href="#" id="linkForgotPassword" class="small">忘記密碼？</a>
+          </div>
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="rememberMe" />
+
             <label class="form-check-label" for="rememberMe">保持登入 (記住我)</label>
           </div>
+
+          <!-- Step-Up：起初隱藏，第三次才顯示 我不是機器人驗證 -->
+
+          <!-- reCAPTCHA Step-Up Wrapper (初始隱藏) -->
+          <div id="loginCaptchaWrapper" class="mb-3 d-none">
+            <div class="g-recaptcha" data-sitekey="6LeYELQrAAAAANBTQHWuLu1PPWX7L1Suhxi-F-RG"></div>
+            <small class="form-text text-muted d-block mt-1">此驗證僅在多次失敗登入後需要。</small>
+          </div>
+
+
+
           <div id="loginAlert" class="alert d-none" role="alert"></div>
 
           <div class="mb-2 d-none" id="loginResendBox">
@@ -154,6 +169,10 @@
           <div class="mb-3">
             <label for="regPassword" class="form-label">密碼</label>
             <input type="password" class="form-control" id="regPassword" required />
+          </div>
+          <div class="mb-3">
+            <label for="regPassword2" class="form-label">確認密碼</label>
+            <input type="password" class="form-control" id="regPassword2" required />
           </div>
           <div id="regAlert" class="alert d-none" role="alert"></div>
           <button type="submit" class="btn btn-primary">註冊</button>
@@ -201,6 +220,42 @@
 <script type="module" src="/assets/js/auth.js"></script>
 <!-- Google 登入模組（依賴 auth.js 與 GSI client） -->
 <script type="module" src="/assets/js/GoogleLogin.js"></script>
+<!-- 忘記密碼流程模組（獨立，不修改 auth.js） -->
+<script type="module" src="/assets/js/forgot-password.js"></script>
+<!-- Google登入按鈕 -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- 載入 reCAPTCHA v2 -->
+<script src="https://www.google.com/recaptcha/api.js?hl=zh-TW" async defer></script>
+
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordLabel">重設密碼</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Step 1: 輸入 Email 要求寄送重設信 -->
+        <form id="fpRequestForm" class="fp-step">
+          <div class="mb-3">
+            <label for="fpEmail" class="form-label">註冊 Email</label>
+            <input type="email" class="form-control" id="fpEmail" required />
+            <div class="form-text">系統將寄出重設密碼連結 / 驗證碼。</div>
+          </div>
+          <div id="fpRequestAlert" class="alert d-none mb-3" role="alert"></div>
+          <button type="submit" class="btn btn-primary w-100 mb-2" id="fpRequestBtn">寄送重設信</button>
+          <div class="text-center">
+            <a href="#" class="small" data-fp-action="to-login">返回登入</a>
+          </div>
+        </form>
+
+        <!-- 提示：密碼重設將透過 Email 連結進行 -->
+      </div>
+    </div>
+  </div>
+</div>
 <script>
   $("#notificationDropdown").on("shown.bs.dropdown", async function () {
     try {
@@ -381,8 +436,7 @@
   }
 </script>
 
-<!-- Google登入按鈕 -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script>
   // 會員中心點擊攔截：未登入則阻止並開啟登入視窗
   (function initMemberCenterGuard() {

@@ -365,6 +365,10 @@ function setupDomHandlers() {
             const password = document.getElementById('loginPassword').value;
             const remember = document.getElementById('rememberMe').checked;
             const alertEl = document.getElementById('loginAlert');
+            // 全域（模組）前端登入失敗次數記錄（僅此 session）
+            if (typeof window !== 'undefined' && window.__LOGIN_FAIL_COUNT == null) {
+                window.__LOGIN_FAIL_COUNT = 0;
+            }
             // helpers for field error rendering (login)
             const setInvalid = (el, msg) => {
                 if (!el) return;
@@ -401,7 +405,22 @@ function setupDomHandlers() {
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>登入中...';
                 }
-                await login({ email, password }, remember);
+                // 取得 reCAPTCHA token （若容器已顯示）
+                let recaptchaToken = '';
+                const captchaWrapper = document.getElementById('loginCaptchaWrapper');
+                if (captchaWrapper && !captchaWrapper.classList.contains('d-none')) {
+                    try {
+                        if (window.grecaptcha) {
+                            recaptchaToken = grecaptcha.getResponse();
+                            if (!recaptchaToken) {
+                                throw new Error('請完成人機驗證');
+                            }
+                        }
+                    } catch (ex) {
+                        throw ex;
+                    }
+                }
+                await login({ email, password, recaptchaToken }, remember);
                 if (alertEl) { alertEl.classList.remove('d-none', 'alert-danger'); alertEl.classList.add('alert-success'); alertEl.textContent = '登入成功'; }
                 // 關閉 modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
@@ -410,6 +429,42 @@ function setupDomHandlers() {
                 window.location.reload();
             } catch (err) {
                 const msg = (err && err.message) ? err.message : '登入失敗';
+                const bodyText = err && err.body ? (err.body + '') : '';
+                // 若後端回傳需要 captcha 的訊息/碼，顯示 reCAPTCHA 區塊（但不把後端訊息顯示給使用者）
+                const needCaptcha = /NEED_RECAPTCHA|需要人機驗證|captcha/i.test(msg) || /NEED_RECAPTCHA|需要人機驗證|captcha/i.test(bodyText);
+                // 前端計數（讓 UI 比後端閾值更早顯示）
+                try { window.__LOGIN_FAIL_COUNT = (window.__LOGIN_FAIL_COUNT || 0) + 1; } catch { }
+                if (needCaptcha) {
+                    const wrapper = document.getElementById('loginCaptchaWrapper');
+                    if (wrapper) {
+                        wrapper.classList.remove('d-none');
+                        if (window.grecaptcha && grecaptcha.renderedIds && grecaptcha.renderedIds.length === 0) {
+                            // 如果 widget 還沒自動渲染，可嘗試強制 (一般同步載入自動渲染)
+                        }
+                        try { if (window.grecaptcha) grecaptcha.reset(); } catch { }
+                        // 隱藏或清空 alert，不顯示「需要人機驗證」字樣
+                        if (alertEl) {
+                            alertEl.classList.add('d-none');
+                            alertEl.classList.remove('alert-danger', 'alert-success');
+                            alertEl.textContent = '';
+                        }
+                    }
+                }
+                // 若後端尚未要求，但已達前端門檻（第一次失敗後）則預先顯示 captcha，第二次嘗試就會附帶 token
+                if (!needCaptcha) {
+                    const localNeed = (window.__LOGIN_FAIL_COUNT || 0) >= 1; // 第一次失敗後顯示
+                    if (localNeed) {
+                        const wrapper = document.getElementById('loginCaptchaWrapper');
+                        if (wrapper && wrapper.classList.contains('d-none')) {
+                            wrapper.classList.remove('d-none');
+                            try { if (window.grecaptcha) grecaptcha.reset(); } catch { }
+                        }
+                    }
+                }
+                // 若已顯示 captcha 但後端回覆驗證失敗
+                if (/RECAPTCHA_FAILED|驗證未通過|人機驗證未通過/i.test(msg) || /RECAPTCHA_FAILED|驗證未通過|人機驗證未通過/i.test(bodyText)) {
+                    try { if (window.grecaptcha) grecaptcha.reset(); } catch { }
+                }
                 const isCred = /帳號或密碼錯誤/i.test(msg);
                 const isUnverified = /尚未驗證|未驗證/i.test(msg);
                 const isBanned = /停權/i.test(msg);
@@ -421,7 +476,7 @@ function setupDomHandlers() {
                     setInvalid(document.getElementById('loginPassword'), '帳號或密碼錯誤');
                 }
                 // 其他狀態（未驗證/停權/凍結/鎖定）僅在 alert 顯示明確訊息
-                if (alertEl) {
+                if (alertEl && !needCaptcha) { // needCaptcha 時不顯示提示訊息，僅顯示驗證元件
                     alertEl.classList.remove('d-none', 'alert-success');
                     alertEl.classList.add('alert-danger');
                     alertEl.textContent = msg || '登入失敗';
@@ -461,9 +516,11 @@ function setupDomHandlers() {
             const nameInput = document.getElementById('regName');
             const emailInput = document.getElementById('regEmail');
             const passwordInput = document.getElementById('regPassword');
+            const password2Input = document.getElementById('regPassword2');
             const name = nameInput?.value?.trim() || '';
             const email = emailInput?.value?.trim() || '';
             const password = passwordInput?.value || '';
+            const password2 = password2Input?.value || '';
             const alertEl = document.getElementById('regAlert');
             // helpers for field error rendering
             const setInvalid = (el, msg) => {
@@ -485,7 +542,7 @@ function setupDomHandlers() {
                 if (fb && fb.classList && fb.classList.contains('invalid-feedback')) fb.textContent = '';
             };
             // clear previous state
-            [nameInput, emailInput, passwordInput].forEach(clearInvalid);
+            [nameInput, emailInput, passwordInput, password2Input].forEach(clearInvalid);
             if (alertEl) { alertEl.classList.add('d-none'); alertEl.classList.remove('alert-danger', 'alert-success'); alertEl.textContent = ''; }
             // validate
             const errors = {};
@@ -495,9 +552,11 @@ function setupDomHandlers() {
             else if (!emailRegex.test(email)) errors.email = 'Email 格式不正確';
             if (!password) errors.password = '請輸入密碼';
             else if (password.length < 6) errors.password = '密碼至少需 6 個字元';
+            else if (password2 && password !== password2) errors.password2 = '兩次密碼不一致';
             if (errors.name) setInvalid(nameInput, errors.name);
             if (errors.email) setInvalid(emailInput, errors.email);
             if (errors.password) setInvalid(passwordInput, errors.password);
+            if (errors.password2) setInvalid(password2Input, errors.password2);
             if (Object.keys(errors).length) {
                 if (alertEl) { alertEl.classList.remove('d-none'); alertEl.classList.add('alert-danger'); alertEl.textContent = '請修正紅框欄位後再送出'; }
                 return;
@@ -514,6 +573,12 @@ function setupDomHandlers() {
                     submitBtn.dataset.originalText = submitBtn.innerHTML;
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>註冊中...';
+                }
+                // 再次檢查一致性（避免極端競態）
+                if (password !== password2) {
+                    setInvalid(password2Input, '兩次密碼不一致');
+                    if (alertEl) { alertEl.classList.remove('d-none'); alertEl.classList.add('alert-danger'); alertEl.textContent = '請確認密碼一致'; }
+                    return;
                 }
                 await register({ name, email, password });
                 // 成功後關閉註冊視窗並顯示成功提示 Modal

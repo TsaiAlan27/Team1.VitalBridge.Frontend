@@ -293,6 +293,7 @@
                 }
             } catch (e) { log('prefill location error', e); }
         })();
+
         val('profileAddressDetail', p.Address || '');
         txt('profileCreatedAt', fmt(p.CreatedAt));
         txt('profileUpdatedAt', fmt(p.UpdatedAt));

@@ -75,23 +75,34 @@ async function handleCredentialResponse(resp) {
             let bodyText = '';
             try { bodyText = await r.text(); } catch { bodyText = ''; }
             let msg = 'Google 登入失敗 (' + r.status + ')';
-            // 嘗試 JSON
+            let usedPlain = false;
+            // 先嘗試 JSON（ProblemDetails / 自訂格式）
             try {
                 const obj = bodyText ? JSON.parse(bodyText) : null;
                 if (obj) {
-                    msg = obj.message || obj.title || msg;
+                    msg = obj.message || obj.detail || obj.error_description || obj.error || obj.title || msg;
                 }
-            } catch { /* not json */ }
-            // 針對 401 可能原因提示
-            if (r.status === 401) {
+            } catch { // 不是 JSON 時，若是純文字(短且非 HTML)直接採用
+                const t = (bodyText || '').trim();
+                if (t && t.length < 200 && !/[<>{}]/.test(t)) {
+                    msg = t; usedPlain = true;
+                }
+            }
+            // 特殊關鍵字覆蓋（確保更貼近後端原訊息）
+            if (/此\s*Email\s*已註冊/i.test(bodyText)) {
+                msg = '此 Email 已註冊，請用原本方式登入或至個人設定綁定 Google 帳號';
+            }
+            // 針對 401 提示（若尚未被純文字覆蓋）
+            if (r.status === 401 && !usedPlain) {
                 if (decoded && decoded.aud && GOOGLE_CLIENT_ID && decoded.aud !== GOOGLE_CLIENT_ID) {
                     msg += '：可能是 Google Client ID (aud) 不符，token aud=' + decoded.aud + ' 須等於後端設定 ClientId';
                 } else {
                     msg += '：請確認後端 GoogleLogin:ClientId、CORS、或 token 已失效';
                 }
             }
-            const err = new Error(msg + (bodyText && bodyText.length < 400 ? ' | raw=' + bodyText : ''));
+            const err = new Error(msg);
             err.status = r.status;
+            try { err.raw = bodyText; } catch { }
             throw err;
         }
         const data = await r.json().catch(() => ({}));
