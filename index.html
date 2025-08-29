@@ -33,7 +33,304 @@
 
   <!-- 自己想改的樣式放這邊 -->
   <style>
-    /* 這裡可以加入自定義的 CSS 樣式 */
+    /* ===== VitalBridge 全站排版美化 ===== */
+
+    /* ---- 色彩與尺寸 Token ---- */
+    :root {
+      --vb-primary: #3B82F6;
+      --vb-primary-600: #2563eb;
+      --vb-primary-700: #1d4ed8;
+
+      --vb-bg: #F7F9FC;
+      --vb-soft: #F6F8FF;
+      --vb-line: #E9EEF7;
+      --vb-text: #0f172a;
+      /* slate-900 */
+      --vb-muted: #64748b;
+      /* slate-500 */
+
+      --vb-radius: 16px;
+      --vb-radius-sm: 12px;
+      --vb-shadow-sm: 0 6px 20px rgba(12, 30, 66, .06);
+      --vb-shadow-md: 0 10px 28px rgba(12, 30, 66, .12);
+
+      --vb-anchor-offset: 84px;
+      /* 固定頂欄時，錨點偏移 */
+    }
+
+    /* ---- 全局字體與背景 ---- */
+    html,
+    body {
+      background: var(--vb-bg);
+      color: var(--vb-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* 版面寬度：在超寬螢幕時收斂一些，提升可讀性 */
+    @media (min-width: 1400px) {
+      .container {
+        max-width: 1200px;
+      }
+    }
+
+    /* 自適應字級（clamp），維持標題節奏 */
+    h1 {
+      font-family: "Poppins", "Noto Sans TC", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-weight: 800;
+      letter-spacing: .2px;
+      font-size: clamp(1.8rem, 1.2rem + 2.2vw, 2.6rem);
+    }
+
+    h2 {
+      font-family: "Poppins", "Noto Sans TC", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-weight: 800;
+      letter-spacing: .2px;
+      font-size: clamp(1.3rem, .9rem + 1.2vw, 1.6rem);
+    }
+
+    h3,
+    h4,
+    h5 {
+      font-family: "Poppins", "Noto Sans TC", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    /* 段落行高與間距 */
+    .lead {
+      line-height: 1.7;
+    }
+
+    p {
+      line-height: 1.8;
+    }
+
+    /* ---- 區塊（不改 HTML）---- */
+    .vb-section {
+      padding: clamp(36px, 6vw, 72px) 0;
+      position: relative;
+    }
+
+    .vb-soft-bg {
+      background:
+        radial-gradient(80rem 20rem at -10% -10%, #ffffff 30%, rgba(59, 130, 246, .06) 35%, transparent 40%) no-repeat,
+        radial-gradient(60rem 18rem at 110% 10%, #ffffff 30%, rgba(59, 130, 246, .06) 35%, transparent 40%) no-repeat;
+      border-top: 1px solid var(--vb-line);
+      border-bottom: 1px solid var(--vb-line);
+    }
+
+    /* 區塊標題與副標 */
+    .vb-section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .vb-section-sub {
+      color: var(--vb-muted);
+      margin: 2px 0 0;
+    }
+
+    .vb-title-accent {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .vb-title-accent::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 64px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--vb-primary), #93c5fd);
+      border-radius: 99px;
+    }
+
+    /* 每個 section 滾動到錨點時，保留頂欄高度 */
+    section[id] {
+      scroll-margin-top: var(--vb-anchor-offset);
+    }
+
+    /* ---- 卡片 ---- */
+    .vb-card {
+      border: 1px solid var(--vb-line);
+      border-radius: var(--vb-radius);
+      box-shadow: var(--vb-shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .vb-card .card-img-top {
+      border-bottom: 1px solid var(--vb-line);
+      object-fit: cover;
+    }
+
+    .vb-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--vb-shadow-md);
+      border-color: #dbe6fb;
+    }
+
+    .vb-card .card-body {
+      color: #334155;
+    }
+
+    /* 兩行省略 */
+    .two-lines {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* ---- Hero 圖片比例 ---- */
+    #vb-hero-img {
+      aspect-ratio: 4/3;
+      object-fit: contain;
+    }
+
+    /* ---- 按鈕樣式（不破壞 Bootstrap API）---- */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--vb-primary), var(--vb-primary-600));
+      border-color: var(--vb-primary-600);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f8efc, var(--vb-primary-700));
+      border-color: var(--vb-primary-700);
+    }
+
+    .btn-outline-primary {
+      color: var(--vb-primary-700);
+      border-color: var(--vb-primary);
+      background: #fff;
+    }
+
+    .btn-outline-primary:hover {
+      background: #ebf2ff;
+      border-color: var(--vb-primary-600);
+      color: var(--vb-primary-700);
+    }
+
+    /* 焦點可見性（鍵盤導覽） */
+    :focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+      border-radius: 10px;
+    }
+
+    .btn:focus-visible {
+      outline-offset: 4px;
+    }
+
+    /* ---- 骨架載入（取代預設 glow，做順滑 Shimmer） ---- */
+    @keyframes vb-sheen {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .placeholder-glow .placeholder {
+      --bg1: #f3f6fd;
+      --bg2: #e7edfb;
+      --bg3: #f3f6fd;
+      background: linear-gradient(110deg, var(--bg1) 8%, var(--bg2) 18%, var(--bg3) 33%);
+      background-size: 200% 100%;
+      animation: vb-sheen 1.2s linear infinite;
+      border-radius: 10px;
+    }
+
+    #scroll-top:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .18);
+    }
+
+    /* ---- 表單圓角與邊框 ---- */
+    .php-email-form .form-control {
+      border-radius: var(--vb-radius-sm);
+      border: 1px solid var(--vb-line);
+    }
+
+    .php-email-form .btn {
+      border-radius: 999px;
+    }
+
+    /* ---- 連結語意（右上角「看更多」） ---- */
+    a.link-primary {
+      font-weight: 600;
+    }
+
+    a.link-primary:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ===== 深色模式（系統主題自動） ===== */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --vb-bg: #0b1220;
+        --vb-soft: #0e1526;
+        --vb-line: #1e2a44;
+        --vb-text: #e2e8f0;
+        --vb-muted: #94a3b8;
+      }
+
+      html,
+      body {
+        background: var(--vb-bg);
+        color: var(--vb-text);
+      }
+
+      .vb-soft-bg {
+        border-color: var(--vb-line);
+      }
+
+      .vb-card {
+        background: #101a2e;
+        border-color: #1b2742;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, .32);
+      }
+
+      .vb-card .card-img-top {
+        border-color: #1b2742;
+      }
+
+      .vb-card .card-body {
+        color: #cbd5e1;
+      }
+
+      .btn-outline-primary {
+        background: transparent;
+        color: #bcd1ff;
+        border-color: #4777ff;
+      }
+
+      .btn-outline-primary:hover {
+        background: #142247;
+      }
+
+      #scroll-top {
+        background: #0e1526;
+        border-color: #1e2a44;
+      }
+
+      .placeholder-glow .placeholder {
+        --bg1: #111a2f;
+        --bg2: #15213f;
+        --bg3: #111a2f;
+      }
+    }
   </style>
 </head>
 
@@ -44,26 +341,182 @@
   <main class="main">
     <!-- 你們的主要頁面內容放這邊下面 -->
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero section">
-      <img src="/assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
 
-      <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <h2>Kelly Adams</h2>
-            <p>I'm a professional illustrator from San Francisco</p>
-            <a href="/about.html" class="btn-get-started">About Me</a>
 
-            <!-- Vue 測試文字 -->
-            <p style="color: green; font-weight: bold">{{ message }}</p>
+    <main class="main">
+      <!-- Hero / 簡介 -->
+      <div class="vb-section vb-soft-bg">
+        <div class="container">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-6" data-aos="fade-right">
+              <div class="vb-badge mb-3"><i class="bi bi-heart-pulse"></i> 長照資訊整合平台</div>
+              <h1 class="fw-bold mb-3 vb-title-accent">樂齡橋 VitalBridge</h1>
+              <p class="lead text-secondary mb-4">
+                串接機構、專業人員與家庭，提供一站式長照資訊與服務。
+              </p>
+              <a href="#institutions" class="btn btn-primary btn-lg me-2">探索推薦機構</a>
+              <a href="#contact" class="btn btn-outline-primary btn-lg">聯絡我們</a>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+              <img id="vb-hero-img" src="/assets/img/hero-elder-care.svg" class="img-fluid" alt="長照平台示意圖">
+            </div>
           </div>
         </div>
       </div>
-    </section>
-    <!-- /Hero Section -->
 
+      <!-- 推薦機構（小卡網格，多個） -->
+      <section id="institutions" class="vb-section">
+        <div class="container" data-aos="fade-up">
+          <div class="vb-section-title">
+            <div>
+              <h2 class="h3 fw-bold vb-title-accent">推薦機構</h2>
+              <p class="vb-section-sub">為您挑選信譽良好、服務完善的長照機構</p>
+            </div>
+            <a href="/VitalBridge/orgs/orgSearch.html" class="link-primary text-decoration-none">看更多 <i
+                class="bi bi-arrow-right"></i></a>
+          </div>
 
+          <div class="row g-3" id="institutions-list">
+            <!-- skeleton 8 張（載入後由 JS 置換） -->
+            <!-- 連續八張骨架 -->
+            ${Array.from({length:8}).map(()=>`
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card vb-card placeholder-glow h-100">
+                <div class="card-img-top placeholder w-100" style="aspect-ratio:16/9;"></div>
+                <div class="card-body">
+                  <h5 class="card-title"><span class="placeholder col-7"></span></h5>
+                  <p class="small mb-2"><span class="placeholder col-4"></span></p>
+                  <p class="card-text"><span class="placeholder col-10"></span></p>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3 pt-0">
+                  <a class="btn btn-sm btn-primary disabled placeholder col-12">&nbsp;</a>
+                </div>
+              </div>
+            </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- 推薦文章 -->
+      <section id="articles" class="vb-section vb-soft-bg">
+        <div class="container" data-aos="fade-up">
+          <div class="vb-section-title">
+            <div>
+              <h2 class="h3 fw-bold vb-title-accent">推薦文章</h2>
+              <p class="vb-section-sub">長照知識、照護指南、案例分享</p>
+            </div>
+            <a href="/VitalBridge/views/Articles/ArticleIndex.html" class="link-primary text-decoration-none">看更多 <i
+                class="bi bi-arrow-right"></i></a>
+          </div>
+
+          <div class="row g-3" id="articles-list">
+            <!-- skeleton 6 張 -->
+            ${Array.from({length:6}).map(()=>`
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card vb-card placeholder-glow h-100">
+                <div class="card-img-top placeholder w-100" style="aspect-ratio:16/9;"></div>
+                <div class="card-body">
+                  <div class="small mb-1"><span class="placeholder col-6"></span></div>
+                  <h5 class="card-title"><span class="placeholder col-8"></span></h5>
+                  <p class="card-text"><span class="placeholder col-10"></span></p>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3 pt-0">
+                  <a class="btn btn-sm btn-outline-primary disabled placeholder col-12">&nbsp;</a>
+                </div>
+              </div>
+            </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- 推薦商品 -->
+      <section id="products" class="vb-section">
+        <div class="container" data-aos="fade-up">
+          <div class="vb-section-title">
+            <div>
+              <h2 class="h3 fw-bold vb-title-accent">推薦商品</h2>
+              <p class="vb-section-sub">照護輔具、營養補充與生活良品</p>
+            </div>
+            <a href="/VitalBridge/ECshop/index.html" class="link-primary text-decoration-none">全部商品 <i
+                class="bi bi-arrow-right"></i></a>
+          </div>
+
+          <div class="row g-3" id="products-list">
+            <!-- skeleton 8 張 -->
+            ${Array.from({length:8}).map(()=>`
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card vb-card placeholder-glow h-100">
+                <div class="card-img-top placeholder w-100" style="aspect-ratio:1/1;"></div>
+                <div class="card-body">
+                  <h6 class="card-title"><span class="placeholder col-8"></span></h6>
+                  <div class="small mb-2"><span class="placeholder col-4"></span></div>
+                  <div class="fw-bold"><span class="placeholder col-3"></span></div>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3 pt-0">
+                  <div class="d-grid gap-2">
+                    <a class="btn btn-sm btn-outline-primary disabled placeholder col-12">&nbsp;</a>
+                    <a class="btn btn-sm btn-primary disabled placeholder col-12">&nbsp;</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- 聯絡我們 -->
+      <section id="contact" class="vb-section vb-soft-bg">
+        <div class="container" data-aos="fade-up">
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <h2 class="h3 fw-bold vb-title-accent mb-3">聯絡我們</h2>
+              <p class="text-secondary">
+                有任何諮詢、合作或顧問需求，歡迎留下您的資訊，我們會盡快與您聯繫。
+              </p>
+              <ul class="list-unstyled small text-secondary mb-0">
+                <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>台南 · 線上諮詢</li>
+                <li class="mb-2"><i class="bi bi-envelope me-2"></i>support@vitalbridge.tw</li>
+                <li class="mb-2"><i class="bi bi-clock me-2"></i>週一至週五 09:00–18:00</li>
+              </ul>
+            </div>
+            <div class="col-lg-7">
+              <form action="/api/contact" method="post" class="php-email-form">
+                <div class="row gy-3">
+                  <div class="col-md-6">
+                    <label class="form-label">您的姓名</label>
+                    <input type="text" name="name" class="form-control" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">電子郵件</label>
+                    <input type="email" name="email" class="form-control" required />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">主旨</label>
+                    <input type="text" name="subject" class="form-control" required />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">內容</label>
+                    <textarea name="message" rows="5" class="form-control" required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">送出訊息</button>
+                  </div>
+                  <!-- validate.js 控制 -->
+                  <div class="my-3">
+                    <div class="loading">處理中…</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">已送出，我們將盡快回覆您！</div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
 
 
@@ -160,5 +613,156 @@
     // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
   });
 </script>
+
+<script>
+  (function onFullyReady(run) {
+    function once(ev) {
+      return new Promise((res) => {
+        function h(e) { window.removeEventListener(ev, h); res(e); }
+        window.addEventListener(ev, h);
+      });
+    }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once("app:ready"); }
+    function waitWindowLoad() { if (document.readyState === "complete") return Promise.resolve(); return once("load"); }
+    Promise.all([waitAppReady(), waitWindowLoad()])
+      .then(run)
+      .catch(function (e) { console.error("post-load hook error", e); });
+  })(function () {
+    // ===== AOS 初始化（若 main.js 未處理）=====
+    if (window.AOS && typeof AOS.init === "function") AOS.init({ once: true, duration: 600 });
+
+    // ===== 測試資料（推薦機構 4、文章 3、商品 4）=====
+    const demoInstitutions = [
+      { id: 101, name: '陽光長照中心', city: '台北市', typeText: '機構式照護', brief: '鄰近醫療院所，提供 24 小時照護與復健服務。', cover: '/assets/img/demo/institution-1.jpg' },
+      { id: 103, name: '心安護理之家', city: '桃園市', typeText: '專業護理', brief: '慢性病個管、復能訓練與營養評估。', cover: '/assets/img/demo/institution-3.jpg' },
+      { id: 104, name: '慈恩日照中心', city: '台中市', typeText: '社區式服務', brief: '交通便利，設有復能與藝文活動空間。', cover: '/assets/img/demo/institution-4.jpg' },
+      { id: 105, name: '安和護理之家', city: '台南市', typeText: '專業護理', brief: '24H 專業護理與個人化照護計畫。', cover: '/assets/img/demo/institution-5.jpg' },
+    ];
+
+    const demoArticles = [
+      { id: 201, title: '如何選擇合適的長照機構？', category: '指南', publishedAt: '2025-08-20', excerpt: '從地點、專業、費用與評價四面向，帶你快速篩選。', cover: '/assets/img/demo/article-1.jpg', url: '/articles/how-to-choose-ltc' },
+      { id: 202, title: '失智長者的日常照護重點', category: '照護', publishedAt: '2025-08-12', excerpt: '建立固定作息、環境標示、安全防護與家屬支持。', cover: '/assets/img/demo/article-2.jpg', url: '/articles/dementia-daily-care' },
+      { id: 204, title: '預立醫療決定：家屬該如何溝通？', category: '法律/倫理', publishedAt: '2025-07-30', excerpt: '先行溝通與尊重意願，是家屬與照護團隊的重要共識。', cover: '/assets/img/demo/article-4.jpg', url: '/articles/advance-directives' }
+    ];
+
+    const demoProducts = [
+      { id: 401, title: '高鈣牛奶粉', brand: 'BoneCare', price: 720, cover: '/assets/img/demo/health-1.jpg', url: '/shop/product/401' },
+      { id: 402, title: '葉黃素膠囊', brand: 'EyeBright', price: 1280, cover: '/assets/img/demo/health-2.jpg', url: '/shop/product/402' },
+      { id: 403, title: '深海魚油', brand: 'OmegaPlus', price: 950, cover: '/assets/img/demo/health-3.jpg', url: '/shop/product/403' },
+      { id: 404, title: '綜合維生素錠', brand: 'NutriLife', price: 650, cover: '/assets/img/demo/health-4.jpg', url: '/shop/product/404' }
+    ];
+
+    // ===== 共用工具 =====
+    function fmtDate(iso) {
+      if (!iso) return "";
+      const d = new Date(iso);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${d.getFullYear()}/${mm}/${dd}`;
+    }
+
+    // ===== 渲染：推薦機構（網格，多張卡片）=====
+    function renderInstitutions(list) {
+      const box = document.getElementById('institutions-list');
+      if (!box) return;
+      box.innerHTML = list.map(i => `
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card vb-card h-100">
+            <img src="${i.cover || '/assets/img/placeholders/institution.jpg'}" class="card-img-top" alt="${i.name}" style="aspect-ratio:16/9;">
+            <div class="card-body">
+              <h5 class="card-title mb-1">${i.name}</h5>
+              <p class="small text-muted mb-2">${i.city}${i.typeText ? ' · ' + i.typeText : ''}</p>
+              <p class="two-lines mb-0">${i.brief || ''}</p>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0 pb-3">
+              <a href="/institutions/${i.id}" class="btn btn-sm btn-primary w-100">查看機構</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== 渲染：推薦文章 =====
+    function renderArticles(list) {
+      const box = document.getElementById('articles-list');
+      if (!box) return;
+      box.innerHTML = list.map(a => `
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card vb-card h-100">
+            <img src="${a.cover || '/assets/img/placeholders/article.jpg'}" class="card-img-top" alt="${a.title}" style="aspect-ratio:16/9;">
+            <div class="card-body">
+              <div class="small text-muted mb-1">${a.category || ''} · ${fmtDate(a.publishedAt)}</div>
+              <h5 class="card-title mb-2">${a.title}</h5>
+              <p class="two-lines mb-0">${a.excerpt || ''}</p>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0 pb-3">
+              <a href="${a.url || ('/articles/' + (a.slug || a.id))}" class="btn btn-sm btn-outline-primary w-100">閱讀更多</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== 渲染：推薦商品 =====
+    function renderProducts(list) {
+      const box = document.getElementById('products-list');
+      if (!box) return;
+      box.innerHTML = list.map(p => `
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card vb-card h-100">
+            <img src="${p.cover || '/assets/img/placeholders/product.jpg'}" class="card-img-top" alt="${p.title}" style="aspect-ratio:1/1;">
+            <div class="card-body">
+              <h6 class="card-title mb-1 two-lines">${p.title}</h6>
+              <div class="small text-muted mb-2">${p.brand || ''}</div>
+              <div class="fw-bold">NT$ ${(p.price ?? 0).toLocaleString()}</div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0 pb-3">
+              <div class="d-grid gap-2">
+                <a href="${p.url || ('/shop/product/' + p.id)}" class="btn btn-sm btn-outline-primary">查看</a>
+                <button class="btn btn-sm btn-primary" data-add-cart="${p.id}">加入購物車</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // 假動作：加入購物車
+      box.querySelectorAll('[data-add-cart]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = e.currentTarget.getAttribute('data-add-cart');
+          console.log('addToCart', id);
+          // TODO: fetch('/api/cart', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, qty:1}) })
+        });
+      });
+    }
+
+    // ===== 取資料並渲染（之後可換成你的 API）=====
+    async function fetchAll() {
+      try {
+        // 之後可改：
+        // const [iRes,aRes,pRes] = await Promise.all([
+        //   fetch('/api/institutions/recommended?limit=12').then(r=>r.json()),
+        //   fetch('/api/articles/recommended?limit=6').then(r=>r.json()),
+        //   fetch('/api/products/recommended?limit=8').then(r=>r.json()),
+        // ]);
+        // renderInstitutions(iRes.data || []);
+        // renderArticles(aRes.data || []);
+        // renderProducts(pRes.data || []);
+        renderInstitutions(demoInstitutions);
+        renderArticles(demoArticles);
+        renderProducts(demoProducts);
+      } catch (e) {
+        console.warn('fetchAll error, using demo data', e);
+        renderInstitutions(demoInstitutions);
+        renderArticles(demoArticles);
+        renderProducts(demoProducts);
+      }
+    }
+
+    fetchAll();
+  });
+</script>
+
+
 
 </html>
