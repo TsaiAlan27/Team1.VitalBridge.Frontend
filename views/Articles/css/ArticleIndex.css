@@ -717,27 +717,59 @@
 
 /* Call-to-Action (CTA) Banner */
 .cta-banner {
-    background: linear-gradient(90deg, #fd7e14, #dc3545);
-    /* Orange to Red gradient */
-    border-radius: 15px;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin: 20px 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-banner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.cta-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.cta-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.cta-banner:hover .cta-image {
+    transform: scale(1.05);
+}
+
+.cta-content {
+    padding: 24px;
     text-align: center;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
 }
 
 .cta-title {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    line-height: 1.2;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .cta-subtitle {
-    font-size: 1.2em;
-    margin-bottom: 25px;
-    opacity: 0.9;
+    font-size: 14px;
+    color: #4a5568;
+    margin: 0 0 20px 0;
+    font-weight: 500;
+    opacity: 0.8;
 }
 
 .purchase-btn {

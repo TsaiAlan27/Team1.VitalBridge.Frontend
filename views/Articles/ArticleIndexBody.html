@@ -23,7 +23,7 @@
         <div class="pageContainer">
             <main class="main-content">
                 <section class="articles-column">
-                    <article-card></article-card>
+                    <article-card ref="articlesCard"></article-card>
                 </section>
 
                 <aside class="sidebar-column">
@@ -60,11 +60,16 @@
                     </div> -->
 
                     <!-- Call-to-Action (CTA) Banner -->
-                    <div class="cta-banner">
-                        <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
-                        <p class="cta-subtitle">Experience the change!</p>
-                        <button class="purchase-btn">立即購買！！！</button>
+                    <!-- Dynamic CTA Banners -->
+                    
+                    <div v-for="banner in banners" :key="banner.id">
+                        <cta-banner :banner-id="banner.id"></cta-banner>
                     </div>
+                    <!-- Loading indicator -->
+                    <div v-if="isLoading" class="loading-indicator">
+                        載入廣告...
+                    </div>
+
                 </aside>
             </main>
         </div>
