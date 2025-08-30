@@ -167,15 +167,15 @@
 <!-- <body class="index-page"> -->
 
 <body>
-  <div class="fixed-top mb-5">
-    <div class="headerpage"></div> <!-- 主導覽 -->
-    <div class="shop-headerpage"></div> <!-- 購物導覽 -->
-  </div>
+
+  <div class="headerpage"></div> <!-- 主導覽 -->
+  <div class="shop-headerpage"></div> <!-- 購物導覽 -->
+
 
 
   <!-- 修正 main 區塊內的結構 -->
 
-  <main class="main mt-5 pt-5">
+  <main class="main">
     <div id="product-detail-app">
       <!-- 成功載入時顯示商品詳情 -->
       <div class="container mt-4" v-if="!loading && !error && product && Object.keys(product).length > 0">

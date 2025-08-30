@@ -212,6 +212,8 @@
       background-color: rgba(220, 53, 69, 0.1);
     }
 
+
+
     /* 載入動畫 移除 */
 
     /* 響應式設計 */
@@ -221,7 +223,7 @@
       }
 
       .product-image {
-        height: 150px;
+        height: 100%;
       }
 
       .hero-placeholder {
@@ -235,30 +237,29 @@
 <!-- <body class="index-page"> -->
 
 <body>
-  <div class="fixed-top mb-5">
+  <div class="mb-5">
     <div class="headerpage"></div> <!-- 主導覽 -->
     <div class="shop-headerpage"></div> <!-- 購物導覽 -->
   </div>
 
-  <main class="main mt-5 pt-5">
+  <main class="main">
     <!-- 你們的主要頁面內容放這邊下面 -->
-    <div id="shop-app" class="mt-5 pt-5">
+    <div id="shop-app">
       <!-- 所有購物相關內容都放在這裡 -->
 
 
       <!-- 廣告區塊 -->
-      <div class="container mt-5 pt-5">
+      <div class="container">
         <div class="banner">
-          <p></p>
+          <hr />
         </div>
-
         <div class="adv-right-left">
           <div class="row g-3">
             <div class="col-md-6">
-              <hr>
+              <hr />
             </div>
             <div class="col-md-6">
-              <hr>
+              <hr />
             </div>
           </div>
         </div>
@@ -474,6 +475,37 @@
     //   console.log("✅ jQuery .ready() 測試成功！");
     //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
     // });
+    // 新增：僅在本頁處理雙導覽與登入層級
+    // function setupEcshopLayout() {
+    //   // 只在有電商導覽時啟用
+    //   var hasShopHeader = !!document.querySelector('.shop-headerpage > *');
+    //   document.documentElement.classList.toggle('has-shop-header', hasShopHeader);
+
+    //   // Modal 移到 body，避免被導覽層級影響
+    //   ['loginModal', 'registerModal', 'registerSuccessModal'].forEach(function (id) {
+    //     var el = document.getElementById(id);
+    //     if (el && el.parentElement !== document.body) document.body.appendChild(el);
+    //   });
+
+    //   // 同時量測兩條導覽的高度
+    //   function applyHeights() {
+    //     var h1 = document.getElementById('header');
+    //     var h2 = document.querySelector('.shop-headerpage > *');
+    //     var hh1 = h1 ? Math.ceil(h1.getBoundingClientRect().height) : 0;
+    //     var hh2 = h2 ? Math.ceil(h2.getBoundingClientRect().height) : 0;
+    //     document.documentElement.style.setProperty('--header-height', hh1 + 'px');
+    //     document.documentElement.style.setProperty('--shop-header-height', hh2 + 'px');
+    //   }
+    //   applyHeights();
+    //   window.addEventListener('resize', applyHeights);
+
+    //   // 保險：若有誤加的 fixed-top 祖先就移掉
+    //   var outerFixed = document.querySelector('.headerpage')?.closest('.fixed-top');
+    //   if (outerFixed) outerFixed.classList.remove('fixed-top');
+    // }
+
+    // setupEcshopLayout();
+
 
     //Vue的部分寫這邊
     (function mountVue() {
