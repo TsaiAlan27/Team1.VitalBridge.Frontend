@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,34 +12,132 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
-    :root{
-      --vb-primary:#0ea5e9; /* sky-500 */
-      --vb-primary-dark:#0284c7; /* sky-600 */
-      --vb-accent:#22c55e; /* green-500 */
-      --vb-bg:#f8fafc; /* slate-50 */
-      --vb-card:#ffffff;
+    :root {
+      --vb-primary: #0ea5e9;
+      /* sky-500 */
+      --vb-primary-dark: #0284c7;
+      /* sky-600 */
+      --vb-accent: #22c55e;
+      /* green-500 */
+      --vb-bg: #f8fafc;
+      /* slate-50 */
+      --vb-card: #ffffff;
     }
-    body{background:var(--vb-bg);}    
-    .btn-primary{background:var(--vb-primary);border-color:var(--vb-primary);} 
-    .btn-primary:hover{background:var(--vb-primary-dark);border-color:var(--vb-primary-dark);} 
-    .navbar{backdrop-filter:saturate(180%) blur(6px);} 
-    .hero{position:relative; overflow:hidden; background:linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);} 
-    .hero .bg-shape{position:absolute; inset:auto -20% -30% -20%; height:80%; background:radial-gradient(50% 50% at 50% 50%, rgba(14,165,233,.25) 0, rgba(14,165,233,0) 55%), radial-gradient(50% 50% at 70% 30%, rgba(34,197,94,.25) 0, rgba(34,197,94,0) 60%);} 
-    .search-card{box-shadow:0 10px 30px rgba(2,8,23,.06);} 
-    .feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;} 
-    .stat{border-radius:16px;background:var(--vb-card);box-shadow:0 8px 20px rgba(2,8,23,.05);} 
-    .section-title{font-weight:800;letter-spacing:.02em;} 
-    .card-hover{transition:transform .2s ease, box-shadow .2s ease;} 
-    .card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(2,8,23,.12);} 
-    .partner-cta{background:linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);} 
-    .partner-cta .badge{background:rgba(255,255,255,.25);} 
-    .vb-badge{background:#e2fbe8;color:#067647;border-radius:999px;padding:.25rem .6rem;font-weight:600;font-size:.8rem;} 
-    .footer a{color:#0ea5e9;text-decoration:none;} .footer a:hover{text-decoration:underline;} 
+
+    body {
+      background: var(--vb-bg);
+    }
+
+    .btn-primary {
+      background: var(--vb-primary);
+      border-color: var(--vb-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--vb-primary-dark);
+      border-color: var(--vb-primary-dark);
+    }
+
+    .navbar {
+      backdrop-filter: saturate(180%) blur(6px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+    }
+
+    .hero .bg-shape {
+      position: absolute;
+      inset: auto -20% -30% -20%;
+      height: 80%;
+      background: radial-gradient(50% 50% at 50% 50%, rgba(14, 165, 233, .25) 0, rgba(14, 165, 233, 0) 55%), radial-gradient(50% 50% at 70% 30%, rgba(34, 197, 94, .25) 0, rgba(34, 197, 94, 0) 60%);
+    }
+
+    .search-card {
+      box-shadow: 0 10px 30px rgba(2, 8, 23, .06);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .stat {
+      border-radius: 16px;
+      background: var(--vb-card);
+      box-shadow: 0 8px 20px rgba(2, 8, 23, .05);
+    }
+
+    .section-title {
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .card-hover {
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(2, 8, 23, .12);
+    }
+
+    .partner-cta {
+      background: linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);
+    }
+
+    .partner-cta .badge {
+      background: rgba(255, 255, 255, .25);
+    }
+
+    .vb-badge {
+      background: #e2fbe8;
+      color: #067647;
+      border-radius: 999px;
+      padding: .25rem .6rem;
+      font-weight: 600;
+      font-size: .8rem;
+    }
+
+    .footer a {
+      color: #0ea5e9;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
     /* 可視化跳至主內容 */
-    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
-    .skip-link:focus{position:static;width:auto;height:auto;padding:.5rem 1rem;background:#111;color:#fff;z-index:10000;}
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: .5rem 1rem;
+      background: #111;
+      color: #fff;
+      z-index: 10000;
+    }
   </style>
 </head>
+
 <body>
   <a href="#main" class="skip-link">跳至主內容</a>
 
@@ -49,7 +148,8 @@
         <i class="bi bi-heart-pulse-fill text-primary"></i>
         VitalBridge 長照平台
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="切換導覽"> 
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="切換導覽">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
@@ -77,8 +177,10 @@
           <h1 class="display-5 fw-800 mt-3">一站式查詢 <span class="text-primary">長照機構、服務與補助</span></h1>
           <p class="lead text-secondary">支援跨平台配對、即時空床、到宅服務與專家諮詢，讓家屬在最緊要的時刻，能快速做出安心決策。</p>
           <div class="d-flex gap-3 align-items-center mt-3">
-            <div class="d-flex align-items-center text-secondary small"><i class="bi bi-shield-check me-2"></i>資料經過實名/機構驗證</div>
-            <div class="d-flex align-items-center text-secondary small"><i class="bi bi-clock-history me-2"></i>每日更新</div>
+            <div class="d-flex align-items-center text-secondary small"><i
+                class="bi bi-shield-check me-2"></i>資料經過實名/機構驗證</div>
+            <div class="d-flex align-items-center text-secondary small"><i class="bi bi-clock-history me-2"></i>每日更新
+            </div>
           </div>
         </div>
         <div class="col-lg-6">
@@ -95,8 +197,14 @@
                   <label for="city" class="form-label">縣市</label>
                   <select class="form-select" id="city" aria-label="選擇縣市">
                     <option value="" selected>不限</option>
-                    <option>台北市</option><option>新北市</option><option>桃園市</option><option>台中市</option>
-                    <option>台南市</option><option>高雄市</option><option>基隆市</option><option>新竹市</option>
+                    <option>台北市</option>
+                    <option>新北市</option>
+                    <option>桃園市</option>
+                    <option>台中市</option>
+                    <option>台南市</option>
+                    <option>高雄市</option>
+                    <option>基隆市</option>
+                    <option>新竹市</option>
                   </select>
                 </div>
                 <div class="col-6 col-md-3">
@@ -179,7 +287,8 @@
           </div>
           <div class="col-md-4">
             <div class="p-4 bg-white rounded-4 card-hover h-100">
-              <div class="feature-icon mb-3" style="background:#dcfce7;color:#166534"><i class="bi bi-cash-coin"></i></div>
+              <div class="feature-icon mb-3" style="background:#dcfce7;color:#166534"><i class="bi bi-cash-coin"></i>
+              </div>
               <h3 class="h5">補助試算</h3>
               <p class="text-secondary">整合長照 2.0、身障與地方方案，輸入條件即刻試算與教學。</p>
               <a href="#tools" class="link-primary">前往工具 <i class="bi bi-arrow-right"></i></a>
@@ -187,7 +296,8 @@
           </div>
           <div class="col-md-4">
             <div class="p-4 bg-white rounded-4 card-hover h-100">
-              <div class="feature-icon mb-3" style="background:#fef3c7;color:#92400e"><i class="bi bi-headset"></i></div>
+              <div class="feature-icon mb-3" style="background:#fef3c7;color:#92400e"><i class="bi bi-headset"></i>
+              </div>
               <h3 class="h5">專家諮詢</h3>
               <p class="text-secondary">護理/社工線上諮詢，提供方案比較、入住評估與轉介。</p>
               <a href="#consult" class="link-primary">預約諮詢 <i class="bi bi-arrow-right"></i></a>
@@ -417,19 +527,25 @@
         <h2 class="section-title h3 mb-3">常見問題</h2>
         <div class="accordion" id="faqAcc">
           <div class="accordion-item">
-            <h2 class="accordion-header" id="q1h"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">平台資料來源？多久更新？</button></h2>
+            <h2 class="accordion-header" id="q1h"><button class="accordion-button" type="button"
+                data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true"
+                aria-controls="q1">平台資料來源？多久更新？</button></h2>
             <div id="q1" class="accordion-collapse collapse show" aria-labelledby="q1h" data-bs-parent="#faqAcc">
               <div class="accordion-body">資料來源包含政府開放資料、機構自行維護與我們的查核；空床/名額資訊預設每日更新。</div>
             </div>
           </div>
           <div class="accordion-item">
-            <h2 class="accordion-header" id="q2h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">如何比較費用與服務內容？</button></h2>
+            <h2 class="accordion-header" id="q2h"><button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false"
+                aria-controls="q2">如何比較費用與服務內容？</button></h2>
             <div id="q2" class="accordion-collapse collapse" aria-labelledby="q2h" data-bs-parent="#faqAcc">
               <div class="accordion-body">使用搜尋後的「比較清單」將多家機構/方案並列，從收費、專長、評價到交通時間一目了然。</div>
             </div>
           </div>
           <div class="accordion-item">
-            <h2 class="accordion-header" id="q3h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">是否提供真人協助？</button></h2>
+            <h2 class="accordion-header" id="q3h"><button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false"
+                aria-controls="q3">是否提供真人協助？</button></h2>
             <div id="q3" class="accordion-collapse collapse" aria-labelledby="q3h" data-bs-parent="#faqAcc">
               <div class="accordion-body">是，我們提供護理/社工諮詢，並可協助預約參訪與入住評估。</div>
             </div>
@@ -475,7 +591,7 @@
         </div>
         <div class="col-md-3">
           <h6 class="fw-bold">聯絡我們</h6>
-          <p class="small text-secondary mb-2">service@vitalbridge.example<br/>週一到週五 09:00-18:00</p>
+          <p class="small text-secondary mb-2">service@vitalbridge.example<br />週一到週五 09:00-18:00</p>
           <a class="btn btn-outline-primary btn-sm" href="#">成為合作機構</a>
         </div>
       </div>
@@ -494,9 +610,9 @@
 
     // 假資料（可替換為 /api/facilities/search 結果）
     const mockData = [
-      { id:1, name:'安心日照中心', city:'台中市', type:'daycare', price:28000, vacancy:true, rating:4.7 },
-      { id:2, name:'青禾護理之家', city:'高雄市', type:'nursing', price:42000, vacancy:false, rating:4.5 },
-      { id:3, name:'和悅居家照護', city:'新北市', type:'homecare', price:時薪500, vacancy:true, rating:4.6 }
+      { id: 1, name: '安心日照中心', city: '台中市', type: 'daycare', price: 28000, vacancy: true, rating: 4.7 },
+      { id: 2, name: '青禾護理之家', city: '高雄市', type: 'nursing', price: 42000, vacancy: false, rating: 4.5 },
+      { id: 3, name: '和悅居家照護', city: '新北市', type: 'homecare', price: 時薪500, vacancy: true, rating: 4.6 }
     ];
 
     // 搜尋互動（示範版）
@@ -523,8 +639,8 @@
       renderResult(list);
     });
 
-    function renderResult(list){
-      if(!list.length){
+    function renderResult(list) {
+      if (!list.length) {
         result.innerHTML = `
           <div class="alert alert-warning" role="alert">
             <i class="bi bi-info-circle me-2"></i>沒有找到符合條件的結果，試著放寬條件或更換關鍵字。
@@ -552,7 +668,7 @@
           <div class="card border-0 shadow-sm card-hover">
             <div class="row g-0 align-items-center">
               <div class="col-md-3">
-                <img class="img-fluid rounded-start" src="https://picsum.photos/480/320?random=${x.id+50}" alt="${x.name}" />
+                <img class="img-fluid rounded-start" src="https://picsum.photos/480/320?random=${x.id + 50}" alt="${x.name}" />
               </div>
               <div class="col-md-6 p-3">
                 <h4 class="h6 mb-1">${x.name} ${x.vacancy ? '<span class="badge text-bg-success ms-1">有空位</span>' : ''}</h4>
@@ -570,16 +686,17 @@
       });
 
       // 排序事件
-      result.querySelectorAll('[data-sort]').forEach(el => el.addEventListener('click', (ev)=>{
+      result.querySelectorAll('[data-sort]').forEach(el => el.addEventListener('click', (ev) => {
         ev.preventDefault();
         const key = el.getAttribute('data-sort');
-        const sorted = [...list].sort((a,b)=> key==='price' ? (num(a.price) - num(b.price)) : (b.rating - a.rating));
+        const sorted = [...list].sort((a, b) => key === 'price' ? (num(a.price) - num(b.price)) : (b.rating - a.rating));
         renderResult(sorted);
       }));
     }
 
-    const num = (v)=> isNaN(v) ? Number.MAX_SAFE_INTEGER : v;
-    const mapType = (t)=> ({homecare:'居家照護', daycare:'日間照顧', nursing:'護理之家', respite:'喘息', rehab:'復健'}[t]||'服務');
+    const num = (v) => isNaN(v) ? Number.MAX_SAFE_INTEGER : v;
+    const mapType = (t) => ({ homecare: '居家照護', daycare: '日間照顧', nursing: '護理之家', respite: '喘息', rehab: '復健' }[t] || '服務');
   </script>
 </body>
+
 </html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>關於我們｜樂齡橋 VitalBridge</title>
+  <meta name="description" content="樂齡橋 VitalBridge 是長照資訊整合平台，串接照護者、被照護者與專業機構，提供長照導覽、機構名錄、輔具與居家安全、會員與機構後台等服務。">
+  <meta name="keywords" content="樂齡橋,VitalBridge,長照,長照整合平台,照護,輔具,機構名錄,居家安全">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+  <link href="/assets/css/main2.css" rel="stylesheet">
+
+  <!-- Page scoped styles -->
+  <style>
+    /* 只作用於本頁 */
+    #about-us .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .6s ease, transform .6s ease;
+      will-change: opacity, transform;
+    }
+
+    #about-us .reveal.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* 合併卡片：圖左文右 */
+    #about-us .card {
+      border: 1px solid rgba(0, 0, 0, .04);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .04);
+      border-radius: 14px;
+    }
+
+    /* 圖片佔位（穩定虛線） */
+    #about-us .icon-holder {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 16px;
+      border: 1px solid var(--vb-line, #e5e7eb);
+      /* 外框改淡實線 */
+      background: var(--vb-soft, #fafafa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 內側虛線用背景畫，避免圓角分段 */
+    #about-us .icon-holder::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 12px;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(0, 0, 0, .08) 10px 16px) top / calc(100% - 4px) 1px no-repeat,
+        repeating-linear-gradient(180deg, transparent 0 10px, rgba(0, 0, 0, .08) 10px 16px) right / 1px calc(100% - 4px) no-repeat,
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(0, 0, 0, .08) 10px 16px) bottom / calc(100% - 4px) 1px no-repeat,
+        repeating-linear-gradient(180deg, transparent 0 10px, rgba(0, 0, 0, .08) 10px 16px) left / 1px calc(100% - 4px) no-repeat;
+      pointer-events: none;
+    }
+
+    #about-us .icon-holder img {
+      max-width: 70%;
+      max-height: 70%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .08));
+    }
+
+    /* 小標題徽章 */
+    #about-us .section-eyebrow {
+      letter-spacing: .12em;
+      font-weight: 700;
+      font-size: .82rem;
+      text-transform: uppercase;
+      color: var(--vb-primary, #3B82F6);
+    }
+
+    /* 里程碑時間軸 */
+    #about-us .timeline {
+      position: relative;
+      padding-left: 1.25rem;
+    }
+
+    #about-us .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, .2), rgba(59, 130, 246, 0));
+    }
+
+    #about-us .timeline-item {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    #about-us .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: .3rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--vb-primary, #3B82F6);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, .15);
+    }
+
+    /* 深色模式微調（可選） */
+    @media (prefers-color-scheme: dark) {
+      #about-us .icon-holder {
+        background: rgba(255, 255, 255, .04);
+        border-color: rgba(255, 255, 255, .12);
+      }
+
+      #about-us .icon-holder::before {
+        background:
+          repeating-linear-gradient(90deg, transparent 0 10px, rgba(255, 255, 255, .2) 10px 16px) top / calc(100% - 4px) 1px no-repeat,
+          repeating-linear-gradient(180deg, transparent 0 10px, rgba(255, 255, 255, .2) 10px 16px) right / 1px calc(100% - 4px) no-repeat,
+          repeating-linear-gradient(90deg, transparent 0 10px, rgba(255, 255, 255, .2) 10px 16px) bottom / calc(100% - 4px) 1px no-repeat,
+          repeating-linear-gradient(180deg, transparent 0 10px, rgba(255, 255, 255, .2) 10px 16px) left / 1px calc(100% - 4px) no-repeat;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="headerpage"></div>
+
+  <main class="main">
+    <section id="about-us" class="container py-5">
+      <header class="text-center mb-5 reveal">
+        <div class="section-eyebrow mb-2">About VitalBridge</div>
+        <h1 class="fw-bold mb-3">關於我們</h1>
+        <p class="text-muted mb-0">讓資訊有路，讓照護有解方。</p>
+      </header>
+
+      <article class="mx-auto" style="max-width: 1000px;">
+
+        <!-- 合併：品牌識別（圖左）＋ 我們是誰（文右） -->
+        <div class="card mb-4 reveal">
+          <div class="card-body">
+            <div class="row g-4 align-items-center">
+              <!-- 左：Icon / Logo -->
+              <div class="col-12 col-md-4 text-center">
+                <div class="icon-holder mx-auto" style="max-width: 280px;">
+                  <img id="brandIcon" src="/assets/img/001-1_2.png" alt="VitalBridge 樂齡橋 Logo" class="img-fluid">
+                </div>
+              </div>
+              <!-- 右：文字 -->
+              <div class="col-12 col-md-8">
+                <h2 class="h5 fw-bold mb-3">我們是誰</h2>
+                <p class="mb-3">
+                  <strong>樂齡橋 VitalBridge</strong> 是一個長照資訊整合平台。我們致力於把分散在各處的長照資源、政府補助、專業機構與居家照護知識，
+                  整理成親切、可搜尋、可比較、可行動的資訊入口，協助家庭更快找到對的解方。
+                </p>
+                <div class="row g-3">
+                  <div class="col-6 col-lg-4 d-flex align-items-center">
+                    <i class="bi bi-layers me-2"></i><span>資訊整合</span>
+                  </div>
+                  <div class="col-6 col-lg-4 d-flex align-items-center">
+                    <i class="bi bi-heart-pulse me-2"></i><span>照護決策</span>
+                  </div>
+                  <div class="col-6 col-lg-4 d-flex align-items-center">
+                    <i class="bi bi-shield-check me-2"></i><span>安心可信</span>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /row -->
+          </div>
+        </div>
+        <!-- /合併卡片 -->
+
+        <!-- 理念 / 使命 / 願景 -->
+        <div class="row g-4 mb-4">
+          <div class="col-12 col-lg-4">
+            <div class="card h-100 reveal">
+              <div class="card-body">
+                <h2 class="h5 fw-bold mb-2">理念</h2>
+                <p class="mb-0">連結照護者、被照護者與專業服務，讓資訊不再零散，讓支持更即時可得。</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="card h-100 reveal">
+              <div class="card-body">
+                <h2 class="h5 fw-bold mb-2">使命</h2>
+                <ul class="mb-0">
+                  <li>建立易懂且可信的長照資訊入口</li>
+                  <li>縮短尋找資源的時間與焦慮</li>
+                  <li>用科技提升照護效率與品質</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="card h-100 reveal">
+              <div class="card-body">
+                <h2 class="h5 fw-bold mb-2">願景</h2>
+                <p class="mb-0">打造一個安心、透明、溫暖的長照生態系，讓每位長者在晚年都能保有尊嚴與選擇。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 我們提供什麼 -->
+        <div class="card mb-4 reveal">
+          <div class="card-body">
+            <h2 class="h4 fw-bold mb-3">我們提供什麼</h2>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 h-100">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-journal-text fs-4 me-3"></i>
+                    <div>
+                      <h3 class="h6 fw-bold mb-1">長照導覽</h3>
+                      <p class="mb-0">整理自理、居家、日照、機構式照護的差異、費用與情境案例，讓家屬快速理解與判斷。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 h-100">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-hospital fs-4 me-3"></i>
+                    <div>
+                      <h3 class="h6 fw-bold mb-1">機構與法人名錄</h3>
+                      <p class="mb-0">查詢並比對服務內容、評價與聯絡資訊，找到合適的專業團隊。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 h-100">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-house-check fs-4 me-3"></i>
+                    <div>
+                      <h3 class="h6 fw-bold mb-1">居家安全與輔具</h3>
+                      <p class="mb-0">提供輔具與居家改造建議、風險案例與補助資訊，降低意外與照護負擔。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 h-100">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-people fs-4 me-3"></i>
+                    <div>
+                      <h3 class="h6 fw-bold mb-1">會員中心與機構後台</h3>
+                      <p class="mb-0">個人化儀表板與機構專區，讓需求與服務可以更有效率地對接。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /row -->
+          </div>
+        </div>
+
+        <!-- 我們的價值 -->
+        <div class="card mb-4 reveal">
+          <div class="card-body">
+            <h2 class="h4 fw-bold mb-3">我們相信的價值</h2>
+            <div class="row g-3">
+              <div class="col-6 col-lg-3">
+                <div class="border rounded-3 p-3 h-100 text-center">
+                  <div class="fw-bold mb-1">資訊透明</div>
+                  <small class="text-muted">明確、可比較、可行動</small>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="border rounded-3 p-3 h-100 text-center">
+                  <div class="fw-bold mb-1">專業可信</div>
+                  <small class="text-muted">引用來源、定期校對</small>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="border rounded-3 p-3 h-100 text-center">
+                  <div class="fw-bold mb-1">以人為本</div>
+                  <small class="text-muted">理解家庭情境與情緒</small>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="border rounded-3 p-3 h-100 text-center">
+                  <div class="fw-bold mb-1">科技賦能</div>
+                  <small class="text-muted">用設計與資料改善體驗</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 里程碑 -->
+        <div class="card mb-4 reveal">
+          <div class="card-body">
+            <h2 class="h4 fw-bold mb-3">里程碑</h2>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-bold">2024 Q4</div>
+                  <span class="badge bg-light text-dark">構想與驗證</span>
+                </div>
+                <div class="text-muted">整理照護者需求、原型測試、訪談 30+ 家庭</div>
+              </div>
+              <div class="timeline-item">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-bold">2025 Q1</div>
+                  <span class="badge bg-light text-dark">平台雛形</span>
+                </div>
+                <div class="text-muted">會員中心、機構專區、長照導覽上線</div>
+              </div>
+              <div class="timeline-item">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-bold">2025 Q2–Q3</div>
+                  <span class="badge bg-light text-dark">內容擴充</span>
+                </div>
+                <div class="text-muted">輔具/居家改造與電商輕量上線、名錄擴編</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 聯絡我們 -->
+        <div class="card reveal">
+          <div class="card-body">
+            <h2 class="h5 fw-bold mb-3">聯絡我們</h2>
+            <div class="row g-3 align-items-center">
+              <div class="col-12 col-md">
+                <ul class="mb-0">
+                  <li>客服信箱：<a href="mailto:support@vitalbridge.example">support@vitalbridge.example</a></li>
+                  <li>服務時間：週一至週五 09:00–18:00（國定假日除外）</li>
+                </ul>
+              </div>
+              <div class="col-12 col-md-auto">
+                <a href="/contact" class="btn btn-primary">
+                  <i class="bi bi-envelope me-1"></i> 聯絡我們
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 與隱私頁相同的 reveal 進場控制 -->
+      <script>
+        (function () {
+          var targets = document.querySelectorAll('#about-us .reveal');
+          if (!('IntersectionObserver' in window)) {
+            targets.forEach(function (el) { el.classList.add('show'); });
+            return;
+          }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('show');
+                io.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.08 });
+          targets.forEach(function (el) { io.observe(el); });
+        })();
+      </script>
+    </section>
+  </main>
+
+  <div class="footerpage"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- 其他要裝的js放在這之前 -->
+  <script src="/assets/js/fragment-loader.js" defer></script>
+</body>
+
+<!-- Simple page hook：等 fragments 與資源載入完成再執行 -->
+<script>
+  (function onFullyReady(run) {
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
+  })(function () {
+    // 可在此替換 icon 或加入追蹤事件
+    // const iconEl = document.getElementById('brandIcon');
+    // if (iconEl) iconEl.src = '/assets/img/your-icon.png';
+  });
+</script>
+
+</html>
