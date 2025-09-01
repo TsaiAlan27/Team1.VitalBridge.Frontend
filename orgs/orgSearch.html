@@ -49,7 +49,10 @@
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(255, 204, 102, 0.4);
+            box-shadow:
+                0 10px 30px rgba(255, 204, 102, 0.4),
+                0 1px 8px rgba(255, 204, 102, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .search-container::before {
@@ -81,6 +84,39 @@
             margin-bottom: 0.75rem;
             font-size: 1rem;
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .text-black {
+            color: #000000 !important;
+        }
+
+        .search-title {
+            color: #000000;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .search-subtitle {
+            color: #333333;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .text-gray {
+            color: #333333 !important;
+        }
+
+        .text-gold {
+            color: #cc9900 !important;
+        }
+
+        .divider-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffcc66, #ffe066);
+            margin: 0 auto;
+            border-radius: 2px;
         }
 
         .form-control,
@@ -481,14 +517,6 @@
             font-weight: 500;
         }
 
-        /* 增加陰影層次 */
-        .search-container {
-            box-shadow:
-                0 10px 30px rgba(255, 204, 102, 0.4),
-                0 1px 8px rgba(255, 204, 102, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
         .pagination {
             justify-content: center;
             margin-top: 3rem;
@@ -825,13 +853,11 @@
             <div class="container">
                 <div class="search-container">
                     <div class="text-center mb-4">
-                        <h1 class="fw-bold mb-3"
-                            style="color: #000000; font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); letter-spacing: 1px;">
+                        <h1 class="fw-bold mb-3 search-title">
                             長照機構搜尋</h1>
-                        <p class="lead mb-0" style="color: #333333; font-size: 1.2rem; font-weight: 600;">🏥 找到最適合的長照機構
+                        <p class="lead mb-0 search-subtitle">🏥 找到最適合的長照機構
                             🏥</p>
-                        <div class="mt-2"
-                            style="width: 100px; height: 3px; background: linear-gradient(90deg, #ffcc66, #ffe066); margin: 0 auto; border-radius: 2px;">
+                        <div class="mt-2 divider-line">
                         </div>
                     </div>
 
@@ -880,22 +906,24 @@
                                     <i class="bi bi-currency-dollar me-2"></i>價格範圍
                                 </label>
                                 <div class="price-range-container">
-                                    <input type="range" class="form-range" id="priceRange" v-model="searchForm.maxPrice"
-                                        min="0" max="500000" step="5000" aria-label="價格範圍選擇">
-
-                                    <!-- 價格輸入框 -->
-                                    <div class="row g-2 mt-2">
+                                    <div class="row g-2">
                                         <div class="col-6">
-                                            <label class="form-label small" style="color: #000000;">最低價格</label>
-                                            <input type="number" class="form-control form-control-sm"
-                                                v-model.number="searchForm.minPrice" min="0" max="500000" step="1000"
+                                            <label for="minPriceRange" class="form-label small">最低價格</label>
+                                            <input type="range" class="form-range" id="minPriceRange"
+                                                v-model="searchForm.minPrice" :min="0" :max="100000" step="1000"
+                                                aria-label="最低價格選擇">
+                                            <input type="number" class="form-control form-control-sm mt-1"
+                                                v-model.number="searchForm.minPrice" min="0" max="100000" step="1000"
                                                 placeholder="0" aria-label="最低價格輸入" @keyup.enter="performNewSearch">
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label small" style="color: #000000;">最高價格</label>
-                                            <input type="number" class="form-control form-control-sm"
-                                                v-model.number="searchForm.maxPrice" min="0" max="500000" step="1000"
-                                                placeholder="500000" aria-label="最高價格輸入"
+                                            <label for="maxPriceRange" class="form-label small">最高價格</label>
+                                            <input type="range" class="form-range" id="maxPriceRange"
+                                                v-model="searchForm.maxPrice" :min="0" :max="100000" step="1000"
+                                                aria-label="最高價格選擇">
+                                            <input type="number" class="form-control form-control-sm mt-1"
+                                                v-model.number="searchForm.maxPrice" min="0" max="100000" step="1000"
+                                                placeholder="100000" aria-label="最高價格輸入"
                                                 @keyup.enter="performNewSearch">
                                         </div>
                                     </div>
@@ -906,7 +934,7 @@
                                         <span class="price-display">NT$ {{ formatPrice(searchForm.maxPrice) }}</span>
                                     </div>
                                     <div class="text-center mt-1">
-                                        <small style="color: #333333;">
+                                        <small class="text-gray">
                                             價格範圍：NT$ {{ formatPrice(searchForm.minPrice || 0) }} - NT$ {{
                                             formatPrice(searchForm.maxPrice) }}
                                         </small>
@@ -961,8 +989,8 @@
                 <!-- Search Results -->
                 <div v-if="searchResults.length > 0">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 style="color: #000000;">搜尋結果 ({{ totalResults }} 筆)</h3>
-                        <small style="color: #333333;">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</small>
+                        <h3 class="text-black">搜尋結果 ({{ totalResults }} 筆)</h3>
+                        <small class="text-gray">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</small>
                     </div>
 
                     <!-- 排序選項與分頁設定 -->
@@ -1059,8 +1087,7 @@
                                                     <!-- 特色服務圖示 -->
                                                     <div v-if="org.featureServiceNames && org.featureServiceNames.length > 0"
                                                         class="feature-services">
-                                                        <small style="color: #333333;"
-                                                            class="d-block mb-1">特色服務：</small>
+                                                        <small class="text-gray d-block mb-1">特色服務：</small>
                                                         <div class="feature-services-grid">
                                                             <div v-for="(serviceName, index) in org.featureServiceNames.slice(0, 8)"
                                                                 :key="index" class="feature-service-item"
@@ -1085,7 +1112,7 @@
                                                     class="col-md-4 col-12 d-flex flex-column justify-content-between text-end text-center-mobile h-100">
                                                     <div>
                                                         <div class="mb-2">
-                                                            <small style="color: #333333;">床位數: {{ org.bedCount
+                                                            <small class="text-gray">床位數: {{ org.bedCount
                                                                 }}</small>
                                                         </div>
                                                         <div class="mb-3">
@@ -1140,16 +1167,16 @@
 
                 <!-- No Results -->
                 <div v-else-if="!loading && hasSearched" class="no-results">
-                    <i class="bi bi-search display-1" style="color: #cc9900;"></i>
-                    <h3 class="mt-3" style="color: #000000;">找不到符合條件的機構</h3>
-                    <p style="color: #333333;">請調整搜尋條件後再試一次</p>
+                    <i class="bi bi-search display-1 text-gold"></i>
+                    <h3 class="mt-3 text-black">找不到符合條件的機構</h3>
+                    <p class="text-gray">請調整搜尋條件後再試一次</p>
                 </div>
 
                 <!-- Initial State -->
                 <div v-else-if="!loading && !hasSearched" class="no-results">
-                    <i class="bi bi-building display-1" style="color: #cc9900;"></i>
-                    <h3 class="mt-3" style="color: #000000;">請設定搜尋條件</h3>
-                    <p style="color: #333333;">輸入關鍵字或選擇篩選條件開始搜尋</p>
+                    <i class="bi bi-building display-1 text-gold"></i>
+                    <h3 class="mt-3 text-black">請設定搜尋條件</h3>
+                    <p class="text-gray">輸入關鍵字或選擇篩選條件開始搜尋</p>
                 </div>
             </div>
         </section>
@@ -1249,7 +1276,7 @@
                                 cityId: 0,
                                 districtId: 0,
                                 minPrice: 0,
-                                maxPrice: 500000,
+                                maxPrice: 100000,
                                 organizationTypeIds: [],
                                 featureServiceIds: []
                             },
@@ -1296,16 +1323,22 @@
                     },
 
                     watch: {
-                        // 監聽 maxPrice 滑桿變化，確保 minPrice 不超過 maxPrice
-                        'searchForm.maxPrice'(newVal) {
-                            if (this.searchForm.minPrice > newVal) {
-                                this.searchForm.minPrice = 0;
+                        // 監聽 maxPrice 變化，確保 minPrice 不超過 maxPrice
+                        'searchForm.maxPrice'(newVal, oldVal) {
+                            // 避免無限循環和不必要的更新
+                            if (newVal < this.searchForm.minPrice) {
+                                this.$nextTick(() => {
+                                    this.searchForm.minPrice = Math.min(newVal, this.searchForm.minPrice);
+                                });
                             }
                         },
-                        // 監聽 minPrice 輸入變化，確保不超過 maxPrice
-                        'searchForm.minPrice'(newVal) {
+                        // 監聽 minPrice 變化，確保不超過 maxPrice
+                        'searchForm.minPrice'(newVal, oldVal) {
+                            // 避免無限循環和不必要的更新
                             if (newVal > this.searchForm.maxPrice) {
-                                this.searchForm.minPrice = this.searchForm.maxPrice;
+                                this.$nextTick(() => {
+                                    this.searchForm.maxPrice = Math.max(newVal, this.searchForm.maxPrice);
+                                });
                             }
                         }
                     },
@@ -1442,7 +1475,7 @@
                                         cityId: (this.searchForm.cityId && this.searchForm.cityId != 0 && this.searchForm.cityId != '0') ? parseInt(this.searchForm.cityId) : null,
                                         districtId: (this.searchForm.districtId && this.searchForm.districtId != 0 && this.searchForm.districtId != '0') ? parseInt(this.searchForm.districtId) : null,
                                         minPrice: this.searchForm.minPrice && this.searchForm.minPrice > 0 ? parseInt(this.searchForm.minPrice) : null,
-                                        maxPrice: this.searchForm.maxPrice && this.searchForm.maxPrice < 500000 ? parseInt(this.searchForm.maxPrice) : null,
+                                        maxPrice: this.searchForm.maxPrice && this.searchForm.maxPrice < 100000 ? parseInt(this.searchForm.maxPrice) : null,
                                         organizationTypeIds: this.searchForm.organizationTypeIds || [],
                                         featureServiceIds: this.searchForm.featureServiceIds || [],
                                         page: 1,
