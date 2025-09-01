@@ -342,6 +342,9 @@
       $(".notifyRedPoing").show();
       newNotify();
     });
+    connection.on("haveNotReadNotify", function (msg) {
+      $(".notifyRedPoing").show();
+    });
   }
   function isLogout() {
     const messenger = document.querySelector("df-messenger");
