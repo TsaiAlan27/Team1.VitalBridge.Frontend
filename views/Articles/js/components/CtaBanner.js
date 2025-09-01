@@ -22,12 +22,7 @@ export default {
     },
     template: `
         <div class="cta-banner" :data-banner-id="bannerId" ref="bannerElement">
-            <div class="banner-id">ID: {{ bannerId }}</div>
-            <div class="cta-image-container">
-                <img :src="bannerData.imageUrl || fallbackImage" 
-                        alt="Premium Blog Theme" 
-                        class="cta-image" />
-            </div>
+            
             <div class="cta-content">
                 <h2 class="cta-title">{{ bannerData.title }}</h2>
                 <p class="cta-subtitle">{{ bannerData.subtitle }}</p>
@@ -39,6 +34,11 @@ export default {
             </div>
         </div>
     `,
+    // <div class="cta-image-container">
+    //             <img :src="bannerData.imageUrl || fallbackImage" 
+    //                     alt="Premium Blog Theme" 
+    //                     class="cta-image" />
+    //         </div>
     methods: {
         async fetchContentArticleBannerProduct(bannerId) {
             try {
