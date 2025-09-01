@@ -1,5 +1,5 @@
 /* Member Center page specific styles extracted from inline <style> */
-/* 全域字體：微軟正黑體優先 */
+/* 全域字體：微軟正黑體優先 (先套在常用元件，避免 Bootstrap 預設英文字體導致手風琴與內容不一致) */
 body,
 .member-content-area,
 .accordion-button,
@@ -14,6 +14,7 @@ body,
 .form-select {
     font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', 'Poppins', 'Roboto', system-ui, sans-serif;
 }
+
 
 .member-layout-row {
     --vb-nav-width: 200px;

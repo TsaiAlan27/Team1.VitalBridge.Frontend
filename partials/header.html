@@ -9,8 +9,15 @@
     font-size: 0.6rem;
     display: inline-block;
   }
+
+
+
+  /* 改標頭字體大小 */
+  .navmenu ul li a {
+    font-size: 1.2rem;
+  }
 </style>
-<header id="header" class="header d-flex align-items-center light-background sticky-top">
+<header id="header" class="header d-flex align-items-center light-background sticky-top  vb-header">
   <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
     <a href="/VitalBridge/index.html" class="logo d-flex align-items-center me-auto me-xl-0">
       <!-- Uncomment the line below if you also wish to use an image logo -->
@@ -27,7 +34,7 @@
         <li><a href="/VitalBridge/ECshop/index.html">樂齡商城</a></li>
         <li><a href="/VitalBridge/views/Articles/ArticleIndex.html">專欄文章</a></li>
         <li><a class="nav-member-center" href="/VitalBridge/member/memberCenter.html">會員中心</a></li>
-        <li><a href="#">關於我們</a></li>
+        <li><a href="/VitalBridge/page/about.html">關於我們</a></li>
 
         <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -503,3 +510,90 @@
     // }, 3000);
   }
 </script>
+
+
+
+
+
+<!-- 固定header -->
+
+<style>
+  /* 只作用於本片段 */
+  .vb-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    /* background: #fff; */
+    border-bottom: 1px solid var(--vb-line, #E9EEF7);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+  }
+
+  /* 占位器：由 JS 動態建立並放在 header 的下一個兄弟節點 */
+  .vb-header-spacer {
+    width: 100%;
+    block-size: var(--vb-header-h, 0px);
+  }
+
+  /* 用 CSS 變數裝高度 */
+</style>
+
+<script>
+  (function HeaderSelfSpacer() {
+    const header = document.currentScript.previousElementSibling.previousElementSibling; // 就是 .vb-header
+    // 若抓不到，改用 querySelector（保險）
+    const $header = header && header.classList && header.classList.contains('vb-header')
+      ? header
+      : document.querySelector('.vb-header');
+
+    if (!$header) return;
+
+    // 建立或取得占位器（插在 header 後面）
+    function ensureSpacer() {
+      let spacer = $header.nextElementSibling;
+      if (!spacer || !spacer.classList || !spacer.classList.contains('vb-header-spacer')) {
+        spacer = document.createElement('div');
+        spacer.className = 'vb-header-spacer';
+        $header.parentNode.insertBefore(spacer, $header.nextSibling);
+      }
+      return spacer;
+    }
+
+    // 量測 header 高度並同步到 spacer 與 :root 變數
+    function syncHeight() {
+      const h = Math.ceil($header.getBoundingClientRect().height);
+      const spacer = ensureSpacer();
+      spacer.style.setProperty('--vb-header-h', h + 'px');
+      // 若頁內有錨點定位可用，順便提供（不會改其他檔案，只是設定變數）
+      document.documentElement.style.setProperty('--vb-anchor-offset', h + 'px');
+    }
+
+    // 初次量測（等待圖片/字型可能影響高度）
+    function afterFonts(cb) {
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(cb).catch(cb);
+      } else cb();
+    }
+    function afterLoad(cb) {
+      if (document.readyState === 'complete') cb();
+      else window.addEventListener('load', cb, { once: true });
+    }
+
+    // 監看 header 尺寸變化（RWD、登入狀態切換、動態內容）
+    const ro = new ResizeObserver(syncHeight);
+    ro.observe($header);
+
+    // 若你的 header 會動態增減 DOM，額外監聽
+    const mo = new MutationObserver(syncHeight);
+    mo.observe($header, { childList: true, subtree: true, attributes: true });
+
+    // 綁定視窗尺寸改變
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(syncHeight, 120); });
+
+    afterFonts(() => afterLoad(syncHeight));
+  })();
+</script>
+
+<!-- 固定header結束 -->

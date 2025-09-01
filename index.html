@@ -2,76 +2,727 @@
 <html lang="zh-TW">
 
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>樂齡橋-VitalBridge 首頁</title>
-  <meta name="description" content="" />
-  <meta name="keywords" content="" />
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="/assets/img/favicon.png" rel="icon" />
-  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect" />
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-  <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
-  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
-  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="/assets/css/main.css" rel="stylesheet" />
-  <!-- <link href="/assets/css/main2.css" rel="stylesheet" /> -->
-
+  <link href="/assets/css/main.css" rel="stylesheet">
+  <link href="/assets/css/main2.css" rel="stylesheet">
 
   <!-- 自己想改的樣式放這邊 -->
   <style>
-    /* 這裡可以加入自定義的 CSS 樣式 */
+
   </style>
+
 </head>
 
 <!-- <body class="index-page"> -->
 
 <body>
   <div class="headerpage"></div>
+
   <main class="main">
-    <!-- 你們的主要頁面內容放這邊下面 -->
+    <!-- ===== 首頁（修正版：卡片微動畫、機構含特色與評價、商品移除品牌字樣） ===== -->
+    <section id="homeFix" class="container py-5">
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero section">
-      <img src="/assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
+      <!-- 區域樣式（只作用於 #homeFix） -->
+      <style>
+        /* reveal 進場（延續隱私頁手感） */
+        #homeFix .reveal {
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity .6s ease, transform .6s ease;
+          will-change: opacity, transform;
+        }
 
-      <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <h2>Kelly Adams</h2>
-            <p>I'm a professional illustrator from San Francisco</p>
-            <a href="/about.html" class="btn-get-started">About Me</a>
+        #homeFix .reveal.show {
+          opacity: 1;
+          transform: none;
+        }
 
-            <!-- Vue 測試文字 -->
-            <p style="color: green; font-weight: bold">{{ message }}</p>
+        /* Hero */
+        #homeFix .vb-hero-card {
+          border: 1px solid rgba(0, 0, 0, .06);
+          border-radius: 18px;
+          overflow: hidden;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+          background: #fff;
+        }
+
+        #homeFix .vb-hero-img {
+          position: relative;
+        }
+
+        #homeFix .ratio>img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: 55% 40%;
+        }
+
+        /* 右圖左緣漸層（靠近左邊） */
+        #homeFix .vb-grad-left {
+          position: absolute;
+          inset: 0 0 0 0;
+          background: linear-gradient(90deg, rgba(255, 255, 255, .94) 0%, rgba(255, 255, 255, .7) 28%, rgba(255, 255, 255, 0) 56%);
+          pointer-events: none;
+        }
+
+        /* 卡片通用 + 微互動動畫 */
+        #homeFix .card {
+          border-radius: 16px;
+          border: 1px solid rgba(0, 0, 0, .06);
+          box-shadow: 0 4px 18px rgba(0, 0, 0, .06);
+          background: #fff;
+        }
+
+        #homeFix .vb-anim {
+          transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        #homeFix .vb-anim:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 14px 32px rgba(0, 0, 0, .12);
+        }
+
+        #homeFix .vb-anim .vb-thumb img,
+        #homeFix .vb-anim .vb-pthumb img {
+          transition: transform .35s ease;
+        }
+
+        #homeFix .vb-anim:hover .vb-thumb img,
+        #homeFix .vb-anim:hover .vb-pthumb img {
+          transform: scale(1.03);
+        }
+
+        #homeFix .vb-meta {
+          color: #6b7280;
+          font-size: .9rem;
+        }
+
+        /* 統一縮圖比例，避免列表高度跳動 */
+        #homeFix .vb-thumb {
+          position: relative;
+          padding-top: 62%;
+          background: #ecf2f4;
+          overflow: hidden;
+          border-top-left-radius: 16px;
+          border-top-right-radius: 16px;
+        }
+
+        #homeFix .vb-thumb>img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        /* 機構：CSS Grid 5 欄 */
+        #homeFix .vb-grid-5 {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: 12px;
+        }
+
+        @media (min-width: 576px) {
+          #homeFix .vb-grid-5 {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (min-width: 768px) {
+          #homeFix .vb-grid-5 {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (min-width: 992px) {
+          #homeFix .vb-grid-5 {
+            grid-template-columns: repeat(4, 1fr);
+          }
+        }
+
+        @media (min-width: 1200px) {
+          #homeFix .vb-grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+          }
+        }
+
+        /* 商品輪播卡片 */
+        #homeFix .vb-pcard {
+          background: #fff;
+          border: 1px solid rgba(0, 0, 0, .06);
+          border-radius: 16px;
+          overflow: hidden;
+          height: 100%;
+        }
+
+        #homeFix .vb-pthumb {
+          position: relative;
+          padding-top: 70%;
+          background: #ecf2f4;
+        }
+
+        #homeFix .vb-pthumb>img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        #homeFix .price {
+          font-weight: 800;
+        }
+
+        /* Swiper 導航鈕 */
+        #homeFix .product-swiper .swiper-button-prev,
+        #homeFix .product-swiper .swiper-button-next {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: #fff;
+          border: 1px solid rgba(0, 0, 0, .1);
+          box-shadow: 0 8px 22px rgba(0, 0, 0, .06);
+        }
+
+        #homeFix .product-swiper .swiper-button-prev:after,
+        #homeFix .product-swiper .swiper-button-next:after {
+          font-size: 18px;
+          color: #333;
+        }
+
+        /* 評價星星 */
+        #homeFix .stars {
+          color: #f59e0b;
+        }
+
+        /* bootstrap-icons 的 star 用這色系 */
+      </style>
+
+      <!-- Hero：左文案＋右側老人圖（左緣漸層） -->
+      <div class="vb-hero-card row g-0 align-items-stretch mb-5 reveal">
+        <!-- 左：文字 -->
+        <div class="col-12 col-lg-5 p-3 p-md-4 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <img src="/assets/img/001-1_2.png" alt="VitalBridge" style="height:36px"
+                onerror="this.style.display='none'">
+              <span class="fw-semibold text-muted">VitalBridge</span>
+            </div>
+            <h1 class="fw-bold mb-2">長照資訊 一站整合</h1>
+            <p class="text-muted mb-3">從機構媒合、照護文章到日常選物，協助家屬做出安心選擇。</p>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="/VitalBridge/page/longterm-care-guide.html" class="btn btn-primary"><i
+                  class="bi bi-compass me-1"></i> 長照導覽</a>
+              <a href="/VitalBridge/orgs/orgSearch.html" class="btn btn-outline-primary"><i
+                  class="bi bi-hospital me-1"></i> 機構名錄</a>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap gap-2 mt-3 vb-kpis">
+            <div class="vb-kpi border rounded-3 px-3 py-2 bg-white vb-anim">
+              <div class="small text-muted">平均回覆</div>
+              <div class="h6 mb-0">3 小時內</div>
+            </div>
+            <div class="vb-kpi border rounded-3 px-3 py-2 bg-white vb-anim">
+              <div class="small text-muted">諮詢費用</div>
+              <div class="h6 mb-0">免費</div>
+            </div>
+            <div class="vb-kpi border rounded-3 px-3 py-2 bg-white vb-anim">
+              <div class="small text-muted">急案協助</div>
+              <div class="h6 mb-0">最快 48 小時</div>
+            </div>
           </div>
         </div>
+        <!-- 右：圖片 -->
+        <div class="col-12 col-lg-7 vb-hero-img">
+          <div class="ratio ratio-16x9">
+            <img src="/assets/img/index_img/index_img1.png" alt="長照情境圖片">
+          </div>
+          <div class="vb-grad-left"></div>
+        </div>
       </div>
+
+      <!-- 推薦機構（5 卡｜特色敘述＋評價） -->
+      <header class="d-flex justify-content-between align-items-end mb-2 reveal">
+        <div>
+          <h2 class="h4 fw-bold mb-1">推薦機構</h2>
+          <div class="text-muted small">依地區與照護型態精選 5 間</div>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary" href="/VitalBridge/orgs/orgSearch.html">看全部 <i
+            class="bi bi-arrow-right"></i></a>
+      </header>
+
+      <div class="vb-grid-5 mb-4">
+        <article class="card vb-anim reveal">
+          <div class="vb-thumb"><img src="/assets/img/index_img/org_img1.jpg" alt="安和日照中心"></div>
+          <div class="card-body">
+            <h3 class="h6 mb-1">安和日照中心</h3>
+            <div class="vb-meta mb-1"><i class="bi bi-geo-alt"></i> 台北市 · 日照</div>
+            <p class="small text-muted mb-2">近捷運，日間活動豐富，職能治療與音樂陪伴。</p>
+            <div class="d-flex align-items-center">
+              <div class="stars me-1">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+              </div>
+              <span class="small text-muted">4.5（112）</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card vb-anim reveal">
+          <div class="vb-thumb"><img src="/assets/img/index_img/org_img2.jpg" alt="松園護理之家"></div>
+          <div class="card-body">
+            <h3 class="h6 mb-1">松園護理之家</h3>
+            <div class="vb-meta mb-1"><i class="bi bi-geo-alt"></i> 新北市 · 護理之家</div>
+            <p class="small text-muted mb-2">24 小時護理照護，備醫療級復健設備與營養餐。</p>
+            <div class="d-flex align-items-center">
+              <div class="stars me-1">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+              </div>
+              <span class="small text-muted">4.0（86）</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card vb-anim reveal">
+          <div class="vb-thumb"><img src="/assets/img/index_img/org_img3.jpg" alt="樂心居家照護"></div>
+          <div class="card-body">
+            <h3 class="h6 mb-1">樂心居家照護</h3>
+            <div class="vb-meta mb-1"><i class="bi bi-geo-alt"></i> 桃園市 · 居家照護</div>
+            <p class="small text-muted mb-2">彈性時段到宅，護理師定期評估與家屬衛教。</p>
+            <div class="d-flex align-items-center">
+              <div class="stars me-1">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-half"></i><i class="bi bi-star"></i>
+              </div>
+              <span class="small text-muted">3.5（54）</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card vb-anim reveal">
+          <div class="vb-thumb"><img src="/assets/img/index_img/org_img4.jpg" alt="蘭亭居護理之家"></div>
+          <div class="card-body">
+            <h3 class="h6 mb-1">蘭亭居護理之家</h3>
+            <div class="vb-meta mb-1"><i class="bi bi-geo-alt"></i> 台南市 · 護理之家</div>
+            <p class="small text-muted mb-2">失智友善環境，感官刺激課程與安全走動動線。</p>
+            <div class="d-flex align-items-center">
+              <div class="stars me-1">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+              </div>
+              <span class="small text-muted">4.5（73）</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card vb-anim reveal">
+          <div class="vb-thumb"><img src="/assets/img/index_img/org_img5.jpg" alt="暖日長照機構"></div>
+          <div class="card-body">
+            <h3 class="h6 mb-1">暖日長照機構</h3>
+            <div class="vb-meta mb-1"><i class="bi bi-geo-alt"></i> 高雄市 · 機構式</div>
+            <p class="small text-muted mb-2">明亮公共空間，社工帶領團體互動與家屬支持。</p>
+            <div class="d-flex align-items-center">
+              <div class="stars me-1">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+              </div>
+              <span class="small text-muted">4.0（65）</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 推薦文章（3 卡） -->
+      <header class="d-flex justify-content-between align-items-end mb-2 reveal">
+        <div>
+          <h2 class="h4 fw-bold mb-1">推薦文章</h2>
+          <div class="text-muted small">照護技巧 · 補助申請 · 家屬經驗</div>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary" href="/VitalBridge/views/Articles/ArticleIndex.html">看全部 <i
+            class="bi bi-arrow-right"></i></a>
+      </header>
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-lg-4">
+          <article class="card vb-anim h-100 reveal">
+            <div class="vb-thumb"><img src="/assets/img/index_img/article_img1.png" alt="如何選擇合適的長照機構？"></div>
+            <div class="card-body">
+              <h3 class="h6 mb-1">如何選擇合適的長照機構？</h3>
+              <div class="vb-meta mb-1"><i class="bi bi-calendar-event"></i> 2025-08-15 · 7 分鐘閱讀</div>
+              <p class="mb-0 small text-muted">從需求評估、地點與費用，到實地參觀與契約重點。</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-lg-4">
+          <article class="card vb-anim h-100 reveal">
+            <div class="vb-thumb"><img src="/assets/img/index_img/article_img2.png" alt="居家環境改造：防跌與安全清單"></div>
+            <div class="card-body">
+              <h3 class="h6 mb-1">居家環境改造：防跌與安全清單</h3>
+              <div class="vb-meta mb-1"><i class="bi bi-calendar-event"></i> 2025-08-09 · 6 分鐘閱讀</div>
+              <p class="mb-0 small text-muted">門檻、浴室、照明與扶手配置的關鍵，降低意外風險。</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-lg-4">
+          <article class="card vb-anim h-100 reveal">
+            <div class="vb-thumb"><img src="/assets/img/index_img/article_img3.png" alt="長照 2.0 補助：申請流程與文件"></div>
+            <div class="card-body">
+              <h3 class="h6 mb-1">長照 2.0 補助：申請流程與文件</h3>
+              <div class="vb-meta mb-1"><i class="bi bi-calendar-event"></i> 2025-08-01 · 5 分鐘閱讀</div>
+              <p class="mb-0 small text-muted">一步步完成申請，掌握評估方式與常見問題。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- 推薦商品（10 件｜輪播｜XL 一次 6 件；已移除品牌小字） -->
+      <header class="d-flex justify-content-between align-items-end mb-2 reveal">
+        <div>
+          <h2 class="h4 fw-bold mb-1">推薦商品</h2>
+          <div class="text-muted small">營養食品與紙尿褲等日常照護用品</div>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary" href="/VitalBridge/ECshop/index.html">看全部 <i
+            class="bi bi-arrow-right"></i></a>
+      </header>
+      <div class="product-swiper reveal mb-4">
+        <div class="swiper" id="vbProducts">
+          <div class="swiper-wrapper">
+            <!-- 10 slides：只顯示名稱＋價格 -->
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p1.png" alt="高蛋白營養飲（原味）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">高蛋白營養飲（原味）</div>
+                  <div class="price text-primary">NT$560</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p2.png" alt="成人紙尿褲（M）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">成人紙尿褲（M）</div>
+                  <div class="price text-primary">NT$699</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p3.png" alt="優纖即飲營養奶"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">優纖即飲營養奶</div>
+                  <div class="price text-primary">NT$520</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p4.png" alt="看護墊（加厚型）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">看護墊（加厚型）</div>
+                  <div class="price text-primary">NT$390</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p5.png" alt="成人紙尿褲（L）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">成人紙尿褲（L）</div>
+                  <div class="price text-primary">NT$749</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p6.png" alt="高纖營養粉（香草）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">高纖營養粉（香草）</div>
+                  <div class="price text-primary">NT$460</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p7.png" alt="成人紙尿褲（夜用 XL）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">成人紙尿褲（夜用 XL）</div>
+                  <div class="price text-primary">NT$899</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p1.png" alt="銀髮專用均衡營養"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">銀髮專用均衡營養</div>
+                  <div class="price text-primary">NT$580</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p2.png" alt="成人紙尿褲（超薄透氣）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">成人紙尿褲（超薄透氣）</div>
+                  <div class="price text-primary">NT$720</div>
+                </div>
+              </article>
+            </div>
+            <div class="swiper-slide">
+              <article class="vb-pcard vb-anim">
+                <div class="vb-pthumb"><img src="/assets/img/index_img/shop_img/p3.png" alt="營養布丁（高熱量）"></div>
+                <div class="p-3">
+                  <div class="fw-semibold">營養布丁（高熱量）</div>
+                  <div class="price text-primary">NT$320</div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-pagination d-lg-none"></div>
+        </div>
+      </div>
+
+      <!-- 聯絡我們（簡潔雙欄版） -->
+      <header class="mb-2 reveal">
+        <h2 class="h4 fw-bold mb-1">聯絡我們</h2>
+      </header>
+
+      <style>
+        #homeFix .contact-clean .info-list li+li {
+          margin-top: .5rem;
+        }
+
+        #homeFix .contact-clean .form-label {
+          font-size: .875rem;
+          color: #6c757d;
+        }
+
+        #homeFix .contact-clean .btn {
+          min-width: 140px;
+        }
+
+        #homeFix .contact-clean .col-divider {
+          border-left: 1px solid rgba(0, 0, 0, .08);
+        }
+
+        /* 左欄新樣式 */
+        #homeFix .contact-clean .contact-block {
+          border: 1px solid rgba(0, 0, 0, .08);
+          border-radius: .75rem;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          background: #fff;
+        }
+
+        #homeFix .contact-clean .contact-block h6 {
+          font-size: .9rem;
+          font-weight: 600;
+          margin-bottom: .5rem;
+          color: #495057;
+        }
+
+        #homeFix .contact-clean .contact-block ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        #homeFix .contact-clean .contact-block li {
+          margin-bottom: .35rem;
+        }
+
+        #homeFix .contact-clean .contact-block li:last-child {
+          margin-bottom: 0;
+        }
+
+        @media (max-width: 991.98px) {
+          #homeFix .contact-clean .col-divider {
+            border-left: 0;
+            border-top: 1px solid rgba(0, 0, 0, .08);
+            padding-top: 1rem;
+            margin-top: .25rem;
+          }
+        }
+      </style>
+
+      <div class="card reveal contact-clean">
+        <div class="card-body">
+          <div class="row g-4 align-items-start">
+            <!-- 左：聯絡資訊 + CTA -->
+            <div class="col-12 col-lg-5 d-flex flex-column">
+              <!-- 快速聯繫按鈕 -->
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <a href="/contact" class="btn btn-primary flex-fill">
+                  <i class="bi bi-chat-dots me-1"></i> 線上留言
+                </a>
+                <a href="#" class="btn btn-success flex-fill">
+                  <i class="bi bi-line me-1"></i> 加入 LINE
+                </a>
+              </div>
+
+              <!-- 聯絡資訊條列 -->
+              <div class="contact-block">
+                <h6>聯絡資訊</h6>
+                <ul>
+                  <li><i class="bi bi-envelope me-2"></i>
+                    <a href="mailto:support@vitalbridge.example" class="text-decoration-none">
+                      support@vitalbridge.example
+                    </a>
+                  </li>
+                  <li><i class="bi bi-telephone me-2"></i> 02-1234-5678</li>
+                  <li><i class="bi bi-clock me-2"></i> 週一–週五 09:00–18:00（國定假日除外）</li>
+                </ul>
+              </div>
+
+              <!-- 資料保護 -->
+              <div class="contact-block">
+                <h6>資料保護</h6>
+                <p class="mb-0 small text-muted">
+                  我們將依 <a href="/privacy" class="text-decoration-underline">隱私權政策</a> 處理您提供的資料，確保資訊安全。
+                </p>
+              </div>
+
+              <!-- 提示 -->
+              <div class="contact-block">
+                <h6><i class="bi bi-info-circle me-1"></i> 提交前建議提供</h6>
+                <ul class="small text-muted">
+                  <li>照護對象狀況（失能等級、主要需求）</li>
+                  <li>希望服務地區與時段</li>
+                  <li>是否需要政府補助／文件協助</li>
+                </ul>
+              </div>
+
+              <p class="text-muted small mt-2 mb-0">
+                如為急案，建議直接透過 <span class="fw-semibold">LINE</span> 聯繫，我們會優先處理。
+              </p>
+            </div>
+
+            <!-- 右：表單（原樣） -->
+            <div class="col-12 col-lg-7 col-divider">
+              <form action="/contact" method="post" class="php-email-form" novalidate>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="cfNameBasic" class="form-label">您的姓名</label>
+                    <input type="text" class="form-control" id="cfNameBasic" name="name" placeholder="請輸入姓名" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="cfEmailBasic" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="cfEmailBasic" name="email"
+                      placeholder="example@mail.com" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="cfPhoneBasic" class="form-label">聯絡電話（選填）</label>
+                    <input type="tel" class="form-control" id="cfPhoneBasic" name="phone" placeholder="0912-345-678">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="cfTopicBasic" class="form-label">洽詢主題</label>
+                    <select class="form-select" id="cfTopicBasic" name="topic" required>
+                      <option value="" selected disabled>請選擇</option>
+                      <option value="match">機構媒合</option>
+                      <option value="subsidy">補助／文件協助</option>
+                      <option value="visit">參觀預約</option>
+                      <option value="other">其他問題</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label for="cfMsgBasic" class="form-label">您的需求／問題</label>
+                    <textarea class="form-control" id="cfMsgBasic" name="message" rows="5"
+                      placeholder="簡述照護狀況、需求地區、期望時程…" required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="1" id="agreePolicyBasic" required>
+                      <label class="form-check-label small" for="agreePolicyBasic">
+                        我同意依 <a href="/privacy" class="text-decoration-underline">隱私權政策</a> 處理我的資料
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="my-2">
+                      <div class="loading">處理中…</div>
+                      <div class="error-message"></div>
+                      <div class="sent-message">我們已收到您的訊息，將盡快與您聯絡！</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-send me-1"></i> 送出訊息
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div> <!-- /row -->
+        </div>
+      </div>
+
+
+
+
+      <!-- 區域腳本（只作用於 #homeFix；不動你的動態流程） -->
+      <script>
+        // reveal
+        (function () {
+          var targets = document.querySelectorAll('#homeFix .reveal');
+          if (!('IntersectionObserver' in window)) { targets.forEach(function (el) { el.classList.add('show'); }); return; }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+          }, { threshold: 0.08 });
+          targets.forEach(function (el) { io.observe(el); });
+        })();
+
+        // 商品輪播（等 fragment-loader app:ready + window.load）
+        (function () {
+          function once(ev) { return new Promise(function (res) { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+          function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+          function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+          Promise.all([waitAppReady(), waitWindowLoad()]).then(function () {
+            if (!window.Swiper) return;
+            new Swiper('#vbProducts', {
+              slidesPerView: 2,
+              spaceBetween: 12,
+              loop: true,
+              navigation: { nextEl: '#homeFix .swiper-button-next', prevEl: '#homeFix .swiper-button-prev' },
+              pagination: { el: '#homeFix .swiper-pagination', clickable: true },
+              breakpoints: { 576: { slidesPerView: 3, spaceBetween: 14 }, 768: { slidesPerView: 4, spaceBetween: 16 }, 1200: { slidesPerView: 6, spaceBetween: 16 } }
+            });
+          }).catch(function (e) { console.error('vbProducts init error', e); });
+        })();
+      </script>
     </section>
-    <!-- /Hero Section -->
-
-
-
-
-
-
-
-
-    <!-- 你們的主要頁面內容放這邊上面 -->
   </main>
+
+
+
 
   <div class="footerpage"></div>
 
@@ -99,63 +750,21 @@
 
   <!-- 其他要裝的js放在這之前 -->
   <script src="/assets/js/fragment-loader.js" defer></script>
+
 </body>
 
 <!-- Simple page hook: 在下面區塊直接寫頁面專屬的 JS（此函式會等到 fragment-loader 發出 app:ready 且 window.load 完成後執行） -->
 <script>
   (function onFullyReady(run) {
-    function once(ev) {
-      return new Promise((res) => {
-        function h(e) {
-          window.removeEventListener(ev, h);
-          res(e);
-        }
-        window.addEventListener(ev, h);
-      });
-    }
-    function waitAppReady() {
-      if (window.appReadyAt !== undefined) return Promise.resolve();
-      return once("app:ready");
-    }
-    function waitWindowLoad() {
-      if (document.readyState === "complete") return Promise.resolve();
-      return once("load");
-    }
-    Promise.all([waitAppReady(), waitWindowLoad()])
-      .then(run)
-      .catch(function (e) {
-        console.error("post-load hook error", e);
-      });
+    function once(ev) { return new Promise(res => { function h(e) { window.removeEventListener(ev, h); res(e); } window.addEventListener(ev, h); }); }
+    function waitAppReady() { if (window.appReadyAt !== undefined) return Promise.resolve(); return once('app:ready'); }
+    function waitWindowLoad() { if (document.readyState === 'complete') return Promise.resolve(); return once('load'); }
+    Promise.all([waitAppReady(), waitWindowLoad()]).then(run).catch(function (e) { console.error('post-load hook error', e); });
   })(function () {
     // ===== 在下面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
-    // 例如：
-    // $(document).ready(function () {
-    //   console.log("✅ jQuery .ready() 測試成功！");
-    //   $("#hero h2").after("<p style='color:red;font-weight:bold;'>jQuery 測試文字：讀取成功！</p>");
-    // });
 
-    //Vue的部分寫這邊
-    (function mountVue() {
-      // 把頁面專屬的 Vue 程式寫在這個函式裡
-      function initPageVue() {
-        if (typeof Vue === "undefined") return; // 若未載入 Vue 則跳過
-        const { createApp } = Vue;
-        // 範例：把實際程式改成你要的內容
 
-        createApp({
-          data() {
-            return { message: "✅ Vue 測試文字：讀取成功！" };
-          },
-          // methods: { ... }, mounted() { ... } 等可在此加入
-        }).mount("#hero");
 
-        console.log("✅ Vue mount 成功！");
-      }
-      // 立即執行（外層 post-load 已確保時機正確）
-      initPageVue();
-    })();
-
-    // 已移除登入提示 alert：需要登入時由 header 連結攔截直接開登入視窗
 
     // ===== 在上面放頁面專屬的 JS（只會在所有片段與資源載入完成後執行） =====
   });
