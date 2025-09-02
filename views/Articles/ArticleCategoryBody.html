@@ -28,17 +28,20 @@
                 <aside class="sidebar-column">
                     <!-- Popular Subcategories Widget (adapted for Technology) -->
                     <popular-categories-widget :category-id=""></popular-categories-widget>
-                    
+
 
                     <!-- Trending Now Widget (adapted for Technology) -->
                     <trending-widget></trending-widget>
 
-
                     <!-- Call-to-Action (CTA) Banner -->
-                    <div class="cta-banner">
-                        <h2 class="cta-title">Best Selling BLOG and MAGAZINE Theme of All Time</h2>
-                        <p class="cta-subtitle">Experience the change!</p>
-                        <button class="purchase-btn">PURCHASE NOW</button>
+                    <!-- Dynamic CTA Banners -->
+
+                    <div v-for="banner in banners" :key="banner.id">
+                        <cta-banner :banner-id="banner.id"></cta-banner>
+                    </div>
+                    <!-- Loading indicator -->
+                    <div v-if="isLoading" class="loading-indicator">
+                        載入廣告...
                     </div>
                 </aside>
             </main>
